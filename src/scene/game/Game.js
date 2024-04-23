@@ -123,6 +123,8 @@ beehive.scene.Game.prototype.initHoneycombs = function() {
         y2 += 30;
         this.stage.addChild(this.honeycomb);
     }
+
+
 };
 
 //HONEYCOMB SRC UPDATE
@@ -168,7 +170,6 @@ beehive.scene.Game.prototype.initHoneycombs = function() {
  */
 beehive.scene.Game.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
-
     //PLAYER ONE MOVEMENT
     // if (this.keyboard.pressed("w") || this.controller.stickLeftUp) {
     //     this.player1.velocity.y -= 0.25;

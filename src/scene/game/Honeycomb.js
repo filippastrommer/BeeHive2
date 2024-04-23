@@ -4,7 +4,7 @@
 */
 beehive.Honeycomb = function(x, y, resource) {
     rune.display.Sprite.call(this, x, y, 20, 18, resource);
-    this.hitbox.set(0, 0, 18, 18);
+    this.hitbox.set(0, 0, 5, 5);
     this.debug = true;
 };
 

@@ -12,13 +12,15 @@ beehive.Player = function (x, y, resource, controller, bullet) {
     this.flippedX = true;
 
     this.rotationSpeed = 2.6;
-   this.bullet = null;
-   this.bullet = bullet;
+    this.bullet = null;
+    this.bullet = bullet;
+    this.bullets = [];
+    this.hitbox.set(0, 0, 50, 50);
+    this.debug = true;
     // this.game = game;
-   // this.bulletTimer = 0;
-   // this.bulletCooldown = 300;
+    // this.bulletTimer = 0;
+    // this.bulletCooldown = 300;
     // this.walking = false;
-    //uuuu
 };
 
 beehive.Player.prototype = Object.create(rune.display.Sprite.prototype);
@@ -45,6 +47,10 @@ beehive.Player.prototype.init = function () {
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
+
+    // for (let i = 0; i < this.bullets.length; i++) {
+    //     this.bullets
+    // }
 };
 
 /**
@@ -126,28 +132,41 @@ beehive.Player.prototype.updateInput = function () {
 };
 
 
-
 beehive.Player.prototype.shootNectar = function () {
-    // Beräkna skottets startposition baserat på spelarens position och rotation
-    var offsetX = 5; // Justera dessa värden för att matcha skottets startpunkt relativt till spelaren
-    var offsetY = -10;
-    var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
-    var bulletX = this.x + offsetX * Math.cos(radians) - offsetY * Math.sin(radians);
-    var bulletY = this.y + offsetX * Math.sin(radians) + offsetY * Math.cos(radians);
+    // Definiera en fördefinierad offset framför biet där skottet ska skapas
+    var beeOffsetX = -3; // Exempelvärde för offsetX
+    var beeOffsetY = -3; // Exempelvärde för offsetY
+
+    // Beräkna skottets startposition baserat på fördefinierad offset och biet position
+    var bulletX = this.x + (this.width / 2) - (7 / 2) + beeOffsetX; // Centrera på x-axeln
+    var bulletY = this.y + (this.height / 2) - (7 / 2) + beeOffsetY; // Centrera på y-axeln
+
+    // Skapa skottet som en ny instans av rune.display.Sprite
+    var nectar = new rune.display.Sprite(bulletX, bulletY, 7, 7, "nectar");
     
     // Beräkna skottets hastighet baserat på spelarens rotation
-    var bulletSpeed = 3;
+    var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
+    var bulletSpeed = 5; // Justera hastigheten efter behov
     var bulletDirectionX = bulletSpeed * Math.cos(radians);
     var bulletDirectionY = bulletSpeed * Math.sin(radians);
-    
-    // Skapa skottet från den beräknade startpositionen med den beräknade hastigheten
-    this.bullet = new rune.display.Sprite(bulletX, bulletY, 7, 7, "nectar");
-    this.bullet.velocity.x += bulletDirectionX;
-    this.bullet.velocity.y += bulletDirectionY;
+
+    // Tilldela skottets hastighet
+    nectar.velocity.x = bulletDirectionX;
+    nectar.velocity.y = bulletDirectionY;
     
     // Lägg till skottet på scenen
-    this.stage.addChild(this.bullet);
+    this.stage.addChild(nectar);
+    this.bullets.push(nectar);
 }
+
+
+
+
+
+
+
+
+
 
 
 // //GAMMAL STYRNING
