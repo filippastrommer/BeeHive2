@@ -3,22 +3,20 @@
 * @param {number, number, number, number, string, object}  
 */
 
-console.log("test")
 beehive.Player = function (x, y, resource, controller, bullet) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
-    //this.debug = true;
+    this.health = 50;
     this.flippedY = true;
     this.flippedX = true;
 
     this.rotationSpeed = 2.6;
-   this.bullet = null;
-   this.bullet = bullet;
+    this.bullet = null;
+    this.bullet = bullet;
     // this.game = game;
-   // this.bulletTimer = 0;
-   // this.bulletCooldown = 300;
+    // this.bulletTimer = 0;
+    // this.bulletCooldown = 300;
     // this.walking = false;
-    //uuuu
 };
 
 beehive.Player.prototype = Object.create(rune.display.Sprite.prototype);
