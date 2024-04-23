@@ -3,11 +3,10 @@
 * @param {number, number, number, number, string, object}  
 */
 
-console.log("test")
 beehive.Player = function (x, y, resource, controller, bullet) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
-    //this.debug = true;
+    this.health = 50;
     this.flippedY = true;
     this.flippedX = true;
 
