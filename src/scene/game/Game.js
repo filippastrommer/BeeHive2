@@ -20,7 +20,8 @@ beehive.scene.Game = function() {
     this.honeycomb = null;
     this.honeycombs1 = [];
     this.honeycombs2 = [];
-    this.block = null;
+    this.leftBeehive = null;
+    this.rightBeehive = null;
     this.bullet = null;
     this.bullets1 = [];
     this.bullets2 = [];
@@ -81,10 +82,15 @@ beehive.scene.Game.prototype.initBackground = function() {
     );
     this.stage.addChild(this.background);
 
-    this.block = new rune.display.Graphic(
-        200, 112, 2, 2, "block"
+    this.leftBeehive = new rune.display.Graphic(
+        9, 8, 24, 24, "beehive"
     );
-    this.stage.addChild(this.block);
+    this.stage.addChild(this.leftBeehive);
+
+    this.rightBeehive = new rune.display.Graphic(
+        364, 190, 24, 24, "beehive"
+    );
+    this.stage.addChild(this.rightBeehive);
 };
 
 beehive.scene.Game.prototype.initPlayers = function() {
@@ -106,17 +112,17 @@ beehive.scene.Game.prototype.initPlayers = function() {
 };
 
 beehive.scene.Game.prototype.initHoneycombs = function() {
-    var y1 = 10;
+    var y1 = 40;
     var y2 = 10;
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 6; i++) {
         this.honeycomb = new beehive.Honeycomb(10, y1, "honeycomb");
         this.honeycombs1.push(this.honeycomb);
         y1 += 30;
         this.stage.addChild(this.honeycomb);
     }
 
-    for (let j = 0; j < 7; j++) {
+    for (let j = 0; j < 6; j++) {
         this.honeycomb = new beehive.Honeycomb(365, y2, "honeycomb");
         this.honeycomb.flippedX = true;
         this.honeycombs2.push(this.honeycomb);
