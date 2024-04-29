@@ -3,7 +3,7 @@
 * @param {number, number, number, number, string, object}  
 */
 
-beehive.Player = function (x, y, resource, controller, bullet) {
+beehive.Player = function (x, y, resource, controller) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
     this.health = 50;
@@ -12,10 +12,9 @@ beehive.Player = function (x, y, resource, controller, bullet) {
 
     this.rotationSpeed = 2.6;
     this.bullet = null;
-    this.bullet = bullet;
+    //this.bullet = bullet;
     this.bullets = [];
-    this.hitbox.set(0, 0, 50, 50);
-    this.debug = true;
+  
     // this.game = game;
     // this.bulletTimer = 0;
     // this.bulletCooldown = 300;
@@ -35,6 +34,7 @@ beehive.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
     this.initPhysics();
     this.initAnimation();
+  
 };
 
 /**
@@ -46,7 +46,7 @@ beehive.Player.prototype.init = function () {
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
-
+    
     // for (let i = 0; i < this.bullets.length; i++) {
     //     this.bullets
     // }
@@ -57,6 +57,7 @@ beehive.Player.prototype.update = function (step) {
  */
 beehive.Player.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
+    
 };
 
 //------------------------------------------------------------------------------
@@ -72,6 +73,7 @@ beehive.Player.prototype.initPhysics = function () {
     this.velocity.drag.y = 0.04;
     this.velocity.max.x = 0.5;
     this.velocity.max.y = 0.5;
+  
 };
 
 /**
@@ -81,6 +83,7 @@ beehive.Player.prototype.initPhysics = function () {
 beehive.Player.prototype.initAnimation = function () {
     this.animation.create("idle", [0, 1], 4, true);
     this.animation.create("fly", [2, 3, 4, 5, 6, 7, 8], 25, true);
+    
 };
 
 /**
@@ -110,7 +113,7 @@ beehive.Player.prototype.updateInput = function () {
     }
     
     // Skjut skott framåt i spelarens riktning
-    if (this.controller.justPressed(0)) {
+    if (this.controller.justPressed(0) || this.keyboard.pressed("SPACE")) {
         var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
         this.shootNectar(radians);
     }
@@ -132,30 +135,40 @@ beehive.Player.prototype.updateInput = function () {
 
 
 beehive.Player.prototype.shootNectar = function () {
-    // Definiera en fördefinierad offset framför biet där skottet ska skapas
-    var beeOffsetX = -3; // Exempelvärde för offsetX
-    var beeOffsetY = -3; // Exempelvärde för offsetY
+    this.bullet = new beehive.Bullet(this.x, this.y);
+    this.stage.addChild(this.bullet);
 
-    // Beräkna skottets startposition baserat på fördefinierad offset och biet position
-    var bulletX = this.x + (this.width / 2) - (7 / 2) + beeOffsetX; // Centrera på x-axeln
-    var bulletY = this.y + (this.height / 2) - (7 / 2) + beeOffsetY; // Centrera på y-axeln
+//     // Definiera en fördefinierad offset framför biet där skottet ska skapas
+//     var beeOffsetX = -2.5; 
+//     var beeOffsetY = -2.5; 
+//     var bulletSpeed = 20;
 
-    // Skapa skottet som en ny instans av rune.display.Sprite
-    var nectar = new rune.display.Sprite(bulletX, bulletY, 7, 7, "nectar");
+//     // Beräkna skottets startposition baserat på fördefinierad offset och biet position
+//     var bulletX = this.x + (this.width / 2) - (7 / 2) + beeOffsetX; // Centrera på x-axeln
+//     var bulletY = this.y + (this.height / 2) - (7 / 2) + beeOffsetY; // Centrera på y-axeln
+
+//     // Skapa skottet som en ny instans av rune.display.Sprite
+//     var nectar = new rune.display.Sprite(bulletX, bulletY, 7, 7, "nectar");
+//     nectar.hitbox.set(0, 0, 5, 5);
+//     nectar.hitbox.debug = true;
     
-    // Beräkna skottets hastighet baserat på spelarens rotation
-    var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
-    var bulletSpeed = 5; // Justera hastigheten efter behov
-    var bulletDirectionX = bulletSpeed * Math.cos(radians);
-    var bulletDirectionY = bulletSpeed * Math.sin(radians);
+//     // Beräkna skottets hastighet baserat på spelarens rotation
+//     var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
+//     var bulletSpeed = 5; // Justera hastigheten efter behov
+//     var bulletDirectionX = bulletSpeed * Math.cos(radians);
+//     var bulletDirectionY = bulletSpeed * Math.sin(radians);
 
-    // Tilldela skottets hastighet
-    nectar.velocity.x = bulletDirectionX;
-    nectar.velocity.y = bulletDirectionY;
+//     // Tilldela skottets hastighet
+//     nectar.velocity.x = bulletDirectionX;
+//     nectar.velocity.y = bulletDirectionY;
     
-    // Lägg till skottet på scenen
-    this.stage.addChild(nectar);
-    this.bullets.push(nectar);
+//     // Lägg till skottet på scenen
+//     this.stage.addChild(nectar);
+//     this.bullets.push(nectar);
+//   //  this.hitbox.set(0, 0, 50, 50);
+//    // this.debug = true;
+        
+    
 }
 
 
