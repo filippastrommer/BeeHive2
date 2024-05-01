@@ -132,13 +132,13 @@ beehive.Player.prototype.updateInput = function () {
         this.animation.gotoAndPlay("idle");
     }
     
-    // Skjut skott framåt i spelarens riktning, om en skjutning inte redan är igång
+  
     if (this.controller.justPressed(0) && !this.isShooting) {
         var radians = this.rotation * (Math.PI / 180); 
         this.shootNectar(radians);
-        this.isShooting = true; // Markera att en skjutning är igång
+        this.isShooting = true; 
     } else if (!this.controller.justPressed(0)) {
-        this.isShooting = false; // Återställ skjutningsflaggan när knappen släpps
+        this.isShooting = false; 
     }
   
 
@@ -150,17 +150,17 @@ beehive.Player.prototype.shootNectar = function() {
     var beeOffsetX = 2.5; 
     var beeOffsetY = 2.5; 
 
-    // Beräkna skottets startposition baserat på fördefinierad offset och biet position
+    
     var bulletX = this.x + (this.width / 2) - (7 / 2) + beeOffsetX; // Centrera på x-axeln
     var bulletY = this.y + (this.height / 2) - (7 / 2) + beeOffsetY; // Centrera på y-axeln
 
     // Beräkna skottets hastighet baserat på spelarens rotation
     var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
-    var bulletSpeed = 5; // Justera hastigheten efter behov
+    var bulletSpeed = 5; 
     var bulletDirectionX = bulletSpeed * Math.cos(radians); // x-komponent av hastighet
     var bulletDirectionY = bulletSpeed * Math.sin(radians); // y-komponent av hastighet
 
-    // Skapa skottet som en ny instans av beehive.Bullet
+    // Skapa skottet som en ny instans
     var nectar = new beehive.Bullet(bulletX, bulletY, radians, this.bullets, this.honeycombs);
     nectar.velocity.x = bulletDirectionX;
     nectar.velocity.y = bulletDirectionY;
