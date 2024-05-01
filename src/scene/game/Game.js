@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-beehive.scene.Game = function() {
+beehive.scene.Game = function(Honeycomb) {
     this.background = null;
     this.player1 = null;
     this.player2 = null;
@@ -27,7 +27,9 @@ beehive.scene.Game = function() {
     this.bullets1 = [];
     this.bullets2 = [];
     this.controller1 = this.gamepads.get(0);
+   // this.Honeycomb = Honeycomb;
     
+  //  console.log("Honeycomb reference in Game:", this.Honeycomb);
     // this.honeycombHP = null;
     // this.honeycombs1HP = [];
     // this.honeycombs2HP = [];
@@ -65,15 +67,7 @@ beehive.scene.Game.prototype.init = function() {
     this.initBackground();
     this.initPlayers();
     this.initHoneycombs();
-    this.checkBulletCollision();
-   
-    // this.initProgressbars();
-    
-    // var text = new rune.text.BitmapField("Hello World!");
-    // text.autoSize = true;
-    // text.center = this.application.screen.center;
-    
-    // this.stage.addChild(text);
+
 };
 
 beehive.scene.Game.prototype.initBackground = function() {
@@ -99,84 +93,101 @@ beehive.scene.Game.prototype.initBackground = function() {
 
 beehive.scene.Game.prototype.initPlayers = function() {
     //Player 1 (black bee)
-    this.player1 = new beehive.Player(100, 150, "bee", this.controller1);
+    this.player1 = new beehive.Player(100, 150, "bee", this.controller1, this.bullets, this.honeycombs2);
     this.stage.addChild(this.player1);
-    // this.player1 = new rune.display.Sprite(65, 40, 22, 28, "bee");
-    // this.player1.animation.create("idle", [0, 1], 4, true);
-    // this.player1.animation.create("fly", [2, 3, 4, 5, 6, 7, 8], 25, true);
-    // this.player1.flippedX = true;
-    // this.player1.velocity.drag.x = 0.02;
-    // this.player1.velocity.drag.y = 0.02;
-    // this.player1.velocity.max.x = 1;
-    // this.player1.velocity.max.y = 1;
-
-    // this.stage.addChild(this.player1);
 
     //Player 2 (brown bee)
-    this.player2 = new beehive.Player(300, 150, "bee2", this.controller1);
+    this.player2 = new beehive.Player(300, 150, "bee2", this.controller1, this.bullets, this.honeycombs1);
     this.stage.addChild(this.player2);
 
 
 };
 
+
 beehive.scene.Game.prototype.initHoneycombs = function() {
-   // this.hitbox.set(0, 0, this.width, this.height);
-    
-    var y1 = 40;
-    var y2 = 10;
+    // this.hitbox.set(0, 0, this.width, this.height);
+  
+     var y1 = 40;
+     var y2 = 10;
+ 
+     for (let i = 0; i < 6; i++) {
+         this.honeycomb = new beehive.Honeycomb(10, y1, "honeycomb");
+         this.honeycombs1.push(this.honeycomb);
+         y1 += 30;
+         this.stage.addChild(this.honeycomb); 
+     }
+ 
+     for (let j = 0; j < 6; j++) {
+         this.honeycomb = new beehive.Honeycomb(365, y2, "honeycomb");
+         this.honeycomb.flippedX = true;
+         this.honeycombs2.push(this.honeycomb);
+         y2 += 30;
+         this.stage.addChild(this.honeycomb);
+     }
+     
+     
+ 
+ };
 
-    for (let i = 0; i < 6; i++) {
-        this.honeycomb = new beehive.Honeycomb(10, y1, "honeycomb");
-        this.honeycombs1.push(this.honeycomb);
-        y1 += 30;
-        this.stage.addChild(this.honeycomb);
-    }
-
-    for (let j = 0; j < 6; j++) {
-        this.honeycomb = new beehive.Honeycomb(365, y2, "honeycomb");
-        this.honeycomb.flippedX = true;
-        this.honeycombs2.push(this.honeycomb);
-        y2 += 30;
-        this.stage.addChild(this.honeycomb);
-    }
-    
-
-};
-
-beehive.scene.Game.prototype.checkBulletCollision = function() {
-    for (var i = 0; i < this.bullets.length; i++) {
-        var bullet = this.bullets[i];
-        for (var j = 0; j < this.honeycombs1.length; j++) {
-            var honeycomb1 = this.honeycombs1[j];
-            if (bullet.hitbox.intersects(honeycomb1.hitbox)) {
-                console.log("Collision detected between bullet and honeycomb 1");
-                // Ta bort honeycomb från scenen och från arrayen
-                this.stage.removeChild(honeycomb1);
-                this.honeycombs1.splice(j, 1);
-                // Ta bort bula från scenen och från arrayen
-                this.stage.removeChild(bullet);
-                this.bullets.splice(i, 1);
-                // Avsluta loopen eftersom bula bara kan träffa en honeycomb
-                break;
-            }
-        }
-        for (var k = 0; k < this.honeycombs2.length; k++) {
-            var honeycomb2 = this.honeycombs2[k];
-            if (bullet.hitbox.intersects(honeycomb2.hitbox)) {
-                // Ta bort honeycomb från scenen och från arrayen
-                this.stage.removeChild(honeycomb2);
-                this.honeycombs2.splice(k, 1);
-                // Ta bort bula från scenen och från arrayen
-                this.stage.removeChild(bullet);
-                this.bullets.splice(i, 1);
-                // Avsluta loopen eftersom bula bara kan träffa en honeycomb
-                break;
-            }
-        }
-    }
+// Initiera Bullet-objekten och skicka med referenser till Honeycomb-objekten
 
 
-};
+// beehive.scene.Game.prototype.initBullets = function() {
+
+//     var radians = Math.atan2(this.player1.y - this.player2.y, this.player1.x - this.player2.x);
+
+//     for (let honeycomb of this.honeycombs1) {
+//         var bullet = new beehive.Bullet(20, 18, radians, this.honeycombs1);
+//         this.bullets.push(bullet);
+//     }
+
+//     for (let honeycomb of this.honeycombs2) {
+//         var bullet = new beehive.Bullet(20, 18, radians, this.honeycombs2);
+//         this.bullets.push(bullet);
+//     }
+// };
+
+
+
+
+
+
+
+
+// beehive.scene.Game.prototype.checkBulletCollision = function() {
+//     for (var i = 0; i < this.bullets.length; i++) {
+//         var bullet = this.bullets[i];
+//         for (var j = 0; j < this.honeycombs1.length; j++) {
+//             var honeycomb1 = this.honeycombs1[j];
+//             if (bullet.hitbox.intersects(honeycomb1.hitbox)) {
+//                 console.log("Collision detected between bullet and honeycomb 1");
+//                 // Ta bort honeycomb från scenen och från arrayen
+//                 this.stage.removeChild(honeycomb1);
+//                 this.honeycombs1.splice(j, 1);
+//                 // Ta bort bula från scenen och från arrayen
+//                 this.stage.removeChild(bullet);
+//                 this.bullets.splice(i, 1);
+//                 // Avsluta loopen eftersom bula bara kan träffa en honeycomb
+//                 break;
+//             }
+//         }
+//         for (var k = 0; k < this.honeycombs2.length; k++) {
+//             var honeycomb2 = this.honeycombs2[k];
+//             if (bullet.hitbox.intersects(honeycomb2.hitbox)) {
+//                 // Ta bort honeycomb från scenen och från arrayen
+//                 this.stage.removeChild(honeycomb2);
+//                 this.honeycombs2.splice(k, 1);
+//                 // Ta bort bula från scenen och från arrayen
+//                 this.stage.removeChild(bullet);
+//                 this.bullets.splice(i, 1);
+//                 // Avsluta loopen eftersom bula bara kan träffa en honeycomb
+//                 break;
+//             }
+//         }
+//     }
+
+
+// };
 
 
 //HONEYCOMB SRC UPDATE
@@ -222,6 +233,46 @@ beehive.scene.Game.prototype.checkBulletCollision = function() {
  */
 beehive.scene.Game.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
+
+    // if (this.player1.hitTestObject(this.honeycombs1[0])) {
+    //     console.log("test")
+    // }
+    // var threshold = 0.1;
+    // var x = this.controller1.m_axesOne.x;
+    // var y = this.controller1.m_axesOne.y;
+        
+    // if (Math.abs(x) > threshold || Math.abs(y) > threshold) {  // Räkna ut rotationen baserat på spakens position                 
+    //     this.rotation = Math.atan2(y, x) * (180 / Math.PI);
+    //         if (this.rotation < 0) {
+    //             this.rotation += 360;
+    //         } // Räkna ut den nya positionen baserat på spakens position och hastigheten
+    //         this.velocity.x += x * this.rotationSpeed;
+    //         this.velocity.y += y * this.rotationSpeed;
+    // }
+
+    // if (this.velocity.x != 0 || this.velocity.y != 0) {
+    //     this.animation.gotoAndPlay("fly");
+    // } else {
+    //     this.animation.gotoAndPlay("idle");
+    // }
+    
+    // // Skjut skott framåt i spelarens riktning
+    // if (this.controller1.justPressed(0) || this.keyboard.pressed("SPACE")) {
+    //     var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
+    //     this.shootNectar(radians);
+    // }
+
+   
+    // if (this.Honeycomb && this.hitTest(this.Honeycomb)) {
+    //     console.log("Bullet collided with Honeycomb!");
+       
+    //     // Här kan du lägga till logik för vad som ska hända när en kollision inträffar
+    //     // Till exempel, minska Honeycomb-hälsan eller förstöra bullet
+    //     // För att förstöra bullet kan du använda: this.destroy();
+    // }
+     
+    // } 
+
     //PLAYER ONE MOVEMENT
     // if (this.keyboard.pressed("w") || this.controller.stickLeftUp) {
     //     this.player1.velocity.y -= 0.25;

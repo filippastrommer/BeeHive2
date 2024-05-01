@@ -5,7 +5,7 @@
 beehive.Honeycomb = function(x, y, resource) {
     rune.display.Sprite.call(this, x, y, 20, 18, resource);
 
-    this.hitbox.set(0, 0, 15, 15);
+    this.hitbox.set(0, 0, 20, 18);
     this.hitbox.debug = true;
    this.debugColor = rune.util.Palette.GREEN;
   
@@ -25,10 +25,10 @@ beehive.Honeycomb.prototype.init = function() {
 
 
 
-beehive.Honeycomb.prototype.checkCollision = function(otherObject) {
-    // Jämför hitbox för honeycomb och det andra objektet
-    return this.hitbox.intersects(otherObject.hitbox);
-};
+// beehive.Honeycomb.prototype.checkCollision = function(otherObject) {
+//     // Jämför hitbox för honeycomb och det andra objektet
+//     return this.hitbox.intersects(otherObject.hitbox);
+// };
 
 
 // if (this.health == 2) {
@@ -70,7 +70,8 @@ beehive.Honeycomb.prototype.checkCollision = function(otherObject) {
 
 beehive.Honeycomb.prototype.update = function(step) {
     rune.display.Sprite.prototype.update.call(this, step);
-    
+
+   
 };
 
 beehive.Honeycomb.prototype.dispose = function() {
