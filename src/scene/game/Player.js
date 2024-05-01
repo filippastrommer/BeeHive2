@@ -6,7 +6,7 @@
 beehive.Player = function (x, y, resource, controller, bullets, honeycombs) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
-    this.health = 50;
+    this.health = 100;
     this.flippedY = true;
     this.flippedX = true;
     this.bullets = bullets;
@@ -157,9 +157,18 @@ beehive.Player.prototype.shootNectar = function() {
     var nectar = new beehive.Bullet(bulletX, bulletY, radians, this.bullets, this.honeycombs);
     nectar.velocity.x = bulletDirectionX;
     nectar.velocity.y = bulletDirectionY;
-    console.log(this.honeycombs);
-
+    this.bullets.push(nectar);
+    //console.log(this.bullets);
+    
     this.stage.addChild(nectar); // Lägg till skottet på scenen
+
+    for (var i = 0; i < this.bullets.length; i++) {
+        for (let j = 0; j < this.honeycombs.length; j++) {
+            this.bullets[i].hitTestObject(this.honeycombs[j], function () {
+                this.honeycombs[j].dispose();
+            }, this);
+        }
+    }
 
     
 // //       // Beräkna x och y för skottets riktning

@@ -93,11 +93,11 @@ beehive.scene.Game.prototype.initBackground = function() {
 
 beehive.scene.Game.prototype.initPlayers = function() {
     //Player 1 (black bee)
-    this.player1 = new beehive.Player(100, 150, "bee", this.controller1, this.bullets, this.honeycombs2);
+    this.player1 = new beehive.Player(100, 150, "bee", this.controller1, this.bullets1, this.honeycombs2);
     this.stage.addChild(this.player1);
 
     //Player 2 (brown bee)
-    this.player2 = new beehive.Player(300, 150, "bee2", this.controller1, this.bullets, this.honeycombs1);
+    this.player2 = new beehive.Player(300, 150, "bee2", this.controller1, this.bullets2, this.honeycombs1);
     this.stage.addChild(this.player2);
 
 
@@ -124,8 +124,6 @@ beehive.scene.Game.prototype.initHoneycombs = function() {
          y2 += 30;
          this.stage.addChild(this.honeycomb);
      }
-     
-     
  
  };
 
@@ -234,9 +232,52 @@ beehive.scene.Game.prototype.initHoneycombs = function() {
 beehive.scene.Game.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
+    //console.log(this.player1.bullets);
+
+    for (let i = 0; i < this.player1.bullets.length; i++) {
+           this.player1.bullets[i].hitTestObject(this.player2, function () {
+            this.player2.health--;
+            this.player2.flicker.start(); 
+            console.log(this.player2.health);
+        }, this); 
+    }
+
+    for (let j = 0; j < this.player2.bullets.length; j++) {
+        this.player2.bullets[j].hitTestObject(this.player1, function () {
+         this.player1.health--;
+         this.player1.flicker.start(); 
+         console.log(this.player1.health);
+     }, this); 
+ }
+
+    // if (this.player2.health == 0) {
+    //     this.timers.create({
+    //         duration: 5000,
+    //         onTick: this.player2.dispose(),
+    //         scope: this
+    //     });
+    //     //this.player2.dispose();
+        
+        
+    // }
+
+    // for (var i = 0; i < this.bullets.length; i++) {
+    //     for (let j = 0; j < this.honeycombs.length; j++) {
+    //         this.bullets[i].hitTestObject(this.honeycombs[j], function () {
+    //             this.honeycombs[j].dispose();
+    //         }, this);
+    //     }
+    // }
+
+    
+    //console.log(this.bullets);
+
     // if (this.player1.hitTestObject(this.honeycombs1[0])) {
     //     console.log("test")
     // }
+
+
+
     // var threshold = 0.1;
     // var x = this.controller1.m_axesOne.x;
     // var y = this.controller1.m_axesOne.y;

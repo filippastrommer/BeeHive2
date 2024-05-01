@@ -2,12 +2,14 @@
 * Class for the player
 * @param {number, number, string}  
 */
-beehive.Honeycomb = function(x, y, resource) {
+beehive.Honeycomb = function(x, y, resource, bullets) {
     rune.display.Sprite.call(this, x, y, 20, 18, resource);
+
+    this.bullets = bullets;
 
     this.hitbox.set(0, 0, 20, 18);
     this.hitbox.debug = true;
-   this.debugColor = rune.util.Palette.GREEN;
+    this.debugColor = rune.util.Palette.GREEN;
   
   //  this.debugColor = rune.util.Palette.RED;
     // this.honeycombHP = null;
