@@ -3,15 +3,18 @@
 * @param {number, number, number, number, string, object}  
 */
 
-beehive.Player = function (x, y, resource, controller, bullets, honeycombs) {
+beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownHoneycombs) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
-    this.health = 100;
+    this.health = 50;
     this.flippedY = true;
     this.flippedX = true;
     this.bullets = bullets;
     this.honeycombs = honeycombs;
+    this.ownHoneycombs = ownHoneycombs;
     this.rotationSpeed = 2.6;
+    this.hitbox.set(2,5,18,18);
+    //this.hitbox.debug = true;
     //this.bullet = null;
     //this.bullet = bullet;
     //this.bullets = [];
@@ -48,10 +51,26 @@ beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
     
+    for (let i = 0; i < this.ownHoneycombs.length; i++) {
+        this.ownHoneycombs[i].hitTestObject(this, function() {
+            if (this.controller.justPressed(1)) {
+                setTimeout(this.addHoneycomb(this.ownHoneycombs[i]), 10000);
+            }
+        }, this);
+    }
+    //duration: 5000,
+        //         onTick: addHoneycomb,
+        //         scope: this
+        //     }, this);
     // for (let i = 0; i < this.bullets.length; i++) {
     //     this.bullets
     // }
 };
+
+beehive.Player.prototype.addHoneycomb = function (honeycomb) {
+    honeycomb.health = 20;
+    this.stage.addChild(honeycomb);
+}
 
 /**
  * ...
@@ -121,21 +140,9 @@ beehive.Player.prototype.updateInput = function () {
     } else if (!this.controller.justPressed(0)) {
         this.isShooting = false; // Återställ skjutningsflaggan när knappen släpps
     }
-
   
 
-    // if (this.controller.stickRightUp || this.controller.stickRightDown || this.controller.stickRightLeft || this.controller.stickRightRight) {
-    //     var x = this.controller.stickRight.x;
-    //     var y = this.controller.stickRight.y;
-    //     var radians = Math.atan2(y, x); // Använd spelarens riktning för skottens riktning
-    //     this.shootNectar(radians);
-    //     // this.bullet = new rune.display.Sprite((this.x + 25), (this.y + 13), 7, 7, "nectar");
-    //     // this.bullet.rotation = this.rotation; // Sätt skottens rotation till spelarens rotation
-    //     // this.bullet.velocity.x += 4 * Math.cos(radians); // Beräkna x-komponenten av skottens hastighet baserat på riktningen
-    //     // this.bullet.velocity.y += 4 * Math.sin(radians); // Beräkna y-komponenten av skottens hastighet baserat på riktningen
-    //     // this.stage.addChild(this.bullet);
-    //     //  this.push(this.bullet);
-    // }
+  
 
 };
 
@@ -165,85 +172,13 @@ beehive.Player.prototype.shootNectar = function() {
     for (var i = 0; i < this.bullets.length; i++) {
         for (let j = 0; j < this.honeycombs.length; j++) {
             this.bullets[i].hitTestObject(this.honeycombs[j], function () {
-                this.honeycombs[j].dispose();
+                // this.stage.removeChild(this.bullets[i]);
+                this.honeycombs[j].health--;
             }, this);
         }
     }
+}
 
-    
-// //       // Beräkna x och y för skottets riktning
-// //    var dx = Math.cos(this.radians) * this.bulletSpeed;
-// //    var dy = Math.sin(this.radians) * this.bulletSpeed;
-
-// //    // Uppdatera skottets position
-// //    this.position.x += dx;
-// //    this.position.y += dy;
-
-
-
-//     // Definiera en fördefinierad offset framför biet där skottet ska skapas
-//     var beeOffsetX = -2.5; 
-//     var beeOffsetY = -2.5; 
-//     var bulletSpeed = 20;
-
-//     // Beräkna skottets startposition baserat på fördefinierad offset och biet position
-//     var bulletX = this.x + (this.width / 2) - (7 / 2) + beeOffsetX; // Centrera på x-axeln
-//     var bulletY = this.y + (this.height / 2) - (7 / 2) + beeOffsetY; // Centrera på y-axeln
-
-//     // Skapa skottet som en ny instans av rune.display.Sprite
-//     var nectar = new rune.display.Sprite(bulletX, bulletY, 7, 7, "nectar");
-//     nectar.hitbox.set(0, 0, 5, 5);
-//     nectar.hitbox.debug = true;
-    
-//     // Beräkna skottets hastighet baserat på spelarens rotation
-//     var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
-//     var bulletSpeed = 5; // Justera hastigheten efter behov
-//     var bulletDirectionX = bulletSpeed * Math.cos(radians);
-//     var bulletDirectionY = bulletSpeed * Math.sin(radians);
-
-//     // Tilldela skottets hastighet
-//     nectar.velocity.x = bulletDirectionX;
-//     nectar.velocity.y = bulletDirectionY;
-    
-
-
-//     this.bullet = new beehive.Bullet(this.x, this.y);
-//     this.stage.addChild(this.bullet);
-
-
-}  
-
-//     // Definiera en fördefinierad offset framför biet där skottet ska skapas
-//     var beeOffsetX = -2.5; 
-//     var beeOffsetY = -2.5; 
-//     var bulletSpeed = 20;
-
-//     // Beräkna skottets startposition baserat på fördefinierad offset och biet position
-//     var bulletX = this.x + (this.width / 2) - (7 / 2) + beeOffsetX; // Centrera på x-axeln
-//     var bulletY = this.y + (this.height / 2) - (7 / 2) + beeOffsetY; // Centrera på y-axeln
-
-//     // Skapa skottet som en ny instans av rune.display.Sprite
-//     var nectar = new rune.display.Sprite(bulletX, bulletY, 7, 7, "nectar");
-//     nectar.hitbox.set(0, 0, 5, 5);
-//     nectar.hitbox.debug = true;
-    
-//     // Beräkna skottets hastighet baserat på spelarens rotation
-//     var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
-//     var bulletSpeed = 5; // Justera hastigheten efter behov
-//     var bulletDirectionX = bulletSpeed * Math.cos(radians);
-//     var bulletDirectionY = bulletSpeed * Math.sin(radians);
-
-//     // Tilldela skottets hastighet
-//     nectar.velocity.x = bulletDirectionX;
-//     nectar.velocity.y = bulletDirectionY;
-    
-//     // Lägg till skottet på scenen
-//     this.stage.addChild(nectar);
-//     this.bullets.push(nectar);
-//   //  this.hitbox.set(0, 0, 50, 50);
-//    // this.debug = true;
-        
-    
 
 
 

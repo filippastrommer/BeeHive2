@@ -6,15 +6,10 @@ beehive.Honeycomb = function(x, y, resource, bullets) {
     rune.display.Sprite.call(this, x, y, 20, 18, resource);
 
     this.bullets = bullets;
-
-    this.hitbox.set(0, 0, 20, 18);
-    this.hitbox.debug = true;
+    this.health = 20;
+    this.hitbox.set(2, 2, 15, 13);
+    //this.hitbox.debug = true;
     this.debugColor = rune.util.Palette.GREEN;
-  
-  //  this.debugColor = rune.util.Palette.RED;
-    // this.honeycombHP = null;
-    // this.honeycombs1HP = [];
-    // this.honeycombs2HP = [];
 };
 
 beehive.Honeycomb.prototype = Object.create(rune.display.Sprite.prototype);
@@ -22,15 +17,19 @@ beehive.Honeycomb.prototype.constructor = beehive.Honeycomb;
 
 beehive.Honeycomb.prototype.init = function() {
     rune.display.Sprite.prototype.init.call(this);
+    this.initAnimation();
     
 };
 
+beehive.Honeycomb.prototype.initAnimation = function() {
+    this.animation.create("100", [0], 1, true);
+    this.animation.create("75", [1], 1, true);
+    this.animation.create("50", [2], 1, true);
+    this.animation.create("25", [3], 1, true);
+}
 
 
-// beehive.Honeycomb.prototype.checkCollision = function(otherObject) {
-//     // Jämför hitbox för honeycomb och det andra objektet
-//     return this.hitbox.intersects(otherObject.hitbox);
-// };
+
 
 
 // if (this.health == 2) {
@@ -73,7 +72,19 @@ beehive.Honeycomb.prototype.init = function() {
 beehive.Honeycomb.prototype.update = function(step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
-   
+    if (this.health == 20) {
+        this.animation.gotoAndPlay("100")
+    } else if (this.health == 15) {
+        this.animation.gotoAndPlay("75");
+    } else if (this.health == 10) {
+        this.animation.gotoAndPlay("50");
+    } else if (this.health == 5) {
+        this.animation.gotoAndPlay("25");
+    }
+
+    // if (this.health == 0) {
+    //     this.stage.removeChild(this);
+    // }
 };
 
 beehive.Honeycomb.prototype.dispose = function() {

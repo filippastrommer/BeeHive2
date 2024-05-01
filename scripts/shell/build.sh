@@ -9,7 +9,10 @@ npx google-closure-compiler \
 --js "./../../lib/rune.js" \
 --js "./../../src/scope/Manifest.js" \
 --js "./../../src/data/resource/Requests.js" \
+--js "./../../src/scene/game/Player.js" \
+--js "./../../src/scene/game/Bullet.js" \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
+--js "./../../src/scene/game/Honeycomb.js" \
 --js_output_file "./../../dist/beehive.js";
