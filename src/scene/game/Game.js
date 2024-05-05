@@ -13,14 +13,16 @@
  * 
  * Game scene.
  */
-beehive.scene.Game = function(Honeycomb) {
+beehive.scene.Game = function () {
     this.background = null;
     this.player1 = null;
     this.player2 = null;
     this.honeycomb = null;
+    
     this.honeycombs1 = [];
     this.honeycombs2 = [];
     this.bullets = [];
+  
     this.leftBeehive = null;
     this.rightBeehive = null;
     this.bullet = null;
@@ -28,9 +30,12 @@ beehive.scene.Game = function(Honeycomb) {
     this.bullets2 = [];
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
-   // this.Honeycomb = Honeycomb;
+  //  this.enemys = [];
+   // this.enemyGravity = 4.99;
     
-  //  console.log("Honeycomb reference in Game:", this.Honeycomb);
+    // this.Honeycomb = Honeycomb;
+
+    //  console.log("Honeycomb reference in Game:", this.Honeycomb);
     // this.honeycombHP = null;
     // this.honeycombs1HP = [];
     // this.honeycombs2HP = [];
@@ -38,7 +43,7 @@ beehive.scene.Game = function(Honeycomb) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
      * Calls the constructor method of the super class.
      */
@@ -62,17 +67,20 @@ beehive.scene.Game.prototype.constructor = beehive.scene.Game;
  *
  * @returns {undefined}
  */
-beehive.scene.Game.prototype.init = function() {
+beehive.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-    
+
     this.initBackground();
     this.initHoneycombs();
     this.initPlayers();
-    
+ //  this.spawnBeekeeper();
+  //  this.initProgressbars();
+   // this.updateHealthBar();
+   
 
 };
 
-beehive.scene.Game.prototype.initBackground = function() {
+beehive.scene.Game.prototype.initBackground = function () {
     this.background = new rune.display.Graphic(
         0,
         0,
@@ -93,68 +101,115 @@ beehive.scene.Game.prototype.initBackground = function() {
     this.stage.addChild(this.rightBeehive);
 };
 
-beehive.scene.Game.prototype.initPlayers = function() {
+beehive.scene.Game.prototype.initPlayers = function () {
     //Player 1 (black bee)
     this.player1 = new beehive.Player(9, 8, "bee", this.controller1, this.bullets1, this.honeycombs2, this.honeycombs1);
     this.stage.addChild(this.player1);
+    
+    
 
     //Player 2 (brown bee)
     this.player2 = new beehive.Player(364, 190, "bee2", this.controller2, this.bullets2, this.honeycombs1, this.honeycombs2);
     this.stage.addChild(this.player2);
+    
+
 };
 
 
-beehive.scene.Game.prototype.initHoneycombs = function() {
+
+
+
+
+beehive.scene.Game.prototype.initHoneycombs = function () {
     // this.hitbox.set(0, 0, this.width, this.height);
-  
-     var y1 = 40;
-     var y2 = 10;
- 
-     for (let i = 0; i < 6; i++) {
-         this.honeycomb = new beehive.Honeycomb(10, y1, "honeycomb_full");
-         this.honeycomb.animation.gotoAndPlay("100");
-         this.honeycombs1.push(this.honeycomb);
-         y1 += 30;
-         this.stage.addChild(this.honeycomb); 
-     }
- 
-     for (let j = 0; j < 6; j++) {
-         this.honeycomb = new beehive.Honeycomb(365, y2, "honeycomb_full");
-         this.honeycomb.flippedX = true;
-         this.honeycomb.animation.gotoAndPlay("100");
-         this.honeycombs2.push(this.honeycomb);
-         y2 += 30;
-         this.stage.addChild(this.honeycomb);
-     }
- 
- };
+
+    var y1 = 40;
+    var y2 = 10;
+
+    for (var i = 0; i < 6; i++) {
+        this.honeycomb = new beehive.Honeycomb(10, y1, "honeycomb_full");
+        this.honeycomb.animation.gotoAndPlay("100");
+        this.honeycombs1.push(this.honeycomb);
+        y1 += 30;
+        this.stage.addChild(this.honeycomb);
+    }
+
+    for (var j = 0; j < 6; j++) {
+        this.honeycomb = new beehive.Honeycomb(365, y2, "honeycomb_full");
+        this.honeycomb.flippedX = true;
+        this.honeycomb.animation.gotoAndPlay("100");
+        this.honeycombs2.push(this.honeycomb);
+        y2 += 30;
+        this.stage.addChild(this.honeycomb);
+    }
+
+};
 
 
 
 
+beehive.scene.Game.prototype.initProgressbars = function() {
+//     this.health = 50;
+
+//     this.player1.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "#ff0000");
+// this.player1.healthBar.x = 80; 
+// this.player1.healthBar.y = 10;
+// this.stage.addChild(this.player1.healthBar);
+
+
+// this.player2.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "ff0000");
+// this.player2.healthBar.x = 300;
+// this.player2.healthBar.y = 10;
+// this.stage.addChild(this.player2.healthBar);
+//    // Hämta hälsan för player1 och player2
+//    var player1Health = this.player1.health;
+//    var player2Health = this.player2.health;
+
+//    // Logga hälsan för player1 och player2
+//    console.log("Health value for player 1:", player1Health);
+//    console.log("Health value for player 2:", player2Health);
+    // // Skapa health bar för player 1 med röd fyllnadsfärg
+    // this.player1.healthBar = this.createHealthBar("#ff0000");
+    // this.player1.healthBar.x = 80;
+    // this.stage.addChild(this.player1.healthBar);
+
+    // // Skapa health bar för player 2 med röd fyllnadsfärg
+    // this.player2.healthBar = this.createHealthBar("#ff0000");
+    // this.player2.healthBar.x = 300;
+    // this.stage.addChild(this.player2.healthBar);
+};
 
 
 
 
 // beehive.scene.Game.prototype.initProgressbars = function() {
 
-//     for(let i = 0; i < 7; i++) {
-//         this.honeycombHP = new rune.ui.Progressbar(3, 15, "#000000", "#07a30c");
-//         this.honeycombHP.centerX = this.honeycombs1[i].x - 5;
-//         this.honeycombHP.centerY = this.honeycombs1[i].y + 9;
-//         this.stage.addChild(this.honeycombHP);
-//         this.honeycombs1HP.push(this.honeycombHP);
-//     }
 
-//     for(let j = 0; j < 7; j++){
-//         this.honeycombHP = new rune.ui.Progressbar(3, 15, "#000000", "#07a30c");
-//         this.honeycombHP.centerX = this.honeycombs2[j].x + 30;
-//         this.honeycombHP.centerY = this.honeycombs2[j].y + 9;
-//         this.stage.addChild(this.honeycombHP);
-//         this.honeycombs2HP.push(this.honeycombHP);
-//     }
-    
+
+
+// this.player1.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "#ff0000");
+// this.player1.healthBar.x = 80; 
+// this.player1.healthBar.y = 10;
+// this.stage.addChild(this.player1.healthBar);
+
+
+// this.player2.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "ff0000");
+// this.player2.healthBar.x = 300;
+// this.player2.healthBar.y = 10;
+// this.stage.addChild(this.player2.healthBar);
+
+
+
 // };
+
+// beehive.scene.Game.prototype.spawnBeekeeper = function () {
+//     this.beekeeper = new rune.display.Sprite(0,0, 10, 10, "block");
+//     this.beekeeper. y = this.actualY;//Math.random () * 225;
+
+//     this.stage.addChild(this.beekeeper);
+//     this.enemys.push(this.beekeeper);
+// }
+
 
 /**
  * This method is automatically executed once per "tick". The method is used for 
@@ -164,29 +219,33 @@ beehive.scene.Game.prototype.initHoneycombs = function() {
  *
  * @returns {undefined}
  */
-beehive.scene.Game.prototype.update = function(step) {
+beehive.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    for (let i = 0; i < this.player1.bullets.length; i++) {
-           this.player1.bullets[i].hitTestObject(this.player2, function () {
+    
+    for (var i = 0; i < this.player1.bullets.length; i++) {
+        this.player1.bullets[i].hitTestObject(this.player2, function () {
             this.player1.bullets[i].dispose(this.player1.bullets[i]);
             this.player2.health--;
-            //this.player2.flicker.start(); 
-            //console.log(this.player2.health);
-        }, this); 
+            
+            this.player2.flicker.start();
+        }, this);
     }
 
-    for (let j = 0; j < this.player2.bullets.length; j++) {
+    for (var j = 0; j < this.player2.bullets.length; j++) {
         this.player2.bullets[j].hitTestObject(this.player1, function () {
             this.player2.bullets[j].dispose(this.player2.bullets[j]);
             this.player1.health--;
-            //this.player1.flicker.start(); 
-            //console.log(this.player1.health);
-        }, this); 
+            
+            this.player1.flicker.start();
+        }, this);
     }
+   
+  
 
 
-    for (let i = 0; i < this.honeycombs1.length; i++) {
+
+    for (var i = 0; i < this.honeycombs1.length; i++) {
         //console.log(this.honeycombs1[i].health);
         // if (this.honeycombs1[i].health == 6) {
         //     console.log("3");
@@ -200,10 +259,10 @@ beehive.scene.Game.prototype.update = function(step) {
         if (this.honeycombs1[i].health == 0) {
             this.stage.removeChild(this.honeycombs1[i]);
         }
-    
+
     }
 
-    for (let i = 0; i < this.honeycombs2.length; i++) {
+    for (var i = 0; i < this.honeycombs2.length; i++) {
         //console.log(this.honeycombs2[i].health);
         // if (this.honeycombs2[i].health == 6) {
         //     console.log("3");
@@ -225,7 +284,14 @@ beehive.scene.Game.prototype.update = function(step) {
         //         scope: this
         //     }, this);
         // } 
-    
+
+
+    //    for (var i = 0; i < this.enemys.lenght; i++) {
+    //     this.enemys[i].x -2.5;
+    //     this.enemys[i].y += this.enemyGravity;
+        
+    //    }
+
     }
 
 
@@ -258,7 +324,7 @@ beehive.scene.Game.prototype.update = function(step) {
         this.stage.removeChild(this.player1);
         //this.player1.dispose();
         this.timers.create({
-            duration: 3000,
+            duration: 1000,
             onTick: this.addPlayer1,
             scope: this
         })
@@ -268,7 +334,7 @@ beehive.scene.Game.prototype.update = function(step) {
         this.stage.removeChild(this.player2);
         //this.player2.dispose();
         this.timers.create({
-            duration: 3000,
+            duration: 1000,
             onTick: this.addPlayer2,
             scope: this
         })
@@ -277,7 +343,17 @@ beehive.scene.Game.prototype.update = function(step) {
 
 };
 
-beehive.scene.Game.prototype.addPlayer1 = function() {
+
+
+
+
+
+
+
+
+
+
+beehive.scene.Game.prototype.addPlayer1 = function () {
     this.player1.x = 9;
     this.player1.y = 8;
     this.player1.health = 50;
@@ -285,13 +361,31 @@ beehive.scene.Game.prototype.addPlayer1 = function() {
     this.player1.flicker.start();
 };
 
-beehive.scene.Game.prototype.addPlayer2 = function() {
+beehive.scene.Game.prototype.addPlayer2 = function () {
     this.player2.x = 364;
     this.player2.y = 190;
     this.player2.health = 50;
     this.stage.addChild(this.player2);
     this.player2.flicker.start();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 
 
 /**
  * This method is automatically called once just before the scene ends. Use 
@@ -301,6 +395,6 @@ beehive.scene.Game.prototype.addPlayer2 = function() {
  *
  * @returns {undefined}
  */
-beehive.scene.Game.prototype.dispose = function() {
+beehive.scene.Game.prototype.dispose = function () {
     rune.scene.Scene.prototype.dispose.call(this);
 };

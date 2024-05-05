@@ -5,13 +5,14 @@ beehive.Bullet = function (x, y, radians, Honeycomb) {
       // Sätt startposition för skottet
      
     this.radians = radians;
-    this.bulletSpeed = 1;
+    this.bulletSpeed = 5;
   //  this.Honeycomb = Honeycomb;
   this.hitbox.set(4, 4, 2, 2);
   //this.hitbox.debug = true;
-  this.Honeycomb = Honeycomb;
-  this.bullets = [];
-  this.Honeycombs = [];
+ // this.Honeycomb = Honeycomb;
+ // this.bullets = [];
+ // this.Honeycombs = [];
+ 
 
  //console.log("Honeycomb reference in Bullet:", this.Honeycomb);
 }

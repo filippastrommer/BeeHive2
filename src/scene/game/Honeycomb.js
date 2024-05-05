@@ -2,7 +2,7 @@
 * Class for the player
 * @param {number, number, string}  
 */
-beehive.Honeycomb = function(x, y, resource, bullets) {
+beehive.Honeycomb = function (x, y, resource, bullets) {
     rune.display.Sprite.call(this, x, y, 20, 18, resource);
 
     this.bullets = bullets;
@@ -15,13 +15,13 @@ beehive.Honeycomb = function(x, y, resource, bullets) {
 beehive.Honeycomb.prototype = Object.create(rune.display.Sprite.prototype);
 beehive.Honeycomb.prototype.constructor = beehive.Honeycomb;
 
-beehive.Honeycomb.prototype.init = function() {
+beehive.Honeycomb.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
     this.initAnimation();
-    
+
 };
 
-beehive.Honeycomb.prototype.initAnimation = function() {
+beehive.Honeycomb.prototype.initAnimation = function () {
     this.animation.create("100", [0], 1, true);
     this.animation.create("75", [1], 1, true);
     this.animation.create("50", [2], 1, true);
@@ -61,7 +61,7 @@ beehive.Honeycomb.prototype.initAnimation = function() {
 //         this.stage.addChild(this.honeycombHP);
 //         this.honeycombs2HP.push(this.honeycombHP);
 //     }
-    
+
 // };
 
 /**
@@ -69,7 +69,7 @@ beehive.Honeycomb.prototype.initAnimation = function() {
  * @param {number} step 
  */
 
-beehive.Honeycomb.prototype.update = function(step) {
+beehive.Honeycomb.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     if (this.health == 20) {
@@ -87,6 +87,6 @@ beehive.Honeycomb.prototype.update = function(step) {
     // }
 };
 
-beehive.Honeycomb.prototype.dispose = function() {
+beehive.Honeycomb.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
 };
