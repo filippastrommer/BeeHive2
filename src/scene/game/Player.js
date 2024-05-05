@@ -48,6 +48,9 @@ beehive.Player.prototype.init = function () {
 
 };
 
+
+
+
 // beehive.Player.prototype.initProgressbars = function() {
 //     this.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "#ff0000");
 //     this.healthBar.x = 80; 
@@ -121,14 +124,51 @@ beehive.Player.prototype.init = function () {
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
-
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
         this.ownHoneycombs[i].hitTestObject(this, function () {
-            if (this.controller.justPressed(1)) {
+            if (this.controller.pressed(1)) {
                 setTimeout(this.addHoneycomb(this.ownHoneycombs[i]), 10000);
+                // this.timers.create({
+                //     duration: 5000,
+                //     onTick: this.addHoneycomb,
+                //     scope: this
+                // });
             }
         }, this);
     }
+
+
+
+    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
+    //     var honeycomb = this.ownHoneycombs[i];
+    //     honeycomb.hitTestObject(this, function () {
+    //         if (this.controller.pressed(1)) {
+    //             this.timers.create({
+    //                 duration: 10000, // Tid för fördröjning i millisekunder
+    //                 onTick: function() {
+    //                     this.addHoneycomb(honeycomb); // Anropa funktionen för att lägga till honungskakan
+    //                 },
+    //                 scope: this // Ange kontexten för funktionen
+    //             });
+    //         }
+    //     }, this);
+    // }
+
+
+
+
+    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
+    //     this.ownHoneycombs[i].hitTestObject(this, function () {
+    //         if (this.controller.pressed(1)) {
+    //             setTimeout(this.addHoneycomb(this.ownHoneycombs[i]), 10000);
+    //             // this.timers.create({
+    //             //     duration: 5000,
+    //             //     onTick: this.addHoneycomb,
+    //             //     scope: this
+    //             // });
+    //         }
+    //     }, this);
+    // }
     //duration: 5000,
     //         onTick: addHoneycomb,
     //         scope: this

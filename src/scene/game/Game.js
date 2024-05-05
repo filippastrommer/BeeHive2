@@ -30,8 +30,8 @@ beehive.scene.Game = function () {
     this.bullets2 = [];
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
-  //  this.enemys = [];
-   // this.enemyGravity = 4.99;
+    // this.enemys = [];
+    // this.enemyGravity = 4.99;
     
     // this.Honeycomb = Honeycomb;
 
@@ -73,6 +73,7 @@ beehive.scene.Game.prototype.init = function () {
     this.initBackground();
     this.initHoneycombs();
     this.initPlayers();
+    this.initEnemyTimer(25000);
  //  this.spawnBeekeeper();
   //  this.initProgressbars();
    // this.updateHealthBar();
@@ -115,9 +116,53 @@ beehive.scene.Game.prototype.initPlayers = function () {
 
 };
 
+beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
+ // Skapa en timer som anropar spawnBeekeeper varje gång den löper ut
+  this.timers.create({
+    duration: duration,
+    onTick: this.spawnBeekeeper,
+    scope: this,
+    repeat: Infinity
 
+    
+});
 
+this.spawnBeekeeper();
 
+// this.timers.create({
+//     delay: delay,  // Fördröjningen innan första anropet
+//     interval: interval,  // Intervallen mellan varje anrop
+//     callback: this.spawnBeekeeper,  // Funktionen som ska anropas
+//     scope: this,  // Kör funktionen i samma kontext (this)
+//     repeat: Infinity  // Upprepa anropet oändligt
+// });
+};
+
+beehive.scene.Game.prototype.spawnBeekeeper = function () {
+   // Skapa fiendespriten med en viss storlek och form (t.ex. en rektangel)
+   var beekeeper = new rune.display.Sprite(0, 0, 20, 20, "block");
+   beekeeper.x = 130;
+
+   // Ange startpositionen för fienden längs y-axeln (t.ex. längst upp på skärmen)
+   beekeeper.y = -beekeeper.height; // Placera fienden utanför skärmen längst upp
+
+   // Ange en lägre hastighet för fienden längs y-axeln för att göra den långsammare
+   var verticalSpeed = 0.04; // Justera hastigheten efter behov
+
+   // Lägg till fienden på scenen
+   this.stage.addChild(beekeeper);
+
+   // Uppdatera fiendens position i varje uppdateringssteg
+   beekeeper.update = function (step) {
+       // Uppdatera fiendens position längs y-axeln baserat på hastigheten
+       this.y += verticalSpeed * step;
+
+       // Om fienden har rört sig längst ner på skärmen, ta bort den från scenen
+       if (this.y > this.stage.height) {
+           this.removeSelf(); // Ta bort fienden från scenen
+       }
+   };
+};
 
 
 beehive.scene.Game.prototype.initHoneycombs = function () {
