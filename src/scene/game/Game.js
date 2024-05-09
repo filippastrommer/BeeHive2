@@ -418,6 +418,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function (player1, player2) {
             console.log("Spelare 1 health:", player1.health);
             player1.flicker.start();
             collisionOccurredPlayer1 = true; 
+            player1.updateHealthbar();
         }
     };
 
@@ -437,6 +438,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function (player1, player2) {
             console.log("Spelare 2 health:", player2.health);
             player2.flicker.start();
             collisionOccurredPlayer2 = true; 
+            player2.updateHealthbar();
         }
     };
 

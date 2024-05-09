@@ -6,7 +6,7 @@
 beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownHoneycombs, player1, player2, healthbarPlayer1,healthbarPlayer2 ) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
-    this.health = 30;
+    this.health = 50;
     this.player1 = player1;
     this.player2 = player2;
     this.flippedY = true;
@@ -104,35 +104,93 @@ beehive.Player.prototype.init = function () {
 
 
 
-beehive.Player.prototype.initHealthbar = function () {
-    this.healthbarplayer1 = new rune.display.Sprite(0, 0, 45, 45, "healthbartest");
+beehive.Player.prototype.initHealthbar = function (healthbarPlayer1, healthbarPlayer2) {
+    this.healthbarplayer1 = new rune.display.Sprite(0, 0, 49, 49, "50hp");
     this.healthbarplayer1.x = 100;
-    this.healthbarplayer1.y = 0;
+    this.healthbarplayer1.y = 10;
    // this.healthbarplayer1.animation.create("31", [0], 1, true); // Skapa animationer för healthbarplayer1
     this.stage.addChild(this.healthbarplayer1);
 
-    this.healthbarplayer2 = new rune.display.Sprite(0, 0, 45, 45, "healthbartest");
+    this.healthbarplayer2 = new rune.display.Sprite(0, 0, 49, 49, "50hp");
     this.healthbarplayer2.x = 250;
-    this.healthbarplayer2.y = 0;
+    this.healthbarplayer2.y = 10;
    // this.healthbarplayer2.animation.create("31", [0], 1, true); // Skapa animationer för healthbarplayer2
     this.stage.addChild(this.healthbarplayer2);
     // Skapa animationer för healthbarplayer1 och healthbarplayer2 genom att anropa initHealthbarAnimation-metoden
     this.initHealthbarAnimation();
 }
 beehive.Player.prototype.initHealthbarAnimation = function () {
-    for (var i = 0; i <= 31; i++) {
-        var animationName = i.toString(); // Namnet på animationen baseras på hälsan
-        this.healthbarplayer1.animation.create(animationName, [31 - i], 1, true); // Skapa animation för healthbarplayer1
-        this.healthbarplayer2.animation.create(animationName, [31 - i], 1, true); // Skapa animation för healthbarplayer2
+//     for (var i = 0; i <= 11; i++) {
+//         var animationName = i.toString(); // Namnet på animationen baseras på hälsan
+//         this.healthbarplayer1.animation.create(animationName, [11 - i], 1, true); // Skapa animation för healthbarplayer1
+//         this.healthbarplayer2.animation.create(animationName, [11 - i], 1, true); // Skapa animation för healthbarplayer2
     
-}
+// }
+
+
+
+// for (var i = 0; i <= 11; i++) {
+//     var animationName = (i + 1).toString(); // Namnet på animationen baseras på hälsan (frame 1 motsvarar hälsa 50)
+//     var frameIndex = 11 - i; // För att räkna från frame 1 (hälsa 50) till frame 11 (hälsa 0)
+//     this.healthbarplayer1.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer1
+//     this.healthbarplayer2.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer2
+// }
+
+
+
+
+    // // Skapa animationer för varje hälsogräns
+    // this.healthbarplayer1.animation.create("50", [11], 1, true); // Hälsa 50
+    // this.healthbarplayer1.animation.create("45", [10], 1, true);  // Hälsa 45
+    // this.healthbarplayer1.animation.create("40", [9], 1, true);  // Hälsa 40
+    // this.healthbarplayer1.animation.create("35", [8], 1, true);  // Hälsa 35
+    // this.healthbarplayer1.animation.create("30", [7], 1, true);  // Hälsa 30
+    // this.healthbarplayer1.animation.create("25", [6], 1, true);  // Hälsa 25
+    // this.healthbarplayer1.animation.create("20", [5], 1, true);  // Hälsa 20
+    // this.healthbarplayer1.animation.create("15", [4], 1, true);   // Hälsa 15
+    // this.healthbarplayer1.animation.create("10", [3], 1, true);   // Hälsa 10
+    // this.healthbarplayer1.animation.create("5", [2], 1, true);  // Hälsa 5
+    // this.healthbarplayer1.animation.create("0", [1], 1, true); // Hälsa 0
+   
+    for (var i = 0; i <= 10; i++) {
+        var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
+        var health = i * 5; // Hälsogränsen för varje frame
+        var animationName = health.toString(); // Namnet på animationen baseras på hälsan
+        this.healthbarplayer1.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer1
+        this.healthbarplayer2.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer2
+    }
 }
 
 
 beehive.Player.prototype.updateHealthbar = function () {
-    var healthAnimationIndex = Math.max(0, Math.min(this.health, 31)); // Begränsa hälsan mellan 0 och 31
-    var animationName = healthAnimationIndex.toString(); // Namnet på animationen baseras på hälsan
-    this.healthbarplayer1.animation.gotoAndPlay(animationName); // Spela upp rätt animation för healthbarplayer1
+    // var healthAnimationIndex = Math.max(0, Math.min(this.health, 13)); // Begränsa hälsan mellan 0 och 31
+    // var animationName = healthAnimationIndex.toString(); // Namnet på animationen baseras på hälsan
+    // this.healthbarplayer1.animation.gotoAndPlay(animationName); // Spela upp rätt animation för healthbarplayer1
+    // this.healthbarplayer2.animation.gotoAndPlay(animationName);
+
+
+
+
+
+    // var healthFrames = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0]; // Hälsogränser för varje frame
+    // var currentFrameIndex = 0; // Index för aktuell frame
+    // for (var i = 0; i < healthFrames.length; i++) {
+    //     if (this.health >= healthFrames[i]) {
+    //         currentFrameIndex = i; // Uppdatera index för aktuell frame
+    //         break; // Avsluta loopen när rätt frame hittas
+    //     }
+    // }
+    // var currentFrame = 11 - currentFrameIndex; // Beräkna aktuell frame baserat på index
+    // var animationName = currentFrame.toString(); // Namnet på animationen baseras på nuvarande frame
+    // this.healthbarplayer1.animation.gotoAndStop(animationName); // Byt till rätt frame för healthbarplayer1
+    // this.healthbarplayer2.animation.gotoAndStop(animationName); 
+
+
+ var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
+    var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
+
+    // Spela upp rätt animation för healthbarplayer1 och healthbarplayer2
+    this.healthbarplayer1.animation.gotoAndPlay(animationName);
     this.healthbarplayer2.animation.gotoAndPlay(animationName);
 }
 
