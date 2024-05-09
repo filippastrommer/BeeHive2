@@ -18,10 +18,13 @@ beehive.scene.Game = function () {
     this.player1 = null;
     this.player2 = null;
     this.honeycomb = null;
-    
+  //  this.health = health;
     this.honeycombs1 = [];
     this.honeycombs2 = [];
     this.bullets = [];
+    this.beekeepers = [];
+    this.beekeeperPlayer1 = null;
+    this.beekeeperPlayer2 = null;
   
     this.leftBeehive = null;
     this.rightBeehive = null;
@@ -74,6 +77,9 @@ beehive.scene.Game.prototype.init = function () {
     this.initHoneycombs();
     this.initPlayers();
     this.initEnemyTimer(25000);
+  //  this.initHealthbarAnimation();
+  //  this.updateHealthbar();
+
  //  this.spawnBeekeeper();
   //  this.initProgressbars();
    // this.updateHealthBar();
@@ -117,52 +123,30 @@ beehive.scene.Game.prototype.initPlayers = function () {
 };
 
 beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
- // Skapa en timer som anropar spawnBeekeeper varje gång den löper ut
-  this.timers.create({
+ this.timers.create({
     duration: duration,
-    onTick: this.spawnBeekeeper,
+    onTick: function () {
+        this.spawnBeekeeper(this.player1);
+        this.spawnBeekeeper(this.player2);
+    }.bind(this), 
     scope: this,
     repeat: Infinity
-
-    
 });
 
-this.spawnBeekeeper();
+this.spawnBeekeeper(this.player1);
 
-// this.timers.create({
-//     delay: delay,  // Fördröjningen innan första anropet
-//     interval: interval,  // Intervallen mellan varje anrop
-//     callback: this.spawnBeekeeper,  // Funktionen som ska anropas
-//     scope: this,  // Kör funktionen i samma kontext (this)
-//     repeat: Infinity  // Upprepa anropet oändligt
-// });
+this.spawnBeekeeper(this.player2);
 };
 
-beehive.scene.Game.prototype.spawnBeekeeper = function () {
-   // Skapa fiendespriten med en viss storlek och form (t.ex. en rektangel)
-   var beekeeper = new rune.display.Sprite(0, 0, 20, 20, "block");
-   beekeeper.x = 130;
 
-   // Ange startpositionen för fienden längs y-axeln (t.ex. längst upp på skärmen)
-   beekeeper.y = -beekeeper.height; // Placera fienden utanför skärmen längst upp
 
-   // Ange en lägre hastighet för fienden längs y-axeln för att göra den långsammare
-   var verticalSpeed = 0.04; // Justera hastigheten efter behov
 
-   // Lägg till fienden på scenen
-   this.stage.addChild(beekeeper);
 
-   // Uppdatera fiendens position i varje uppdateringssteg
-   beekeeper.update = function (step) {
-       // Uppdatera fiendens position längs y-axeln baserat på hastigheten
-       this.y += verticalSpeed * step;
+//     };
+//  };
 
-       // Om fienden har rört sig längst ner på skärmen, ta bort den från scenen
-       if (this.y > this.stage.height) {
-           this.removeSelf(); // Ta bort fienden från scenen
-       }
-   };
-};
+
+
 
 
 beehive.scene.Game.prototype.initHoneycombs = function () {
@@ -194,66 +178,11 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
 
 
 beehive.scene.Game.prototype.initProgressbars = function() {
-//     this.health = 50;
 
-//     this.player1.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "#ff0000");
-// this.player1.healthBar.x = 80; 
-// this.player1.healthBar.y = 10;
-// this.stage.addChild(this.player1.healthBar);
-
-
-// this.player2.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "ff0000");
-// this.player2.healthBar.x = 300;
-// this.player2.healthBar.y = 10;
-// this.stage.addChild(this.player2.healthBar);
-//    // Hämta hälsan för player1 och player2
-//    var player1Health = this.player1.health;
-//    var player2Health = this.player2.health;
-
-//    // Logga hälsan för player1 och player2
-//    console.log("Health value for player 1:", player1Health);
-//    console.log("Health value for player 2:", player2Health);
-    // // Skapa health bar för player 1 med röd fyllnadsfärg
-    // this.player1.healthBar = this.createHealthBar("#ff0000");
-    // this.player1.healthBar.x = 80;
-    // this.stage.addChild(this.player1.healthBar);
-
-    // // Skapa health bar för player 2 med röd fyllnadsfärg
-    // this.player2.healthBar = this.createHealthBar("#ff0000");
-    // this.player2.healthBar.x = 300;
-    // this.stage.addChild(this.player2.healthBar);
 };
 
 
 
-
-// beehive.scene.Game.prototype.initProgressbars = function() {
-
-
-
-
-// this.player1.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "#ff0000");
-// this.player1.healthBar.x = 80; 
-// this.player1.healthBar.y = 10;
-// this.stage.addChild(this.player1.healthBar);
-
-
-// this.player2.healthBar = new rune.ui.Progressbar(25, 5, "#000000", "ff0000");
-// this.player2.healthBar.x = 300;
-// this.player2.healthBar.y = 10;
-// this.stage.addChild(this.player2.healthBar);
-
-
-
-// };
-
-// beehive.scene.Game.prototype.spawnBeekeeper = function () {
-//     this.beekeeper = new rune.display.Sprite(0,0, 10, 10, "block");
-//     this.beekeeper. y = this.actualY;//Math.random () * 225;
-
-//     this.stage.addChild(this.beekeeper);
-//     this.enemys.push(this.beekeeper);
-// }
 
 
 /**
@@ -267,13 +196,56 @@ beehive.scene.Game.prototype.initProgressbars = function() {
 beehive.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
-    
+
+   // Hit-test för spelarens skott mot beekeeper
+  // För spelare 1
+
+for (var j = 0; j < this.player2.bullets.length; j++) {
+    // Hämta bullet för spelare 2
+    var bullet = this.player2.bullets[j];
+    // Kolla kollision med beekeeper för spelare 1
+    if (bullet.hitTestObject(this.beekeeperPlayer1)) {
+        // Ta bort bullet från scenen om det träffar beekeeper för spelare 1
+        console.log("Bullet hit beekeeperPlayer1");
+        bullet.dispose();
+    }
+    if (bullet.hitTestObject(this.beekeeperPlayer2)) {
+        // Ta bort bullet från scenen om det träffar beekeeper för spelare 1
+        console.log("Bullet hit beekeeperPlayer1");
+        bullet.dispose();
+    }
+}
+
+// Loopa igenom spelarens 1 skott och kolla kollision med beekeeper för spelare 2
+for (var i = 0; i < this.player1.bullets.length; i++) {
+    // Hämta bullet för spelare 1
+    var bullet = this.player1.bullets[i];
+    // Kolla kollision med beekeeper för spelare 2
+    if (bullet.hitTestObject(this.beekeeperPlayer2)) {
+      
+        // Ta bort bullet från scenen om det träffar beekeeper för spelare 2
+        bullet.dispose();
+    }
+    if (bullet.hitTestObject(this.beekeeperPlayer1)) {
+        // Ta bort bullet från scenen om det träffar beekeeper för spelare 1
+       
+        bullet.dispose();
+    }
+}
+
+
+ 
+
+
     for (var i = 0; i < this.player1.bullets.length; i++) {
         this.player1.bullets[i].hitTestObject(this.player2, function () {
             this.player1.bullets[i].dispose(this.player1.bullets[i]);
             this.player2.health--;
-            
+            console.log("Spelare 2 health:", this.player2.health);
+           // this.updateHealthbar(this.player2, this.healthbarPlayer2);
             this.player2.flicker.start();
+
+            this.player2.updateHealthbar();
         }, this);
     }
 
@@ -281,8 +253,12 @@ beehive.scene.Game.prototype.update = function (step) {
         this.player2.bullets[j].hitTestObject(this.player1, function () {
             this.player2.bullets[j].dispose(this.player2.bullets[j]);
             this.player1.health--;
-            
+            console.log("Spealre 1 health:", this.player1.health);
+          //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
+        //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
             this.player1.flicker.start();
+
+            this.player1.updateHealthbar();
         }, this);
     }
    
@@ -340,6 +316,10 @@ beehive.scene.Game.prototype.update = function (step) {
     }
 
 
+
+
+
+
     //Limitations
     if (this.player1.bottom > 225) {
         this.player1.bottom = 225;
@@ -369,7 +349,7 @@ beehive.scene.Game.prototype.update = function (step) {
         this.stage.removeChild(this.player1);
         //this.player1.dispose();
         this.timers.create({
-            duration: 1000,
+            duration: 3000,
             onTick: this.addPlayer1,
             scope: this
         })
@@ -379,7 +359,7 @@ beehive.scene.Game.prototype.update = function (step) {
         this.stage.removeChild(this.player2);
         //this.player2.dispose();
         this.timers.create({
-            duration: 1000,
+            duration: 3000,
             onTick: this.addPlayer2,
             scope: this
         })
@@ -391,8 +371,78 @@ beehive.scene.Game.prototype.update = function (step) {
 
 
 
+beehive.scene.Game.prototype.spawnBeekeeper = function (player1, player2) {
+    var verticalSpeed = 0.04; 
+
+    this.beekeeperPlayer1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+    this.beekeeperPlayer1.hitbox.set(10, 7, 30, 25);
+  //  this.beekeeperPlayer1.hitbox.debug = true;
+
+    this.beekeeperPlayer1.x = 80;
+
+    this.beekeeperPlayer1.y = -this.beekeeperPlayer1.height; 
+
+    
+    this.stage.addChild(this.beekeeperPlayer1);
+
+    this.beekeeperPlayer2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+    this.beekeeperPlayer2.hitbox.set(10, 7, 30, 25);
+   // this.beekeeperPlayer2.hitbox.debug = true;
+
+    this.beekeeperPlayer2.x = 270;
+
+    this.beekeeperPlayer2.y = -this.beekeeperPlayer2.height;
+
+  
+    this.stage.addChild(this.beekeeperPlayer2);
+
+    var collisionOccurredPlayer1 = false;
+
+   
+    var collisionOccurredPlayer2 = false;
+
+   
+    this.beekeeperPlayer1.update = function (step) {
+     
+        this.y += verticalSpeed * step;
+
+        
+        if (this.y > this.stage.height) {
+            this.y = -this.height; 
+            collisionOccurredPlayer1 = false; 
+        }
+
+       
+        if (!collisionOccurredPlayer1 && this.hitTestObject(player1)) {
+            player1.health -= 5; 
+            console.log("Spelare 1 health:", player1.health);
+            player1.flicker.start();
+            collisionOccurredPlayer1 = true; 
+        }
+    };
+
+  
+    this.beekeeperPlayer2.update = function (step) {
+       
+        this.y += verticalSpeed * step;
+
+        if (this.y > this.stage.height) {
+            this.y = -this.height; 
+            collisionOccurredPlayer2 = false; 
+        }
+
+       
+        if (!collisionOccurredPlayer2 && this.hitTestObject(player2)) {
+            player2.health -= 5; 
+            console.log("Spelare 2 health:", player2.health);
+            player2.flicker.start();
+            collisionOccurredPlayer2 = true; 
+        }
+    };
 
 
+    
+};
 
 
 

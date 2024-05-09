@@ -3,10 +3,10 @@
 * @param {number, number, number, number, string, object}  
 */
 
-beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownHoneycombs, player1, player2) {
+beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownHoneycombs, player1, player2, healthbarPlayer1,healthbarPlayer2 ) {
     rune.display.Sprite.call(this, x, y, 22, 28, resource);
     this.controller = controller;
-    this.health = 50;
+    this.health = 30;
     this.player1 = player1;
     this.player2 = player2;
     this.flippedY = true;
@@ -14,6 +14,8 @@ beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownH
     this.bullets = bullets;
     this.honeycombs = honeycombs;
     this.ownHoneycombs = ownHoneycombs;
+    this.healthbarplayer1 = healthbarPlayer1;
+    this.healthbarplayer2 = healthbarPlayer2;
     this.rotationSpeed = 2.6;
     this.hitbox.set(2, 5, 18, 18);
    // this.healthBar = healthBar;
@@ -40,9 +42,13 @@ beehive.Player.prototype.constructor = beehive.Player;
 beehive.Player.prototype.init = function () {
    //this.initProgressbars();
     rune.display.Sprite.prototype.init.call(this);
-    
+    this.initHealthbar();
     this.initPhysics();
     this.initAnimation();
+
+
+     // Uppdatera healthbaren baserat på spelarens hälsa
+     this.updateHealthbar();
   
    // this.updateHealthBar();
 
@@ -73,13 +79,7 @@ beehive.Player.prototype.init = function () {
 
 // }
 
-// beehive.Player.prototype.updateHealthBar = function() {
-//     // Beräkna förhållandet mellan nuvarande hälsa och maxhälsa för att bestämma fyllnadsgraden av healthbaren
-//     var healthRatio = this.health / this.maxHealth; // Förutsatt att du har en variabel för maxhälsa
 
-//     // Uppdatera healthbaren med det nya förhållandet
-//     this.playerHealthBar.setRatio(healthRatio);
-// };
 
 /**
  * ...
@@ -103,23 +103,38 @@ beehive.Player.prototype.init = function () {
 // }
 
 
-// beehive.scene.Game.prototype.updateHealthBar = function(player, health) {
-//     if (player.healthBar) {
-//         var maxHealth = 50; // Maximal hälsa för spelaren
-//         var healthRatio = health / maxHealth; // Beräkna förhållandet mellan aktuell hälsa och maximal hälsa
-//         var progressBarWidth = 25; // Bredden på healthbaren
 
-//         // Uppdatera healthbaren baserat på hälsostatusen
-//         player.healthBar.graphics.clear(); // Rensa tidigare ritad healthbar
-//         player.healthBar.graphics.beginFill("#ff0000"); // Sätt färgen för aktuell hälsa
-//         player.healthBar.graphics.drawRect(0, 0, progressBarWidth * healthRatio, 5); // Rita förgrundsfärgen baserat på hälsostatusen
-//         player.healthBar.graphics.endFill(); // Avsluta ritning
-//     } else {
-//         console.error("Health bar is not defined for player:", player);
-//     }
-// };
+beehive.Player.prototype.initHealthbar = function () {
+    this.healthbarplayer1 = new rune.display.Sprite(0, 0, 45, 45, "healthbartest");
+    this.healthbarplayer1.x = 100;
+    this.healthbarplayer1.y = 0;
+   // this.healthbarplayer1.animation.create("31", [0], 1, true); // Skapa animationer för healthbarplayer1
+    this.stage.addChild(this.healthbarplayer1);
+
+    this.healthbarplayer2 = new rune.display.Sprite(0, 0, 45, 45, "healthbartest");
+    this.healthbarplayer2.x = 250;
+    this.healthbarplayer2.y = 0;
+   // this.healthbarplayer2.animation.create("31", [0], 1, true); // Skapa animationer för healthbarplayer2
+    this.stage.addChild(this.healthbarplayer2);
+    // Skapa animationer för healthbarplayer1 och healthbarplayer2 genom att anropa initHealthbarAnimation-metoden
+    this.initHealthbarAnimation();
+}
+beehive.Player.prototype.initHealthbarAnimation = function () {
+    for (var i = 0; i <= 31; i++) {
+        var animationName = i.toString(); // Namnet på animationen baseras på hälsan
+        this.healthbarplayer1.animation.create(animationName, [31 - i], 1, true); // Skapa animation för healthbarplayer1
+        this.healthbarplayer2.animation.create(animationName, [31 - i], 1, true); // Skapa animation för healthbarplayer2
+    
+}
+}
 
 
+beehive.Player.prototype.updateHealthbar = function () {
+    var healthAnimationIndex = Math.max(0, Math.min(this.health, 31)); // Begränsa hälsan mellan 0 och 31
+    var animationName = healthAnimationIndex.toString(); // Namnet på animationen baseras på hälsan
+    this.healthbarplayer1.animation.gotoAndPlay(animationName); // Spela upp rätt animation för healthbarplayer1
+    this.healthbarplayer2.animation.gotoAndPlay(animationName);
+}
 
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
