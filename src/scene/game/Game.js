@@ -18,14 +18,15 @@ beehive.scene.Game = function () {
     this.player1 = null;
     this.player2 = null;
     this.honeycomb = null;
-  //  this.health = health;
+  
     this.honeycombs1 = [];
     this.honeycombs2 = [];
     this.bullets = [];
     this.beekeepers = [];
     this.beekeeperPlayer1 = null;
     this.beekeeperPlayer2 = null;
-  
+   // this.healthbarplayer1 = null;
+    //this.healthbarplayer2 = null;
     this.leftBeehive = null;
     this.rightBeehive = null;
     this.bullet = null;
@@ -33,6 +34,7 @@ beehive.scene.Game = function () {
     this.bullets2 = [];
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
+    
     // this.enemys = [];
     // this.enemyGravity = 4.99;
     
@@ -83,7 +85,12 @@ beehive.scene.Game.prototype.init = function () {
  // this.spawnBeekeeper();
   //  this.initProgressbars();
    // this.updateHealthBar();
-   
+//    this.initHealthbar1();
+//    this.initHealthbar2();
+//    this.initHealthbarAnimation1();
+//    this.initHealthbarAnimation2();
+ //  this.updateHealthbarPlayer1();
+  // this.updateHealthbarPlayer2();
 
 };
 
@@ -110,15 +117,17 @@ beehive.scene.Game.prototype.initBackground = function () {
 
 beehive.scene.Game.prototype.initPlayers = function () {
     //Player 1 (black bee)
-    this.player1 = new beehive.Player(9, 8, "bee", this.controller1, this.bullets1, this.honeycombs2, this.honeycombs1, this.healthbarplayer1);
-    this.stage.addChild(this.player1);
+    this.player1 = new beehive.Player(9, 8, "bee", this.controller1, this.bullets1, this.honeycombs2, this.honeycombs1);
     
+    this.stage.addChild(this.player1);
+  //  this.player1.initHealthbar1(); // Initiera healthbar för spelare 1
     
 
     //Player 2 (brown bee)
-    this.player2 = new beehive.Player(364, 190, "bee2", this.controller2, this.bullets2, this.honeycombs1, this.honeycombs2, this.healthbarplayer2);
-    this.stage.addChild(this.player2);
+    this.player2 = new beehive.Player(364, 190, "bee2", this.controller2, this.bullets2, this.honeycombs1, this.honeycombs2);
     
+    this.stage.addChild(this.player2);
+   // this.player2.initHealthbar2(); // Initiera healthbar för spelare 1
 
 };
 
@@ -209,7 +218,7 @@ beehive.scene.Game.prototype.spawnBeekeeper1 = function (player1) {
         console.log("Spelare 1 health:", player.health);
         player.flicker.start();
         collisionOccurred = true;
-        player.updateHealthbarPlayer1();
+     //   player.updateHealthbarPlayer1();
     }
 
     // Returnera referensen till beekeeper-objektet
@@ -247,12 +256,84 @@ beehive.scene.Game.prototype.spawnBeekeeper2 = function (player2) {
         console.log("Spelare 2 health:", player.health);
         player.flicker.start();
         collisionOccurred = true;
-        player.updateHealthbarPlayer2();
+      //  player.updateHealthbarPlayer2();
     }
 
     // Returnera referensen till beekeeper-objektet
     return beekeeper2;
 };
+
+
+// beehive.scene.Game.prototype.initHealthbar1 = function () {
+//     this.healthbarplayer1 = new rune.display.Sprite(0, 0, 49, 49, "50hp2");
+//     this.healthbarplayer1.x = 100;
+//     this.healthbarplayer1.y = 10;
+//     this.stage.addChild(this.healthbarplayer1);
+
+//     this.initHealthbarAnimation1();
+// }
+
+// beehive.scene.Game.prototype.initHealthbar2 = function () {
+//     this.healthbarplayer2 = new rune.display.Sprite(0, 0, 49, 49, "50hp");
+//     this.healthbarplayer2.x = 250;
+//     this.healthbarplayer2.y = 10;
+//     this.stage.addChild(this.healthbarplayer2);
+
+//     this.initHealthbarAnimation2();
+// }
+// beehive.scene.Game.prototype.initHealthbarAnimation1 = function () {
+//     for (var i = 10; i >= 0; i--) {
+//         var frameIndex = 10 - i; 
+//         var health = i * 5; 
+//         var animationName = health.toString(); // Namnet på animationen baseras på hälsan
+//         this.healthbarplayer1.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer1
+//     }
+// }
+
+// beehive.scene.Game.prototype.initHealthbarAnimation2 = function () {
+//     for (var i = 10; i >= 0; i--) {
+//         var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
+//         var health = i * 5; // Hälsogränsen för varje frame
+//         var animationName = health.toString(); // Namnet på animationen baseras på hälsan
+//         this.healthbarplayer2.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer2
+//     }
+    
+
+// }
+
+// beehive.scene.Game.prototype.updateHealthbarPlayer1 = function () {
+//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
+//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
+
+//     // Starta och spela upp rätt animation för healthbarplayer1
+//     this.healthbarplayer1.animation.gotoAndPlay(animationName);
+// }
+
+// beehive.scene.Game.prototype.updateHealthbarPlayer2 = function () {
+//     console.log("Uppdaterar healthbar för player 2...");
+//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
+//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
+
+//     // Starta och spela upp rätt animation för healthbarplayer2
+//     this.healthbarplayer2.animation.gotoAndPlay(animationName);
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -289,34 +370,29 @@ beehive.scene.Game.prototype.update = function (step) {
     }
 
 
-    for (var i = 0; i < this.player1.bullets.length; i++) {
-        this.player1.bullets[i].hitTestObject(this.player2, function () {
-            this.player1.bullets[i].dispose(this.player1.bullets[i]);
-            this.player2.health--;
-            console.log("Spelare 2 health:", this.player2.health);
-           // this.updateHealthbar(this.player2, this.healthbarPlayer2);
-            this.player2.flicker.start();
-           // this.player2.updateHealthbars();
-             this.player2.updateHealthbarPlayer2();
-        }, this);
-    }
 
     for (var j = 0; j < this.player2.bullets.length; j++) {
         this.player2.bullets[j].hitTestObject(this.player1, function () {
             this.player2.bullets[j].dispose(this.player2.bullets[j]);
             this.player1.health--;
-            console.log("Spealre 1 health:", this.player1.health);
-          //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
-        //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
+            console.log("Spelare 1 health:", this.player1.health);
             this.player1.flicker.start();
-           // this.player1.updateHealthbars();
+            console.log("Anropar updateHealthbarPlayer1...");
+          //  this.player1.updateHealthbarPlayer1(); // Anropa uppdateringsfunktionen för player1's healthbar
 
-            this.player1.updateHealthbarPlayer1();
         }, this);
     }
-   
   
-
+    for (var i = 0; i < this.player1.bullets.length; i++) {
+        this.player1.bullets[i].hitTestObject(this.player2, function () {
+            this.player1.bullets[i].dispose(this.player1.bullets[i]);
+            this.player2.health--;
+            console.log("Spelare 2 health:", this.player2.health);
+            this.player2.flicker.start();
+            console.log("Anropar updateHealthbarPlayer2...");
+           // this.player2.updateHealthbarPlayer2(); // Anropa uppdateringsfunktionen för player2's healthbar
+        }, this);
+    }
 
 
     for (var i = 0; i < this.honeycombs1.length; i++) {
@@ -422,8 +498,6 @@ beehive.scene.Game.prototype.update = function (step) {
 };
 
 
-
-
 // beehive.scene.Game.prototype.spawnBeekeeper = function (player1, player2) {
 //     var verticalSpeed = 0.04; 
 
@@ -507,6 +581,7 @@ beehive.scene.Game.prototype.addPlayer1 = function () {
     this.player1.health = 50;
     this.stage.addChild(this.player1);
     this.player1.flicker.start();
+   // this.player1.updateHealthbarPlayer1();
 };
 
 beehive.scene.Game.prototype.addPlayer2 = function () {
@@ -515,6 +590,7 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
     this.player2.health = 50;
     this.stage.addChild(this.player2);
     this.player2.flicker.start();
+   // this.player2.updateHealthbarPlayer2();
 };
 
 
