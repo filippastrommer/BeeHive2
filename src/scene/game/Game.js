@@ -112,6 +112,9 @@ beehive.scene.Game.prototype.initPlayers = function () {
     //Player 1 (black bee)
     this.player1 = new beehive.Player(9, 8, "bee", this.controller1, this.bullets1, this.honeycombs2, this.honeycombs1, this.healthbarplayer1);
     this.stage.addChild(this.player1);
+
+    this.player1.healthBar.x = 75;
+    this.player1.healthBar.y = 10;
     
     
 
@@ -119,7 +122,8 @@ beehive.scene.Game.prototype.initPlayers = function () {
     this.player2 = new beehive.Player(364, 190, "bee2", this.controller2, this.bullets2, this.honeycombs1, this.honeycombs2, this.healthbarplayer2);
     this.stage.addChild(this.player2);
     
-
+    this.player2.healthBar.x = 300;
+    this.player2.healthBar.y = 10;
 };
 
 beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
@@ -297,7 +301,7 @@ beehive.scene.Game.prototype.update = function (step) {
            // this.updateHealthbar(this.player2, this.healthbarPlayer2);
             this.player2.flicker.start();
            // this.player2.updateHealthbars();
-             this.player2.updateHealthbarPlayer2();
+             this.player2.updateHealthBar();
         }, this);
     }
 
@@ -311,7 +315,7 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player1.flicker.start();
            // this.player1.updateHealthbars();
 
-            this.player1.updateHealthbarPlayer1();
+            this.player1.updateHealthBar();
         }, this);
     }
    
