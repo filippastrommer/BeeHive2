@@ -120,15 +120,19 @@ beehive.scene.Game.prototype.initPlayers = function () {
     this.player1 = new beehive.Player(9, 8, "bee", this.controller1, this.bullets1, this.honeycombs2, this.honeycombs1);
     
     this.stage.addChild(this.player1);
-  //  this.player1.initHealthbar1(); // Initiera healthbar för spelare 1
+
+    this.player1.healthBar.x = 75;
+    this.player1.healthBar.y = 10;
+    
     
 
     //Player 2 (brown bee)
     this.player2 = new beehive.Player(364, 190, "bee2", this.controller2, this.bullets2, this.honeycombs1, this.honeycombs2);
     
     this.stage.addChild(this.player2);
-   // this.player2.initHealthbar2(); // Initiera healthbar för spelare 1
-
+    
+    this.player2.healthBar.x = 300;
+    this.player2.healthBar.y = 10;
 };
 
 beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
@@ -389,8 +393,22 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player2.health--;
             console.log("Spelare 2 health:", this.player2.health);
             this.player2.flicker.start();
-            console.log("Anropar updateHealthbarPlayer2...");
-           // this.player2.updateHealthbarPlayer2(); // Anropa uppdateringsfunktionen för player2's healthbar
+           // this.player2.updateHealthbars();
+             this.player2.updateHealthBar();
+        }, this);
+    }
+
+    for (var j = 0; j < this.player2.bullets.length; j++) {
+        this.player2.bullets[j].hitTestObject(this.player1, function () {
+            this.player2.bullets[j].dispose(this.player2.bullets[j]);
+            this.player1.health--;
+            console.log("Spealre 1 health:", this.player1.health);
+          //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
+        //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
+            this.player1.flicker.start();
+           // this.player1.updateHealthbars();
+
+            this.player1.updateHealthBar();
         }, this);
     }
 
