@@ -1,3 +1,5 @@
+
+
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
@@ -14,30 +16,26 @@
  * Game scene.
  */
 
-beehive.scene.Menu = function() {
+beehive.scene.GameOverMenu = function (winner) {
     this.menu = null; 
     this.controller1 = this.gamepads.get(0);
-    this.controller2 = this.gamepads.get(1);    
-    this.background = null; 
-
+    this.controller2 = this.gamepads.get(1);
+    this.background = null;
+    this.winner = winner; 
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
      * Calls the constructor method of the super class.
      */
+
     rune.scene.Scene.call(this);
-}; 
+}
 
-//------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
-
-beehive.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype); 
-beehive.scene.Menu.prototype.constructor = beehive.scene.Menu; 
-
+beehive.scene.GameOverMenu.prototype = Object.create(rune.scene.Scene.prototype); 
+beehive.scene.GameOverMenu.prototype.constructor = beehive.scene.GameOverMenu;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
@@ -50,43 +48,51 @@ beehive.scene.Menu.prototype.constructor = beehive.scene.Menu;
  * @returns {undefined}
  */
 
-beehive.scene.Menu.prototype.init = function () {
-    rune.scene.Scene.prototype.init.call(this); 
 
-    this.initBackground(); 
-    this.menu = new rune.ui.VTMenu(); 
+beehive.scene.GameOverMenu.prototype.init = function () {
+
+    rune.scene.Scene.prototype.init.call(this);
+
+    this.initBackground();
+    this.menu = new rune.ui.VTMenu (); 
     this.menu.onSelect(this.selectionSwitch, this); 
-    this.menu.add("Start Game"); 
-    this.menu.add("How to Play"); 
+    this.menu.add("Play Again");
+    this.menu.add("Back to Main Menu"); 
     this.menu.centerX = this.application.screen.centerX; 
-    this.menu.centerY = 135; 
+    this.menu.centerY = 160; 
+
+    // var shoot = new rune.text.BitmapField("Shoot opponents and honeycombs by pressing A"); 
+
+    var winnerText = new rune.text.BitmapField(this.winner + " has won!"); 
+  winnerText.autoSize = true; 
+     winnerText.x = 200; 
+     winnerText.y = 50; 
+    this.stage.addChild(winnerText); 
 
     this.stage.addChild(this.menu); 
-}; 
-
-beehive.scene.Menu.prototype.initBackground = function () {
-this.background = new rune.display.Graphic (
-    0,
-    0,
-    400,
-    225,
-    "tempBackground"
-); 
-this.stage.addChild(this.background); 
 };
 
-beehive.scene.Menu.prototype.selectionSwitch = function (element) {
-    switch (element.text) {
-        case "Start Game":
-        this.application.scenes.load([new beehive.scene.Game()]); 
-        break;
-
-        case "How to Play": 
-        this.application.scenes.load([new beehive.scene.HowToPlay()]);
-        break; 
-    }
+beehive.scene.GameOverMenu.prototype.initBackground = function() {
+    this.background = new rune.display.Graphic (
+        0, 
+        0, 
+        400, 
+        225, 
+        "tempBackground"
+    ); 
+    this.stage.addChild(this.background); 
 }; 
 
+beehive.scene.GameOverMenu.prototype.selectionSwitch = function (element) {
+switch (element.text) {
+    case "Play Again":
+        this.application.scenes.load([new beehive.scene.Game()]); 
+        break; 
+    case "Back to Main Menu":
+        this.application.scenes.load ([new beehive.scene.Menu()]); 
+        break; 
+}
+}; 
 
 /**
  * This method is automatically executed once per "tick". The method is used for 
@@ -97,7 +103,7 @@ beehive.scene.Menu.prototype.selectionSwitch = function (element) {
  * @returns {undefined}
  */
 
-beehive.scene.Menu.prototype.update = function (step) {
+beehive.scene.GameOverMenu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step); 
 
     if (this.controller1.justPressed(0)) {
@@ -111,6 +117,7 @@ beehive.scene.Menu.prototype.update = function (step) {
     if (this.controller1.stickLeftJustUp) {
         this.menu.up(); 
     }
+
 }; 
 
 /**
@@ -122,7 +129,6 @@ beehive.scene.Menu.prototype.update = function (step) {
  * @returns {undefined}
  */
 
-
-beehive.scene.Menu.prototype.dispose = function () {
-    rune.scene.Scene.prototype.dispose.call(this);
+beehive.scene.GameOverMenu.prototype.dispose = function () {
+    rune.scene.Scene.prototype.dispose.call(this); 
 }; 

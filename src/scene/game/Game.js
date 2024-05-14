@@ -480,74 +480,53 @@ beehive.scene.Game.prototype.update = function (step) {
         }, this);
     }
 
-    // for (var j = 0; j < this.player2.bullets.length; j++) {
-    //     this.player2.bullets[j].hitTestObject(this.player1, function () {
-    //         this.player2.bullets[j].dispose(this.player2.bullets[j]);
-    //         this.player1.health--;
-    //      //   console.log("Spealre 1 health:", this.player1.health);
-    //       //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
-    //     //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
-    //         this.player1.flicker.start();
-    //        // this.player1.updateHealthbars();
 
-    //         this.player1.updateHealthBar();
-    //     }, this);
+
+    // for (var i = 0; i < this.honeycombs1.length; i++) {
+   
+    //     if (this.honeycombs1[i].health == 0) {
+    //         this.stage.removeChild(this.honeycombs1[i]);
+    //     }
+
+    // }
+
+    // for (var i = 0; i < this.honeycombs2.length; i++) {
+  
+    //     if (this.honeycombs2[i].health == 0) {
+    //         this.stage.removeChild(this.honeycombs2[i]);
+    //     }
     // }
 
 
-    for (var i = 0; i < this.honeycombs1.length; i++) {
-        //console.log(this.honeycombs1[i].health);
-        // if (this.honeycombs1[i].health == 6) {
-        //     console.log("3");
-        // }
-        // if (this.honeycombs1[i].health == 4) {
-        //     console.log("2");
-        // }
-        // if (this.honeycombs1[i].health == 2) {
-        //     console.log("1");
-        // }
-        if (this.honeycombs1[i].health == 0) {
+    let toRemove1 = [];
+    for (let i = 0; i < this.honeycombs1.length; i++) {
+        if (this.honeycombs1[i].health <= 0) {
             this.stage.removeChild(this.honeycombs1[i]);
+            toRemove1.push(i);
         }
-
     }
 
-    for (var i = 0; i < this.honeycombs2.length; i++) {
-        //console.log(this.honeycombs2[i].health);
-        // if (this.honeycombs2[i].health == 6) {
-        //     console.log("3");
-        // }
-        // if (this.honeycombs2[i].health == 4) {
-        //     console.log("2");
-        // }
-        // if (this.honeycombs2[i].health == 2) {
-        //     console.log("1");
-        // }
+    for (let i = toRemove1.length - 1; i >= 0; i--) {
+        this.honeycombs1.splice(toRemove1[i], 1);
+    }
 
-        
-        if (this.honeycombs2[i].health == 0) {
+    let toRemove2 = [];
+    for (let i = 0; i < this.honeycombs2.length; i++) {
+        if (this.honeycombs2[i].health <= 0) {
             this.stage.removeChild(this.honeycombs2[i]);
+            toRemove2.push(i);
         }
-
-        // if (this.controller.justPressed(1)) {
-        //     this.timers.create({
-        //         duration: 5000,
-        //         onTick: addHoneycomb,
-        //         scope: this
-        //     }, this);
-        // } 
-
-
-    //    for (var i = 0; i < this.enemys.lenght; i++) {
-    //     this.enemys[i].x -2.5;
-    //     this.enemys[i].y += this.enemyGravity;
-        
-    //    }
-
     }
 
+    for (let i = toRemove2.length - 1; i >= 0; i--) {
+        this.honeycombs2.splice(toRemove2[i], 1);
+    }
 
-
+    if (this.honeycombs1.length === 0) {
+        this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
+    } else if (this.honeycombs2.length === 0) {
+        this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
+    }
 
 
 
@@ -583,7 +562,6 @@ beehive.scene.Game.prototype.update = function (step) {
             onTick: this.addPlayer1,
             scope: this
         });
-        // Återställ spelarens hälsa till noll för att undvika negativa värden
         this.player1.health = 0;
     }
     
@@ -595,7 +573,6 @@ beehive.scene.Game.prototype.update = function (step) {
             onTick: this.addPlayer2,
             scope: this
         });
-        // Återställ spelarens hälsa till noll för att undvika negativa värden
         this.player2.health = 0;
     }
 
@@ -631,81 +608,6 @@ beehive.scene.Game.prototype.update = function (step) {
 };
 
 
-// beehive.scene.Game.prototype.spawnBeekeeper = function (player1, player2) {
-//     var verticalSpeed = 0.04; 
-
-//     this.birdPlayer1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-//     this.birdPlayer1.hitbox.set(10, 7, 30, 25);
-//   //  this.birdPlayer1.hitbox.debug = true;
-
-//     this.birdPlayer1.x = 80;
-
-//     this.birdPlayer1.y = -this.birdPlayer1.height; 
-
-    
-//     this.stage.addChild(this.birdPlayer1);
-
-//     this.birdPlayer2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-//     this.birdPlayer2.hitbox.set(10, 7, 30, 25);
-//    // this.birdPlayer2.hitbox.debug = true;
-
-//     this.birdPlayer2.x = 270;
-
-//     this.birdPlayer2.y = -this.birdPlayer2.height;
-
-  
-//     this.stage.addChild(this.birdPlayer2);
-
-//     var collisionOccurredPlayer1 = false;
-
-   
-//     var collisionOccurredPlayer2 = false;
-
-   
-//     this.birdPlayer1.update = function (step) {
-     
-//         this.y += verticalSpeed * step;
-
-        
-//         if (this.y > this.stage.height) {
-//             this.y = -this.height; 
-//             collisionOccurredPlayer1 = false; 
-//         }
-
-       
-//         if (!collisionOccurredPlayer1 && this.hitTestObject(player1)) {
-//             player1.health -= 5; 
-//             console.log("Spelare 1 health:", player1.health);
-//             player1.flicker.start();
-//             collisionOccurredPlayer1 = true; 
-//         //    player1.updateHealthbarPlayer1();      
-//       }
-//     };
-
-  
-//     this.birdPlayer2.update = function (step) {
-       
-//         this.y += verticalSpeed * step;
-
-//         if (this.y > this.stage.height) {
-//             this.y = -this.height; 
-//             collisionOccurredPlayer2 = false; 
-//         }
-
-//         if (!collisionOccurredPlayer2 && this.hitTestObject(player2)) {
-
-            
-//             player2.health -= 5; 
-//             console.log("Spelare 2 health:", player2.health);
-//             player2.flicker.start();
-//             collisionOccurredPlayer2 = true; 
-//            // player2.updateHealthbarPlayer2();       
-//          }
-//     };
-
-    
-// };
-
 
 
 beehive.scene.Game.prototype.addPlayer1 = function () {
@@ -729,7 +631,16 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
 };
 
 
+beehive.scene.Game.prototype.gameEnd = function(winner) {
+    console.log("Spelet är slut!");
+    this.timers.create( {
+        duration: 2000, 
+        onComplete: () => {
+            this.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
+        }
+    });
 
+}; 
 
 
 // 

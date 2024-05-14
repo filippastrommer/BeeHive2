@@ -25,7 +25,7 @@ beehive.system.Main = function() {
         developer: "se.lnu",
         app: "beehive",
         build: "0.0.0",
-        scene: beehive.scene.Game,
+        scene: beehive.scene.Menu,
         resources: beehive.data.Requests,
         useGamepads:true,
         useKeyboard:true,
