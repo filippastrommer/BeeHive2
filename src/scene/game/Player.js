@@ -199,16 +199,21 @@ beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
-        this.ownHoneycombs[i].hitTestObject(this, function () {
+        this.ownHoneycombs[i].hitTestObject(this, function (honeycomb) {
             if (this.controller.pressed(1)) {
-                setTimeout(this.addHoneycomb(this.ownHoneycombs[i]), 10000);
-                // this.timers.create({
-                //     duration: 5000,
-                //     onTick: this.addHoneycomb,
-                //     scope: this
-                // });
+                if (!this.addTimer) {
+                    this.addTimer = setTimeout(() => {
+                        this.addHoneycomb(honeycomb);
+                        this.addTimer = null; 
+                    }, 3000);
+                }
+            } else {
+                if (this.addTimer) {
+                    clearTimeout(this.addTimer); 
+                    this.addTimer = null;
+                }
             }
-        }, this);
+        }.bind(this, this.ownHoneycombs[i]), this); 
     }
 
 
