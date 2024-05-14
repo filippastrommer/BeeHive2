@@ -22,9 +22,10 @@ beehive.scene.Game = function () {
     this.honeycombs1 = [];
     this.honeycombs2 = [];
     this.bullets = [];
+    this.birds = [];
     this.beekeepers = [];
-    this.beekeeperPlayer1 = null;
-    this.beekeeperPlayer2 = null;
+    this.birdPlayer1 = null;
+    this.birdPlayer2 = null;
    // this.healthbarplayer1 = null;
     //this.healthbarplayer2 = null;
     this.leftBeehive = null;
@@ -34,7 +35,6 @@ beehive.scene.Game = function () {
     this.bullets2 = [];
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
-    
     // this.enemys = [];
     // this.enemyGravity = 4.99;
     
@@ -79,6 +79,15 @@ beehive.scene.Game.prototype.init = function () {
     this.initHoneycombs();
     this.initPlayers();
     this.initEnemyTimer(25000);
+    this.initEnemyRandom(30000, 90000);
+    
+
+    var initialDelay = Math.random() * (30000 - 10000) + 10000; 
+    setTimeout(() => {
+        this.spawnBeekeeper();
+    }, initialDelay);
+
+    // this.spawnBeekeeper();
   //  this.initHealthbarAnimation();
   //  this.updateHealthbar();
 
@@ -123,7 +132,7 @@ beehive.scene.Game.prototype.initPlayers = function () {
 
     this.player1.healthBar.x = 75;
     this.player1.healthBar.y = 10;
-    
+
     
 
     //Player 2 (brown bee)
@@ -133,6 +142,8 @@ beehive.scene.Game.prototype.initPlayers = function () {
     
     this.player2.healthBar.x = 300;
     this.player2.healthBar.y = 10;
+
+
 };
 
 beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
@@ -142,16 +153,15 @@ beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
     this.timers.create({
         duration: duration,
         onTick: function () {
-            self.beekeeperPlayer1 = self.spawnBeekeeper1(self.player1);
-            self.beekeeperPlayer2 = self.spawnBeekeeper2(self.player2);
+            self.birdPlayer1 = self.spawnBird1(self.player1);
+            self.birdPlayer2 = self.spawnBird2(self.player2);
         },
         scope: this,
         repeat: Infinity
     });
 
-    // Skapa beekeeper-objekt och spara referenserna
-    this.beekeeperPlayer1 = this.spawnBeekeeper1(this.player1);
-    this.beekeeperPlayer2 = this.spawnBeekeeper2(this.player2);
+    this.birdPlayer1 = this.spawnBird1(this.player1);
+    this.birdPlayer2 = this.spawnBird2(this.player2);
 };
 
 
@@ -191,20 +201,20 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
 };
 
 
-// Skapa en prototyp för Beekeeper1
-beehive.scene.Game.prototype.spawnBeekeeper1 = function (player1) {
+
+beehive.scene.Game.prototype.spawnBird1 = function (player1) {
 
     var verticalSpeed = 0.04;
 
-    var beekeeper1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-    beekeeper1.hitbox.set(10, 7, 30, 25);
-    beekeeper1.x = 80;
-    beekeeper1.y = -beekeeper1.height;
-    this.stage.addChild(beekeeper1);
+    var bird1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+    bird1.hitbox.set(10, 7, 30, 25);
+    bird1.x = 80;
+    bird1.y = -bird1.height;
+    this.stage.addChild(bird1);
 
     var collisionOccurred = false;
 
-    beekeeper1.update = function (step) {
+    bird1.update = function (step) {
         this.y += verticalSpeed * step;
 
         if (this.y > this.stage.height) {
@@ -222,27 +232,28 @@ beehive.scene.Game.prototype.spawnBeekeeper1 = function (player1) {
         console.log("Spelare 1 health:", player.health);
         player.flicker.start();
         collisionOccurred = true;
+        player.updateHealthBar();
      //   player.updateHealthbarPlayer1();
     }
 
-    // Returnera referensen till beekeeper-objektet
-    return beekeeper1;
+
+    return bird1;
 };
 
-// Skapa en prototyp för Beekeeper2
-beehive.scene.Game.prototype.spawnBeekeeper2 = function (player2) {
+
+beehive.scene.Game.prototype.spawnBird2 = function (player2) {
 
     var verticalSpeed = 0.04;
 
-    var beekeeper2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-    beekeeper2.hitbox.set(10, 7, 30, 25);
-    beekeeper2.x = 270;
-    beekeeper2.y = -beekeeper2.height;
-    this.stage.addChild(beekeeper2);
+    var bird2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+    bird2.hitbox.set(10, 7, 30, 25);
+    bird2.x = 270;
+    bird2.y = -bird2.height;
+    this.stage.addChild(bird2);
 
     var collisionOccurred = false;
 
-    beekeeper2.update = function (step) {
+    bird2.update = function (step) {
         this.y += verticalSpeed * step;
 
         if (this.y > this.stage.height) {
@@ -260,88 +271,90 @@ beehive.scene.Game.prototype.spawnBeekeeper2 = function (player2) {
         console.log("Spelare 2 health:", player.health);
         player.flicker.start();
         collisionOccurred = true;
+        player.updateHealthBar();
       //  player.updateHealthbarPlayer2();
     }
 
-    // Returnera referensen till beekeeper-objektet
-    return beekeeper2;
+    
+    return bird2;
 };
 
-
-// beehive.scene.Game.prototype.initHealthbar1 = function () {
-//     this.healthbarplayer1 = new rune.display.Sprite(0, 0, 49, 49, "50hp2");
-//     this.healthbarplayer1.x = 100;
-//     this.healthbarplayer1.y = 10;
-//     this.stage.addChild(this.healthbarplayer1);
-
-//     this.initHealthbarAnimation1();
-// }
-
-// beehive.scene.Game.prototype.initHealthbar2 = function () {
-//     this.healthbarplayer2 = new rune.display.Sprite(0, 0, 49, 49, "50hp");
-//     this.healthbarplayer2.x = 250;
-//     this.healthbarplayer2.y = 10;
-//     this.stage.addChild(this.healthbarplayer2);
-
-//     this.initHealthbarAnimation2();
-// }
-// beehive.scene.Game.prototype.initHealthbarAnimation1 = function () {
-//     for (var i = 10; i >= 0; i--) {
-//         var frameIndex = 10 - i; 
-//         var health = i * 5; 
-//         var animationName = health.toString(); // Namnet på animationen baseras på hälsan
-//         this.healthbarplayer1.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer1
-//     }
-// }
-
-// beehive.scene.Game.prototype.initHealthbarAnimation2 = function () {
-//     for (var i = 10; i >= 0; i--) {
-//         var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
-//         var health = i * 5; // Hälsogränsen för varje frame
-//         var animationName = health.toString(); // Namnet på animationen baseras på hälsan
-//         this.healthbarplayer2.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer2
-//     }
-    
-
-// }
-
-// beehive.scene.Game.prototype.updateHealthbarPlayer1 = function () {
-//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
-//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
-
-//     // Starta och spela upp rätt animation för healthbarplayer1
-//     this.healthbarplayer1.animation.gotoAndPlay(animationName);
-// }
-
-// beehive.scene.Game.prototype.updateHealthbarPlayer2 = function () {
-//     console.log("Uppdaterar healthbar för player 2...");
-//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
-//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
-
-//     // Starta och spela upp rätt animation för healthbarplayer2
-//     this.healthbarplayer2.animation.gotoAndPlay(animationName);
-// }
+beehive.scene.Game.prototype.initEnemyRandom = function (minDuration, maxDuration) {
+    var startXOptions = [10, 345];
+    this.lastBeekeeperX = startXOptions[Math.floor(Math.random() * startXOptions.length)];
 
 
+    var self = this;
+
+    function getRandomDuration() {
+        return Math.random() * (maxDuration - minDuration) + minDuration;
+    }
+
+    function spawnRandomBeekeeper() {
+        self.spawnBeekeeper();
+        var duration = getRandomDuration();
+        self.enemyRandom = setTimeout(spawnRandomBeekeeper, duration);
+    }
+
+    // Initial fördröjning innan den första beekeeper spawnas
+    var initialDelay = getRandomDuration();
+    self.enemyRandom = setTimeout(spawnRandomBeekeeper, initialDelay);
+}
 
 
+beehive.scene.Game.prototype.spawnBeekeeper = function () {
+    var self = this;
+    var startY = -40;
+
+    // Välj startX baserat på lastBeekeeperX, växla mellan de två
+    var startX = this.lastBeekeeperX === 10 ? 345 : 10;
+    this.lastBeekeeperX = startX; // Uppdatera lastBeekeeperX för nästa gång
+
+    var beekeeper = new rune.display.Sprite(startX, startY, 40, 40, "testbeekeeper");
+    beekeeper.honeycombTaken = false;
+    this.stage.addChild(beekeeper);
+
+    var endY = 250;
+    var distanceY = endY - startY;
+    var verticalSpeed = distanceY / 400;
+
+    function moveBeekeeper() {
+        var interval = setInterval(function () {
+            beekeeper.y += verticalSpeed;
+            if (!beekeeper.honeycombTaken) {
+                self.takeHoneycomb(beekeeper);
+            }
+            if (beekeeper.y >= endY) {
+                clearInterval(interval);
+                console.log("Beekeeper har nått slutpositionen:", beekeeper.x, beekeeper.y);
+                setTimeout(function () {
+                    self.stage.removeChild(beekeeper);
+                }, 1000);
+            }
+        }, 16);
+    }
+
+    moveBeekeeper();
+}
 
 
+beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
+    var honeycombs = beekeeper.x === 10 ? this.honeycombs1 : this.honeycombs2;
 
+    for (var i = 0; i < honeycombs.length; i++) {
+        if (beekeeper.hitTestObject(honeycombs[i])) {
+            honeycombs[i].health -= 5; 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+            
+            if (honeycombs[i].health <= 0) {
+                this.stage.removeChild(honeycombs[i]);
+                honeycombs.splice(i, 1); 
+            }
+            beekeeper.honeycombTaken = true; 
+            break; 
+        }
+    }
+}
 
 /**
  * This method is automatically executed once per "tick". The method is used for 
@@ -360,7 +373,7 @@ beehive.scene.Game.prototype.update = function (step) {
     // För spelare 1
     for (var i = 0; i < this.player1.bullets.length; i++) {
         var bullet = this.player1.bullets[i];
-        if (bullet.hitTestObject(this.beekeeperPlayer1) || bullet.hitTestObject(this.beekeeperPlayer2)) {
+        if (bullet.hitTestObject(this.birdPlayer1) || bullet.hitTestObject(this.birdPlayer2)) {
             bullet.dispose();
         }
     }
@@ -368,7 +381,7 @@ beehive.scene.Game.prototype.update = function (step) {
     // För spelare 2
     for (var j = 0; j < this.player2.bullets.length; j++) {
         var bullet = this.player2.bullets[j];
-        if (bullet.hitTestObject(this.beekeeperPlayer1) || bullet.hitTestObject(this.beekeeperPlayer2)) {
+        if (bullet.hitTestObject(this.birdPlayer1) || bullet.hitTestObject(this.birdPlayer2)) {
             bullet.dispose();
         }
     }
@@ -381,9 +394,7 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player1.health--;
             console.log("Spelare 1 health:", this.player1.health);
             this.player1.flicker.start();
-            console.log("Anropar updateHealthbarPlayer1...");
-          //  this.player1.updateHealthbarPlayer1(); // Anropa uppdateringsfunktionen för player1's healthbar
-
+            this.player1.updateHealthBar();
         }, this);
     }
   
@@ -393,24 +404,23 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player2.health--;
             console.log("Spelare 2 health:", this.player2.health);
             this.player2.flicker.start();
-           // this.player2.updateHealthbars();
              this.player2.updateHealthBar();
         }, this);
     }
 
-    for (var j = 0; j < this.player2.bullets.length; j++) {
-        this.player2.bullets[j].hitTestObject(this.player1, function () {
-            this.player2.bullets[j].dispose(this.player2.bullets[j]);
-            this.player1.health--;
-            console.log("Spealre 1 health:", this.player1.health);
-          //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
-        //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
-            this.player1.flicker.start();
-           // this.player1.updateHealthbars();
+    // for (var j = 0; j < this.player2.bullets.length; j++) {
+    //     this.player2.bullets[j].hitTestObject(this.player1, function () {
+    //         this.player2.bullets[j].dispose(this.player2.bullets[j]);
+    //         this.player1.health--;
+    //      //   console.log("Spealre 1 health:", this.player1.health);
+    //       //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
+    //     //  this.updateHealthbar(this.player1, this.healthbarPlayer1);
+    //         this.player1.flicker.start();
+    //        // this.player1.updateHealthbars();
 
-            this.player1.updateHealthBar();
-        }, this);
-    }
+    //         this.player1.updateHealthBar();
+    //     }, this);
+    // }
 
 
     for (var i = 0; i < this.honeycombs1.length; i++) {
@@ -491,26 +501,58 @@ beehive.scene.Game.prototype.update = function (step) {
 
     //Lägg in flicker innan removeChild
 
-    if (this.player1.health == 0) {
-        //this.player1.flicker.start();
+    if (this.player1.health <= 0) {
+        // Ta bort spelaren från scenen endast om hälsan är noll eller mindre
         this.stage.removeChild(this.player1);
-        //this.player1.dispose();
         this.timers.create({
-            duration: 3000,
+            duration: 1000,
             onTick: this.addPlayer1,
             scope: this
-        })
+        });
+        // Återställ spelarens hälsa till noll för att undvika negativa värden
+        this.player1.health = 0;
     }
-
-    if (this.player2.health == 0) {
+    
+    if (this.player2.health <= 0) {
+        // Ta bort spelaren från scenen endast om hälsan är noll eller mindre
         this.stage.removeChild(this.player2);
-        //this.player2.dispose();
         this.timers.create({
-            duration: 3000,
+            duration: 1000,
             onTick: this.addPlayer2,
             scope: this
-        })
+        });
+        // Återställ spelarens hälsa till noll för att undvika negativa värden
+        this.player2.health = 0;
     }
+
+
+
+
+
+
+    // if (this.player1.health == 0) {
+    //     //this.player1.flicker.start();
+    //     this.stage.removeChild(this.player1);
+    //     //this.player1.dispose();
+    //     this.timers.create({
+    //         duration: 3000,
+    //         onTick: this.addPlayer1,
+    //         scope: this
+    //     })
+
+    // }
+
+    // if (this.player2.health == 0) {
+    //     this.stage.removeChild(this.player2);
+    //     //this.player2.dispose();
+    //     this.timers.create({
+    //         duration: 3000,
+    //         onTick: this.addPlayer2,
+    //         scope: this
+            
+    //     })
+
+    // }
 
 
 };
@@ -519,27 +561,27 @@ beehive.scene.Game.prototype.update = function (step) {
 // beehive.scene.Game.prototype.spawnBeekeeper = function (player1, player2) {
 //     var verticalSpeed = 0.04; 
 
-//     this.beekeeperPlayer1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-//     this.beekeeperPlayer1.hitbox.set(10, 7, 30, 25);
-//   //  this.beekeeperPlayer1.hitbox.debug = true;
+//     this.birdPlayer1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+//     this.birdPlayer1.hitbox.set(10, 7, 30, 25);
+//   //  this.birdPlayer1.hitbox.debug = true;
 
-//     this.beekeeperPlayer1.x = 80;
+//     this.birdPlayer1.x = 80;
 
-//     this.beekeeperPlayer1.y = -this.beekeeperPlayer1.height; 
+//     this.birdPlayer1.y = -this.birdPlayer1.height; 
 
     
-//     this.stage.addChild(this.beekeeperPlayer1);
+//     this.stage.addChild(this.birdPlayer1);
 
-//     this.beekeeperPlayer2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-//     this.beekeeperPlayer2.hitbox.set(10, 7, 30, 25);
-//    // this.beekeeperPlayer2.hitbox.debug = true;
+//     this.birdPlayer2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+//     this.birdPlayer2.hitbox.set(10, 7, 30, 25);
+//    // this.birdPlayer2.hitbox.debug = true;
 
-//     this.beekeeperPlayer2.x = 270;
+//     this.birdPlayer2.x = 270;
 
-//     this.beekeeperPlayer2.y = -this.beekeeperPlayer2.height;
+//     this.birdPlayer2.y = -this.birdPlayer2.height;
 
   
-//     this.stage.addChild(this.beekeeperPlayer2);
+//     this.stage.addChild(this.birdPlayer2);
 
 //     var collisionOccurredPlayer1 = false;
 
@@ -547,7 +589,7 @@ beehive.scene.Game.prototype.update = function (step) {
 //     var collisionOccurredPlayer2 = false;
 
    
-//     this.beekeeperPlayer1.update = function (step) {
+//     this.birdPlayer1.update = function (step) {
      
 //         this.y += verticalSpeed * step;
 
@@ -568,7 +610,7 @@ beehive.scene.Game.prototype.update = function (step) {
 //     };
 
   
-//     this.beekeeperPlayer2.update = function (step) {
+//     this.birdPlayer2.update = function (step) {
        
 //         this.y += verticalSpeed * step;
 
@@ -599,7 +641,8 @@ beehive.scene.Game.prototype.addPlayer1 = function () {
     this.player1.health = 50;
     this.stage.addChild(this.player1);
     this.player1.flicker.start();
-   // this.player1.updateHealthbarPlayer1();
+    this.player1.healthBar.x = 75;
+    this.player1.healthBar.y = 10;
 };
 
 beehive.scene.Game.prototype.addPlayer2 = function () {
@@ -608,7 +651,8 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
     this.player2.health = 50;
     this.stage.addChild(this.player2);
     this.player2.flicker.start();
-   // this.player2.updateHealthbarPlayer2();
+    this.player2.healthBar.x = 300;
+    this.player2.healthBar.y = 10;
 };
 
 

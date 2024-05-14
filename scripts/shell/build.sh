@@ -15,4 +15,5 @@ npx google-closure-compiler \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
 --js "./../../src/scene/game/Honeycomb.js" \
+--js "./../../src/scene/game/Beekeeper.js" \
 --js_output_file "./../../dist/beehive.js";

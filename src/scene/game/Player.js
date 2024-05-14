@@ -184,7 +184,10 @@ beehive.Player.prototype.updateHealthBar = function () {
 // }
 
 
-
+// beehive.Player.prototype.resetHealthBar = function () {
+//     this.health = 50; // Återställ hälsan till full
+//     this.updateHealthBar(); // Uppdatera hälsobaren med den nya hälsan
+// };
 
 
 
