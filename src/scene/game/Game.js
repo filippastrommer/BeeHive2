@@ -33,8 +33,11 @@ beehive.scene.Game = function () {
     this.bullet = null;
     this.bullets1 = [];
     this.bullets2 = [];
+    this.powerups = [];
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
+   // this.doubleDamage = false; 
+
     // this.enemys = [];
     // this.enemyGravity = 4.99;
     
@@ -87,6 +90,7 @@ beehive.scene.Game.prototype.init = function () {
         this.spawnBeekeeper();
     }, initialDelay);
 
+    this.initPowerups();
     // this.spawnBeekeeper();
   //  this.initHealthbarAnimation();
   //  this.updateHealthbar();
@@ -356,6 +360,46 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
     }
 }
 
+
+
+beehive.scene.Game.prototype.initPowerups = function() {
+    var self = this;
+
+    function spawnPowerup() {
+        var width = 400; 
+        var height = 225; 
+
+        var x = Math.random() * width; // Slumpmässig X-position inom scenens bredd
+        var y = Math.random() * height; // Slumpmässig Y-position inom scenens höjd
+
+        var powerup = new rune.display.Sprite(x, y, 20, 20, "hppoweruptest");
+        powerup.type = "healthTimes2";
+        this.stage.addChild(powerup);
+        this.powerups.push(powerup);
+
+        setTimeout(function() {
+            var index = self.powerups.indexOf(powerup);
+            if (index > -1) {
+                self.stage.removeChild(powerup);
+                self.powerups.splice(index, 1);
+            }
+        }, 10000); // Ta bort power-up efter 10 sekunder om den inte plockats upp
+    }
+
+    // Slumpmässigt spawnar en powerup varje 30 till 60 sekunder
+    setInterval(spawnPowerup.bind(this), Math.random() * 30000 + 30000);
+};
+
+beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
+    if (powerup.type === "healthTimes2") {
+        player.doubleDamage = true; 
+        setTimeout(() => player.doubleDamage = false, 10000);
+    }
+
+
+}; 
+
+
 /**
  * This method is automatically executed once per "tick". The method is used for 
  * calculations such as application logic.
@@ -387,21 +431,49 @@ beehive.scene.Game.prototype.update = function (step) {
     }
 
 
+    this.powerups.forEach((powerup, index) => {
+        if (this.player1.hitTestObject(powerup)) {
+            this.handlePowerup(this.player1, powerup);
+            this.stage.removeChild(powerup);
+            this.powerups.splice(index, 1);
+        }
+    });
+
+    // Hantera power-ups för player2
+    this.powerups.forEach((powerup, index) => {
+        if (this.player2.hitTestObject(powerup)) {
+            this.handlePowerup(this.player2, powerup);
+            this.stage.removeChild(powerup);
+            this.powerups.splice(index, 1);
+        }
+    });
+
 
     for (var j = 0; j < this.player2.bullets.length; j++) {
         this.player2.bullets[j].hitTestObject(this.player1, function () {
             this.player2.bullets[j].dispose(this.player2.bullets[j]);
-            this.player1.health--;
+            //this.player1.health--;
+            if (this.player2.doubleDamage) {
+                this.player1.health -=2; 
+            } else {
+                this.player1.health -=1; 
+            }
             console.log("Spelare 1 health:", this.player1.health);
             this.player1.flicker.start();
             this.player1.updateHealthBar();
+
         }, this);
     }
   
     for (var i = 0; i < this.player1.bullets.length; i++) {
         this.player1.bullets[i].hitTestObject(this.player2, function () {
             this.player1.bullets[i].dispose(this.player1.bullets[i]);
-            this.player2.health--;
+           // this.player2.health--;
+           if (this.player1.doubleDamage) {
+            this.player2.health -=2; 
+        } else {
+            this.player2.health -=1; 
+        }
             console.log("Spelare 2 health:", this.player2.health);
             this.player2.flicker.start();
              this.player2.updateHealthBar();
@@ -451,6 +523,8 @@ beehive.scene.Game.prototype.update = function (step) {
         // if (this.honeycombs2[i].health == 2) {
         //     console.log("1");
         // }
+
+        
         if (this.honeycombs2[i].health == 0) {
             this.stage.removeChild(this.honeycombs2[i]);
         }
@@ -524,7 +598,6 @@ beehive.scene.Game.prototype.update = function (step) {
         // Återställ spelarens hälsa till noll för att undvika negativa värden
         this.player2.health = 0;
     }
-
 
 
 
@@ -654,6 +727,8 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
     this.player2.healthBar.x = 300;
     this.player2.healthBar.y = 10;
 };
+
+
 
 
 

@@ -17,6 +17,7 @@ beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownH
     this.healthBar = null;
     this.rotationSpeed = 2.6;
     this.hitbox.set(2, 5, 18, 18);
+    this.doubleDamage = false; 
    // this.healthBar = healthBar;
     //this.hitbox.debug = true;
     //this.bullet = null;
@@ -198,6 +199,8 @@ beehive.Player.prototype.updateHealthBar = function () {
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
+
+
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
         this.ownHoneycombs[i].hitTestObject(this, function (honeycomb) {
             if (this.controller.pressed(1)) {
@@ -262,7 +265,13 @@ beehive.Player.prototype.update = function (step) {
             if (this.bullets[i].hitTestObject(this.honeycombs[j])) {
                 this.bullets[i].dispose(); 
                 console.log("träff");
-                this.honeycombs[j].health--;
+                // this.honeycombs[j].health--;
+                if (this.doubleDamage) {
+                    this.honeycombs[j].health -= 2; // Dubbel skada
+                } else {
+                    this.honeycombs[j].health -= 1; // Normal skada
+                }
+                console.log("Träff på honeycomb! Nuvarande hälsa: ", this.honeycombs[j].health);
             }
         }
     }
@@ -364,7 +373,7 @@ beehive.Player.prototype.shootNectar = function () {
     var bulletY = this.y + beeOffsetY;
 
     var radians = this.rotation * (Math.PI / 180);
-    var bulletSpeed = 5;
+    var bulletSpeed = 3;
     var bulletDirectionX = bulletSpeed * Math.cos(radians);
     var bulletDirectionY = bulletSpeed * Math.sin(radians);
 
