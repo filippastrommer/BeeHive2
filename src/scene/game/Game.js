@@ -314,7 +314,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     var startX = this.lastBeekeeperX === 10 ? 345 : 10;
     this.lastBeekeeperX = startX; // Uppdatera lastBeekeeperX för nästa gång
 
-    var beekeeper = new rune.display.Sprite(startX, startY, 40, 40, "testbeekeeper");
+    var beekeeper = new rune.display.Sprite(startX, startY, 31, 31, "beekeeper");
     beekeeper.honeycombTaken = false;
     this.stage.addChild(beekeeper);
 
@@ -325,6 +325,9 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     function moveBeekeeper() {
         var interval = setInterval(function () {
             beekeeper.y += verticalSpeed;
+
+          
+
             if (!beekeeper.honeycombTaken) {
                 self.takeHoneycomb(beekeeper);
             }
@@ -372,7 +375,7 @@ beehive.scene.Game.prototype.initPowerups = function() {
         var x = Math.random() * width; // Slumpmässig X-position inom scenens bredd
         var y = Math.random() * height; // Slumpmässig Y-position inom scenens höjd
 
-        var powerup = new rune.display.Sprite(x, y, 20, 20, "hppoweruptest");
+        var powerup = new rune.display.Sprite(x, y, 20, 20, "x2");
         powerup.type = "healthTimes2";
         this.stage.addChild(powerup);
         this.powerups.push(powerup);

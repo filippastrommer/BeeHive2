@@ -70,7 +70,7 @@ this.background = new rune.display.Graphic (
     0,
     400,
     225,
-    "tempBackground"
+    "start"
 ); 
 this.stage.addChild(this.background); 
 };
