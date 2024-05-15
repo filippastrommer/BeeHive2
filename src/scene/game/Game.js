@@ -36,6 +36,7 @@ beehive.scene.Game = function () {
     this.powerups = [];
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
+    this.shields = []; 
    // this.doubleDamage = false; 
 
     // this.enemys = [];
@@ -81,8 +82,8 @@ beehive.scene.Game.prototype.init = function () {
     this.initBackground();
     this.initHoneycombs();
     this.initPlayers();
-    this.initEnemyTimer(25000);
-    this.initEnemyRandom(30000, 90000);
+    this.initEnemyTimer(15000);
+    this.initEnemyRandom(20000, 50000);
     
 
     var initialDelay = Math.random() * (30000 - 10000) + 10000; 
@@ -212,7 +213,7 @@ beehive.scene.Game.prototype.spawnBird1 = function (player1) {
 
     var bird1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
     bird1.hitbox.set(10, 7, 30, 25);
-    bird1.x = 80;
+    bird1.x = 160;
     bird1.y = -bird1.height;
     this.stage.addChild(bird1);
 
@@ -251,7 +252,7 @@ beehive.scene.Game.prototype.spawnBird2 = function (player2) {
 
     var bird2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
     bird2.hitbox.set(10, 7, 30, 25);
-    bird2.x = 270;
+    bird2.x = 215;
     bird2.y = -bird2.height;
     this.stage.addChild(bird2);
 
@@ -314,7 +315,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     var startX = this.lastBeekeeperX === 10 ? 345 : 10;
     this.lastBeekeeperX = startX; // Uppdatera lastBeekeeperX för nästa gång
 
-    var beekeeper = new rune.display.Sprite(startX, startY, 31, 31, "beekeeper");
+    var beekeeper = new rune.display.Sprite(startX, startY, 30, 35, "beekeeper");
     beekeeper.honeycombTaken = false;
     this.stage.addChild(beekeeper);
 
@@ -375,10 +376,15 @@ beehive.scene.Game.prototype.initPowerups = function() {
         var x = Math.random() * width; // Slumpmässig X-position inom scenens bredd
         var y = Math.random() * height; // Slumpmässig Y-position inom scenens höjd
 
-        var powerup = new rune.display.Sprite(x, y, 20, 20, "x2");
-        powerup.type = "healthTimes2";
+        var powerupType = Math.random() < 0.5 ? "healthTimes2" : "shield"; 
+        var texture = powerupType === "healthTimes2"
+ ? "x2" : "shieldpower"; 
+
+        var powerup = new rune.display.Sprite(x, y, 20, 20, texture);
+        powerup.type = powerupType;
         this.stage.addChild(powerup);
         this.powerups.push(powerup);
+        
 
         setTimeout(function() {
             var index = self.powerups.indexOf(powerup);
@@ -393,14 +399,41 @@ beehive.scene.Game.prototype.initPowerups = function() {
     setInterval(spawnPowerup.bind(this), Math.random() * 30000 + 30000);
 };
 
+beehive.scene.Game.prototype.shieldPowerup = function (player) {
+    var shield = new rune.display.Sprite(0,0,20,400, "shieldbush"); 
+    this.stage.addChild(shield); 
+
+
+    if (player === this.player1) {
+        shield.x = 30; 
+        shield.y = 10;
+    } else if (player === this.player2) {
+        shield.x = 345; 
+        shield.y = 10; 
+    }
+
+    this.shields.push(shield); 
+
+    setTimeout(() => {
+        this.stage.removeChild(shield); 
+        var index = this.shields.indexOf(shield); 
+        if (index !== -1) {
+            this.shields.splice(index,1); 
+        }
+    }, 10000); 
+}; 
+
+
 beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
     if (powerup.type === "healthTimes2") {
         player.doubleDamage = true; 
         setTimeout(() => player.doubleDamage = false, 10000);
+    } else if (powerup.type === "shield") {
+       this.shieldPowerup(player); 
     }
-
-
 }; 
+
+
 
 
 /**
@@ -415,6 +448,20 @@ beehive.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
 
+    this.shields.forEach(shield => {
+        this.player1.bullets.forEach((bullet, i) => {
+            if (bullet.hitTestObject(shield)) {
+                bullet.dispose(); 
+                this.player1.bullets.splice(i, 1); 
+            }
+        }); 
+        this.player2.bullets.forEach((bullet, i) => {
+            if (bullet.hitTestObject(shield)) {
+                bullet.dispose(); 
+                this.player2.bullets.splice(i, 1); 
+            }
+        }); 
+    }); 
 
  // Hit-test för spelarens skott mot beekeeper
     // För spelare 1

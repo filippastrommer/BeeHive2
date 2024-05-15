@@ -111,6 +111,18 @@ beehive.scene.Menu.prototype.update = function (step) {
     if (this.controller1.stickLeftJustUp) {
         this.menu.up(); 
     }
+
+    if (this.controller2.justPressed(0)) {
+        this.menu.select(); 
+    }
+
+    if (this.controller2.stickLeftJustDown) {
+        this.menu.down();
+    }
+
+    if (this.controller2.stickLeftJustUp) {
+        this.menu.up(); 
+    }
 }; 
 
 /**

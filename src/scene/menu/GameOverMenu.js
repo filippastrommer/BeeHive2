@@ -59,14 +59,14 @@ beehive.scene.GameOverMenu.prototype.init = function () {
     this.menu.add("Play Again");
     this.menu.add("Back to Main Menu"); 
     this.menu.centerX = this.application.screen.centerX; 
-    this.menu.centerY = 160; 
+    this.menu.centerY = 190; 
 
-    // var shoot = new rune.text.BitmapField("Shoot opponents and honeycombs by pressing A"); 
 
-    var winnerText = new rune.text.BitmapField(this.winner + " has won!"); 
-  winnerText.autoSize = true; 
-     winnerText.x = 200; 
-     winnerText.y = 50; 
+    var winnerText = new rune.text.BitmapField(this.winner + " is the winner!"); 
+    winnerText.fontSize = 144;
+//   winnerText.autoSize = true; 
+     winnerText.x = 120; 
+     winnerText.y = 150; 
     this.stage.addChild(winnerText); 
 
     this.stage.addChild(this.menu); 
@@ -78,7 +78,7 @@ beehive.scene.GameOverMenu.prototype.initBackground = function() {
         0, 
         400, 
         225, 
-        "tempBackground"
+        "gameover"
     ); 
     this.stage.addChild(this.background); 
 }; 
@@ -118,6 +118,17 @@ beehive.scene.GameOverMenu.prototype.update = function (step) {
         this.menu.up(); 
     }
 
+    if (this.controller2.justPressed(0)) {
+        this.menu.select(); 
+    }
+
+    if (this.controller2.stickLeftJustDown) {
+        this.menu.down();
+    }
+
+    if (this.controller2.stickLeftJustUp) {
+        this.menu.up(); 
+    }
 }; 
 
 /**

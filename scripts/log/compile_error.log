@@ -1,0 +1,65 @@
+./../../src/scene/game/Game.js:90:15: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  90|     setTimeout(() => {
+                     ^
+
+./../../src/scene/game/Game.js:417:15: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  417|     setTimeout(() => {
+                      ^
+
+./../../src/scene/game/Game.js:430:19: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  430|         setTimeout(() => player.doubleDamage = false, 10000);
+                          ^
+
+./../../src/scene/game/Game.js:451:25: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  451|     this.shields.forEach(shield => {
+                                ^
+
+./../../src/scene/game/Game.js:452:37: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  452|         this.player1.bullets.forEach((bullet, i) => {
+                                            ^
+
+./../../src/scene/game/Game.js:458:37: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  458|         this.player2.bullets.forEach((bullet, i) => {
+                                            ^
+
+./../../src/scene/game/Game.js:484:26: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  484|     this.powerups.forEach((powerup, index) => {
+                                 ^
+
+./../../src/scene/game/Game.js:493:26: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  493|     this.powerups.forEach((powerup, index) => {
+                                 ^
+
+./../../src/scene/game/Game.js:551:4: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: let declaration.
+  551|     let toRemove1 = [];
+           ^
+
+./../../src/scene/game/Game.js:552:9: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: let declaration.
+  552|     for (let i = 0; i < this.honeycombs1.length; i++) {
+                ^
+
+./../../src/scene/game/Game.js:559:9: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: let declaration.
+  559|     for (let i = toRemove1.length - 1; i >= 0; i--) {
+                ^
+
+./../../src/scene/game/Game.js:563:4: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: let declaration.
+  563|     let toRemove2 = [];
+           ^
+
+./../../src/scene/game/Game.js:564:9: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: let declaration.
+  564|     for (let i = 0; i < this.honeycombs2.length; i++) {
+                ^
+
+./../../src/scene/game/Game.js:571:9: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: let declaration.
+  571|     for (let i = toRemove2.length - 1; i >= 0; i--) {
+                ^
+
+./../../src/scene/game/Game.js:688:20: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  688|         onComplete: () => {
+                           ^
+
+./../../src/scene/game/Player.js:208:47: ERROR - [JSC_LANGUAGE_FEATURE] This language feature is only supported for ECMASCRIPT_2015 mode or better: arrow function.
+  208|                     this.addTimer = setTimeout(() => {
+                                                      ^
+
+16 error(s), 0 warning(s)

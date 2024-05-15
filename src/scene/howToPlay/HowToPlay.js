@@ -17,11 +17,15 @@
 beehive.scene.HowToPlay = function () {
     this.menu = null; 
     this.controller1 = this.gamepads.get(0); 
+    this.controller2 = this.gamepads.get(1);
     this.background = null; 
     this.controllerImg = null; 
     this.beekeeper = null; 
     this.birds = null; 
     this.powerups = null; 
+    this.beekeeper = null; 
+    this.x2Bullets = null; 
+    this.shield = null; 
 
     //--------------------------------------------------------------------------
     // Super call
@@ -60,31 +64,68 @@ beehive.scene.HowToPlay.prototype.init = function () {
     this.menu.onSelect(this.selectionSwitch, this); 
     this.menu.add("Start Game"); 
     this.menu.add("Back to Main Menu"); 
-    this.menu.x = 20; 
-    this.menu.centerY = 30; 
+    this.menu.x = 235; 
+    this.menu.centerY = 190; 
+
+    // var width = 400; 
+    // var height = 225; 
+
 
     this.stage.addChild(this.menu); 
 
-    var title = new rune.text.BitmapField("Welcome to Beehive!"); 
+    var title = new rune.text.BitmapField("How to play Beehive!"); 
     title.autoSize = true; 
-    title.x = 200;
-    title.y = 45; 
+    title.x = 190;
+    title.y = 15; 
 
-    // var shoot = new rune.text.BitmapField("Shoot opponents and honeycombs by pressing A"); 
-    // shoot.autoSize = true; 
-    // shoot.x = 100; 
-    // shoot.y = 60; 
+    var shoot = new rune.text.BitmapField("- Shoot opponents and honeycombs \nby pressing A"); 
+    shoot.autoSize = true; 
+    shoot.x = 190; 
+    shoot.y = 35; 
 
-    // var move = new rune.text.BitmapField("Move with the left joystick");
-    // move.autoSize = true; 
-    // move.x = 200; 
-    // move.y = 75; 
+    var move = new rune.text.BitmapField("- Move with the left joystick");
+    move.autoSize = true; 
+    move.x = 190; 
+    move.y = 65; 
+
+    var health = new rune.text.BitmapField("- Collision with birds give -5 hp, \ncollision with bullet gives -1 hp"); 
+    health.autoSize = true; 
+    health.x = 190; 
+    health.y = 80; 
+
+    honeycombs = new rune.text.BitmapField("- Shoot apart the opponents \nhoneycombs to win. Honeycombs have 20 health and bullets give -1 hp"); 
+    honeycombs.autoSize = true; 
+    honeycombs.x = 190; 
+    honeycombs.y = 110; 
+
+    var beekeeperText = new rune.text.BitmapField("-5hp on one Honeycomb"); 
+    beekeeperText.autoSize = true; 
+    beekeeperText.x = 45; 
+    beekeeperText.y = 123; 
+
+  
+   var x2Text = new rune.text.BitmapField("Bullets damage doubles"); 
+   x2Text.autoSize = true; 
+   x2Text.x = 35; 
+   x2Text.y = 160; 
+
+   
+
+   shieldText = new rune.text.BitmapField("Gives shield for Honeycombs"); 
+   shieldText.autoSize = true; 
+   shieldText.x = 35; 
+   shieldText.y = 190; 
 
 
-
-    // this.stage.addChild(title); 
-    // this.stage.addChild(shoot); 
-    // this.stage.addChild(move); 
+    this.stage.addChild(title); 
+    this.stage.addChild(shoot); 
+    this.stage.addChild(move); 
+    this.stage.addChild(health); 
+    this.stage.addChild(honeycombs);
+    this.stage.addChild(beekeeperText); 
+    this.stage.addChild(x2Text);
+    this.stage.addChild(shieldText); 
+ 
 }; 
 
 beehive.scene.HowToPlay.prototype.initGraphics = function () {
@@ -93,10 +134,46 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
         0,
         400, 
         225, 
-        "tempBackground"
+        "background"
         ); 
 
         this.stage.addChild(this.background); 
+
+        this.controllerImg = new rune.display.Graphic(
+            5, 
+            15, 
+            160, 
+            80, 
+            "controller"
+        ); 
+        this.stage.addChild(this.controllerImg); 
+
+        this.beekeeper = new rune.display.Graphic(
+            10, 
+            110, 
+            30, 
+            35, 
+            "beekeeper"
+        ); 
+        this.stage.addChild(this.beekeeper); 
+
+        this.x2Bullets = new rune.display.Graphic(
+            15, 
+            155, 
+            20, 
+            20, 
+            "x2"
+        ); 
+        this.stage.addChild(this.x2Bullets); 
+
+        this.shield = new rune.display.Graphic(
+            10, 
+            185, 
+            20, 
+            20, 
+            "shieldpower"
+        ); 
+        this.stage.addChild(this.shield); 
 }
 
 beehive.scene.HowToPlay.prototype.selectionSwitch = function (element) {
@@ -132,6 +209,19 @@ beehive.scene.HowToPlay.prototype.update = function (step) {
     }
 
     if (this.controller1.stickLeftJustUp) {
+        this.menu.up(); 
+    }
+
+
+    if (this.controller2.justPressed(0)) {
+        this.menu.select(); 
+    }
+
+    if (this.controller2.stickLeftJustDown) {
+        this.menu.down();
+    }
+
+    if (this.controller2.stickLeftJustUp) {
         this.menu.up(); 
     }
 }; 
