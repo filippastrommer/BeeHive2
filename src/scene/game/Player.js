@@ -201,23 +201,44 @@ beehive.Player.prototype.update = function (step) {
     this.updateInput();
 
 
+    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
+    //     this.ownHoneycombs[i].hitTestObject(this, function (honeycomb) {
+    //         if (this.controller.pressed(1)) {
+    //             if (!this.addTimer) {
+    //                 this.addTimer = setTimeout(() => {
+    //                     this.addHoneycomb(honeycomb);
+    //                     this.addTimer = null; 
+    //                 }, 3000);
+    //             }
+    //         } else {
+    //             if (this.addTimer) {
+    //                 clearTimeout(this.addTimer); 
+    //                 this.addTimer = null;
+    //             }
+    //         }
+    //     }.bind(this, this.ownHoneycombs[i]), this); 
+    // }
+
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
-        this.ownHoneycombs[i].hitTestObject(this, function (honeycomb) {
+        this.ownHoneycombs[i].hitTestObject(this, (function(honeycomb) {
             if (this.controller.pressed(1)) {
                 if (!this.addTimer) {
-                    this.addTimer = setTimeout(() => {
-                        this.addHoneycomb(honeycomb);
-                        this.addTimer = null; 
+                    var self = this; 
+                    this.addTimer = setTimeout(function() {
+                        self.addHoneycomb(honeycomb);
+                        self.addTimer = null;
                     }, 3000);
                 }
             } else {
                 if (this.addTimer) {
-                    clearTimeout(this.addTimer); 
+                    clearTimeout(this.addTimer);
                     this.addTimer = null;
                 }
             }
-        }.bind(this, this.ownHoneycombs[i]), this); 
+        }).bind(this, this.ownHoneycombs[i]), this);
     }
+
+
 
 
 

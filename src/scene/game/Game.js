@@ -84,13 +84,13 @@ beehive.scene.Game.prototype.init = function () {
     this.initPlayers();
     this.initEnemyTimer(15000);
     this.initEnemyRandom(20000, 50000);
-    
-
-    var initialDelay = Math.random() * (30000 - 10000) + 10000; 
-    setTimeout(() => {
-        this.spawnBeekeeper();
+    var self = this;
+    var initialDelay = Math.random() * (30000 - 10000) + 10000;
+    setTimeout(function() {
+        self.spawnBeekeeper();
     }, initialDelay);
 
+  
     this.initPowerups();
     // this.spawnBeekeeper();
   //  this.initHealthbarAnimation();
@@ -396,7 +396,7 @@ beehive.scene.Game.prototype.initPowerups = function() {
     }
 
     // Slumpmässigt spawnar en powerup varje 30 till 60 sekunder
-    setInterval(spawnPowerup.bind(this), Math.random() * 30000 + 30000);
+    setInterval(spawnPowerup.bind(this), Math.random() * 15000 + 25000);
 };
 
 beehive.scene.Game.prototype.shieldPowerup = function (player) {
@@ -414,23 +414,30 @@ beehive.scene.Game.prototype.shieldPowerup = function (player) {
 
     this.shields.push(shield); 
 
-    setTimeout(() => {
-        this.stage.removeChild(shield); 
-        var index = this.shields.indexOf(shield); 
-        if (index !== -1) {
-            this.shields.splice(index,1); 
-        }
-    }, 10000); 
+    var self = this; 
+setTimeout(function() {
+    self.stage.removeChild(shield);
+    var index = self.shields.indexOf(shield); 
+    if (index !== -1) {
+        self.shields.splice(index, 1); 
+    }
+}, 10000);
 }; 
 
 
 beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
+
+
     if (powerup.type === "healthTimes2") {
-        player.doubleDamage = true; 
-        setTimeout(() => player.doubleDamage = false, 10000);
+        player.doubleDamage = true;
+        // var self = this;
+        setTimeout(function() {
+            player.doubleDamage = false;
+        }, 10000);
     } else if (powerup.type === "shield") {
-       this.shieldPowerup(player); 
+        this.shieldPowerup(player); 
     }
+    
 }; 
 
 
@@ -447,21 +454,22 @@ beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
 beehive.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
+    var self = this;
+this.shields.forEach(function(shield) {
+    self.player1.bullets.forEach(function(bullet, i) {
+        if (bullet.hitTestObject(shield)) {
+            bullet.dispose();
+            self.player1.bullets.splice(i, 1);
+        }
+    });
 
-    this.shields.forEach(shield => {
-        this.player1.bullets.forEach((bullet, i) => {
-            if (bullet.hitTestObject(shield)) {
-                bullet.dispose(); 
-                this.player1.bullets.splice(i, 1); 
-            }
-        }); 
-        this.player2.bullets.forEach((bullet, i) => {
-            if (bullet.hitTestObject(shield)) {
-                bullet.dispose(); 
-                this.player2.bullets.splice(i, 1); 
-            }
-        }); 
-    }); 
+    self.player2.bullets.forEach(function(bullet, i) {
+        if (bullet.hitTestObject(shield)) {
+            bullet.dispose();
+            self.player2.bullets.splice(i, 1);
+        }
+    });
+});
 
  // Hit-test för spelarens skott mot beekeeper
     // För spelare 1
@@ -481,11 +489,13 @@ beehive.scene.Game.prototype.update = function (step) {
     }
 
 
-    this.powerups.forEach((powerup, index) => {
-        if (this.player1.hitTestObject(powerup)) {
-            this.handlePowerup(this.player1, powerup);
-            this.stage.removeChild(powerup);
-            this.powerups.splice(index, 1);
+
+    var self = this;
+    this.powerups.forEach(function(powerup, index) {
+        if (self.player1.hitTestObject(powerup)) {
+            self.handlePowerup(self.player1, powerup);
+            self.stage.removeChild(powerup);
+            self.powerups.splice(index, 1);
         }
     });
 
@@ -548,37 +558,63 @@ beehive.scene.Game.prototype.update = function (step) {
     // }
 
 
-    let toRemove1 = [];
-    for (let i = 0; i < this.honeycombs1.length; i++) {
+    // let toRemove1 = [];
+    // for (let i = 0; i < this.honeycombs1.length; i++) {
+    //     if (this.honeycombs1[i].health <= 0) {
+    //         this.stage.removeChild(this.honeycombs1[i]);
+    //         toRemove1.push(i);
+    //     }
+    // }
+
+    // for (let i = toRemove1.length - 1; i >= 0; i--) {
+    //     this.honeycombs1.splice(toRemove1[i], 1);
+    // }
+
+    // let toRemove2 = [];
+    // for (let i = 0; i < this.honeycombs2.length; i++) {
+    //     if (this.honeycombs2[i].health <= 0) {
+    //         this.stage.removeChild(this.honeycombs2[i]);
+    //         toRemove2.push(i);
+    //     }
+    // }
+
+    // for (let i = toRemove2.length - 1; i >= 0; i--) {
+    //     this.honeycombs2.splice(toRemove2[i], 1);
+    // }
+
+    // if (this.honeycombs1.length === 0) {
+    //     this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
+    // } else if (this.honeycombs2.length === 0) {
+    //     this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
+    // }
+
+    var toRemove1 = [];
+    for (var i = 0; i < this.honeycombs1.length; i++) {
         if (this.honeycombs1[i].health <= 0) {
             this.stage.removeChild(this.honeycombs1[i]);
             toRemove1.push(i);
         }
     }
-
-    for (let i = toRemove1.length - 1; i >= 0; i--) {
+    for (var i = toRemove1.length - 1; i >= 0; i--) {
         this.honeycombs1.splice(toRemove1[i], 1);
     }
-
-    let toRemove2 = [];
-    for (let i = 0; i < this.honeycombs2.length; i++) {
-        if (this.honeycombs2[i].health <= 0) {
-            this.stage.removeChild(this.honeycombs2[i]);
-            toRemove2.push(i);
-        }
+    var toRemove2 = [];
+for (var i = 0; i < this.honeycombs2.length; i++) {
+    if (this.honeycombs2[i].health <= 0) {
+        this.stage.removeChild(this.honeycombs2[i]);
+        toRemove2.push(i);
     }
+}
 
-    for (let i = toRemove2.length - 1; i >= 0; i--) {
-        this.honeycombs2.splice(toRemove2[i], 1);
-    }
+for (var i = toRemove2.length - 1; i >= 0; i--) {
+    this.honeycombs2.splice(toRemove2[i], 1);
+}
 
-    if (this.honeycombs1.length === 0) {
-        this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
-    } else if (this.honeycombs2.length === 0) {
-        this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
-    }
-
-
+if (this.honeycombs1.length === 0) {
+    this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
+} else if (this.honeycombs2.length === 0) {
+    this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
+}
 
     //Limitations
     if (this.player1.bottom > 225) {
@@ -683,10 +719,12 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
 
 beehive.scene.Game.prototype.gameEnd = function(winner) {
     console.log("Spelet är slut!");
-    this.timers.create( {
-        duration: 2000, 
-        onComplete: () => {
-            this.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
+
+    var self = this;
+    this.timers.create({
+        duration: 2000,
+        onComplete: function() {
+            self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
         }
     });
 
