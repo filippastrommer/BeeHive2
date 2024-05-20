@@ -93,10 +93,15 @@ beehive.scene.HowToPlay.prototype.init = function () {
     health.x = 190; 
     health.y = 80; 
 
-    honeycombs = new rune.text.BitmapField("- Shoot apart the opponents \nhoneycombs to win. Honeycombs have 20 health and bullets give -1 hp"); 
+    honeycombs = new rune.text.BitmapField("- Shoot apart the opponents \nhoneycombs to win. Honeycombs have \n20 health and bullets give -1hp"); 
     honeycombs.autoSize = true; 
     honeycombs.x = 190; 
     honeycombs.y = 110; 
+
+    repair = new rune.text.BitmapField("- Repair and place new honeycombs \nby pressing B for 3s"); 
+    repair.autoSize = true; 
+    repair.x = 190; 
+    repair.y = 150; 
 
     var beekeeperText = new rune.text.BitmapField("-5hp on one Honeycomb"); 
     beekeeperText.autoSize = true; 
@@ -122,6 +127,9 @@ beehive.scene.HowToPlay.prototype.init = function () {
     this.stage.addChild(move); 
     this.stage.addChild(health); 
     this.stage.addChild(honeycombs);
+    this.stage.addChild(repair);
+
+
     this.stage.addChild(beekeeperText); 
     this.stage.addChild(x2Text);
     this.stage.addChild(shieldText); 

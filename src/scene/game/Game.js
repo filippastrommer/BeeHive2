@@ -24,8 +24,8 @@ beehive.scene.Game = function () {
     this.bullets = [];
     this.birds = [];
     this.beekeepers = [];
-    this.birdPlayer1 = null;
-    this.birdPlayer2 = null;
+  //  this.birdPlayer1 = null;
+  //  this.birdPlayer2 = null;
    // this.healthbarplayer1 = null;
     //this.healthbarplayer2 = null;
     this.leftBeehive = null;
@@ -37,6 +37,12 @@ beehive.scene.Game = function () {
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
     this.shields = []; 
+
+
+    //Sound effects 
+    this.powerupSound = null; 
+    this.honeycombSound = null; 
+
    // this.doubleDamage = false; 
 
     // this.enemys = [];
@@ -82,8 +88,8 @@ beehive.scene.Game.prototype.init = function () {
     this.initBackground();
     this.initHoneycombs();
     this.initPlayers();
-    this.initEnemyTimer(15000);
-    this.initEnemyRandom(20000, 50000);
+    this.initEnemyTimer(20000, 2);
+    this.initEnemyRandom(20000, 40000);
     var self = this;
     var initialDelay = Math.random() * (30000 - 10000) + 10000;
     setTimeout(function() {
@@ -92,6 +98,14 @@ beehive.scene.Game.prototype.init = function () {
 
   
     this.initPowerups();
+
+    //Init sounds
+    this.powerupSound = this.application.sounds.sound.get("pickupPowerup", true); 
+    this.honeycombSound = this.application.sounds.sound.get("honeycombSound", true); 
+
+
+
+
     // this.spawnBeekeeper();
   //  this.initHealthbarAnimation();
   //  this.updateHealthbar();
@@ -151,22 +165,44 @@ beehive.scene.Game.prototype.initPlayers = function () {
 
 };
 
-beehive.scene.Game.prototype.initEnemyTimer = function (duration) {
+beehive.scene.Game.prototype.initEnemyTimer = function (duration, maxBirds) {
 
+
+    // var self = this;
+    // this.timers.create({
+    //     duration: duration,
+    //     onTick: function () {
+    //         self.birdPlayer1 = self.spawnBird1(self.player1);
+    //         self.birdPlayer2 = self.spawnBird2(self.player2);
+    //     },
+    //     scope: this,
+    //     repeat: Infinity
+    // });
+
+    // this.birdPlayer1 = this.spawnBird1(this.player1);
+    // this.birdPlayer2 = this.spawnBird2(this.player2);
 
     var self = this;
-    this.timers.create({
-        duration: duration,
-        onTick: function () {
-            self.birdPlayer1 = self.spawnBird1(self.player1);
-            self.birdPlayer2 = self.spawnBird2(self.player2);
-        },
-        scope: this,
-        repeat: Infinity
-    });
+    var birdCount = 0;
 
-    this.birdPlayer1 = this.spawnBird1(this.player1);
-    this.birdPlayer2 = this.spawnBird2(this.player2);
+    // Initial spawn
+    if (birdCount < maxBirds) {
+        console.log("Initial spawn");
+        self.spawnBird(self.player1, self.player2);
+        self.spawnBird(self.player1, self.player2);
+        birdCount += 2;
+    }
+    console.log("Initial birds spawned");
+
+    // Timer for spawning birds
+    setInterval(function () {
+        if (birdCount < maxBirds) {
+            console.log("Tick: Spawning birds");
+            self.spawnBird(self.player1, self.player2);
+            self.spawnBird(self.player1, self.player2);
+            birdCount += 2; // Increase the counter by 2 as we spawn two birds each time
+        }
+    }, duration);
 };
 
 
@@ -207,82 +243,207 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
 
 
 
-beehive.scene.Game.prototype.spawnBird1 = function (player1) {
+// beehive.scene.Game.prototype.spawnBird1 = function (player1) {
 
-    var verticalSpeed = 0.04;
+//     // var verticalSpeed = 0.04;
 
-    var bird1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-    bird1.hitbox.set(10, 7, 30, 25);
-    bird1.x = 160;
-    bird1.y = -bird1.height;
-    this.stage.addChild(bird1);
+//     // var bird1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+//     // bird1.hitbox.set(10, 7, 30, 25);
+//     // bird1.x = 160;
+//     // bird1.y = -bird1.height;
+//     // this.stage.addChild(bird1);
 
-    var collisionOccurred = false;
+//     // var collisionOccurred = false;
 
-    bird1.update = function (step) {
-        this.y += verticalSpeed * step;
+//     // bird1.update = function (step) {
+//     //     this.y += verticalSpeed * step;
 
-        if (this.y > this.stage.height) {
-            this.y = -this.height;
-            collisionOccurred = false;
-        }
+//     //     if (this.y > this.stage.height) {
+//     //         this.y = -this.height;
+//     //         collisionOccurred = false;
+//     //     }
 
-        if (!collisionOccurred && this.hitTestObject(player1)) {
-            handleCollision(player1);
-        }
-    };
+//     //     if (!collisionOccurred && this.hitTestObject(player1)) {
+//     //         handleCollision(player1);
+//     //     }
+//     // };
 
-    function handleCollision(player) {
-        player.health -= 5;
-        console.log("Spelare 1 health:", player.health);
-        player.flicker.start();
-        collisionOccurred = true;
-        player.updateHealthBar();
-     //   player.updateHealthbarPlayer1();
-    }
-
-
-    return bird1;
-};
+//     // function handleCollision(player) {
+//     //     player.health -= 5;
+//     //     console.log("Spelare 1 health:", player.health);
+//     //     player.flicker.start();
+//     //     collisionOccurred = true;
+//     //     player.updateHealthBar();
+//     //  //   player.updateHealthbarPlayer1();
+//     // }
 
 
-beehive.scene.Game.prototype.spawnBird2 = function (player2) {
+//     // return bird1;
+//     var bird1 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+//     bird1.hitbox.set(10, 7, 30, 25);
+//     bird1.x = Math.random() * (400 - bird1.width); // Använd scenens bredd direkt
+//     bird1.y = -bird1.height;
+//     this.stage.addChild(bird1);
+//     console.log("Bird 1 spawned at x:", bird1.x, " y:", bird1.y);
 
-    var verticalSpeed = 0.04;
+//     var collisionOccurred = false;
+//     var direction = { x: Math.random() * 0.08 - 0.04, y: Math.random() * 0.08 };
 
-    var bird2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
-    bird2.hitbox.set(10, 7, 30, 25);
-    bird2.x = 215;
-    bird2.y = -bird2.height;
-    this.stage.addChild(bird2);
+//     bird1.update = function (step) {
+//         console.log("Bird 1 updating");
 
-    var collisionOccurred = false;
+//         this.x += direction.x * step;
+//         this.y += direction.y * step;
 
-    bird2.update = function (step) {
-        this.y += verticalSpeed * step;
+//         // Ändra riktning om fågeln träffar en kant
+//         if (this.x <= 0 || this.x + this.width >= 400) { // Använd scenens bredd direkt
+//             direction.x = -direction.x;
+//         }
+//         if (this.y >= 225) { // Använd scenens höjd direkt
+//             this.y = -this.height;
+//             collisionOccurred = false;
+//         }
 
-        if (this.y > this.stage.height) {
-            this.y = -this.height;
-            collisionOccurred = false;
-        }
+//         if (!collisionOccurred && this.hitTestObject(player1)) {
+//             console.log("Bird 1 collided with player 1");
+//             handleCollision(player1);
+//         }
+//     };
 
-        if (!collisionOccurred && this.hitTestObject(player2)) {
-            handleCollision(player2);
-        }
-    };
+//     function handleCollision(player) {
+//         player.health -= 5;
+//         console.log("Spelare 1 health:", player.health);
+//         player.flicker.start();
+//         collisionOccurred = true;
+//         player.updateHealthBar();
+//     }
 
-    function handleCollision(player) {
-        player.health -= 5;
-        console.log("Spelare 2 health:", player.health);
-        player.flicker.start();
-        collisionOccurred = true;
-        player.updateHealthBar();
-      //  player.updateHealthbarPlayer2();
-    }
+//     return bird1;
+// };
+
+
+// beehive.scene.Game.prototype.spawnBird2 = function (player2) {
+//     // var verticalSpeed = 0.04;
+
+//     // var bird2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+//     // bird2.hitbox.set(10, 7, 30, 25);
+//     // bird2.x = 215;
+//     // bird2.y = -bird2.height;
+//     // this.stage.addChild(bird2);
+
+//     // var collisionOccurred = false;
+
+//     // bird2.update = function (step) {
+//     //     this.y += verticalSpeed * step;
+
+//     //     if (this.y > this.stage.height) {
+//     //         this.y = -this.height;
+//     //         collisionOccurred = false;
+//     //     }
+
+//     //     if (!collisionOccurred && this.hitTestObject(player2)) {
+//     //         handleCollision(player2);
+//     //     }
+//     // };
+
+//     // function handleCollision(player) {
+//     //     player.health -= 5;
+//     //     console.log("Spelare 2 health:", player.health);
+//     //     player.flicker.start();
+//     //     collisionOccurred = true;
+//     //     player.updateHealthBar();
+//     //   //  player.updateHealthbarPlayer2();
+//     // }
 
     
-    return bird2;
+//     // return bird2;
+//     var bird2 = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+//     bird2.hitbox.set(10, 7, 30, 25);
+//     bird2.x = Math.random() * (400 - bird2.width); // Använd scenens bredd direkt
+//     bird2.y = -bird2.height;
+//     this.stage.addChild(bird2);
+//     console.log("Bird 2 spawned at x:", bird2.x, " y:", bird2.y);
+
+//     var collisionOccurred = false;
+//     var direction = { x: Math.random() * 0.08 - 0.04, y: Math.random() * 0.08 };
+
+//     bird2.update = function (step) {
+//         console.log("Bird 2 updating");
+
+//         this.x += direction.x * step;
+//         this.y += direction.y * step;
+
+//         // Ändra riktning om fågeln träffar en kant
+//         if (this.x <= 0 || this.x + this.width >= 400) { // Använd scenens bredd direkt
+//             direction.x = -direction.x;
+//         }
+//         if (this.y >= 225) { // Använd scenens höjd direkt
+//             this.y = -this.height;
+//             collisionOccurred = false;
+//         }
+
+//         if (!collisionOccurred && this.hitTestObject(player2)) {
+//             console.log("Bird 2 collided with player 2");
+//             handleCollision(player2);
+//         }
+//     };
+
+//     function handleCollision(player) {
+//         player.health -= 5;
+//         console.log("Spelare 2 health:", player.health);
+//         player.flicker.start();
+//         collisionOccurred = true;
+//         player.updateHealthBar();
+//     }
+
+//     return bird2;
+// };
+
+
+
+beehive.scene.Game.prototype.spawnBird = function (player1, player2) {
+    var bird = new rune.display.Sprite(0, 0, 40, 40, "birdtest");
+    bird.hitbox.set(10, 7, 30, 25);
+    bird.x = Math.random() * (400 - bird.width); // Use the scene's width directly
+    bird.y = -bird.height;
+    this.stage.addChild(bird);
+    this.birds.push(bird);
+    console.log("Bird spawned at x:", bird.x, " y:", bird.y);
+
+    var collisionOccurred = false;
+    var direction = { x: Math.random() * 0.08 - 0.04, y: Math.random() * 0.08 };
+
+    bird.update = function (step) {
+        this.x += direction.x * step;
+        this.y += direction.y * step;
+
+        // Change direction if the bird hits an edge
+        if (this.x <= 0 || this.x + this.width >= 400) { // Use the scene's width directly
+            direction.x = -direction.x;
+        }
+        if (this.y >= 225) { // Use the scene's height directly
+            this.y = -this.height;
+            collisionOccurred = false;
+        }
+
+        if (!collisionOccurred && (this.hitTestObject(player1) || this.hitTestObject(player2))) {
+            console.log("Bird collided with player");
+            handleCollision(this.hitTestObject(player1) ? player1 : player2);
+        }
+    }.bind(bird);
+
+    function handleCollision(player) {
+        player.health -= 5;
+        console.log("Player health:", player.health);
+        player.flicker.start();
+        collisionOccurred = true;
+        player.updateHealthBar();
+    }
+
+    return bird;
 };
+
+
 
 beehive.scene.Game.prototype.initEnemyRandom = function (minDuration, maxDuration) {
     var startXOptions = [10, 345];
@@ -301,7 +462,6 @@ beehive.scene.Game.prototype.initEnemyRandom = function (minDuration, maxDuratio
         self.enemyRandom = setTimeout(spawnRandomBeekeeper, duration);
     }
 
-    // Initial fördröjning innan den första beekeeper spawnas
     var initialDelay = getRandomDuration();
     self.enemyRandom = setTimeout(spawnRandomBeekeeper, initialDelay);
 }
@@ -311,9 +471,8 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     var self = this;
     var startY = -40;
 
-    // Välj startX baserat på lastBeekeeperX, växla mellan de två
     var startX = this.lastBeekeeperX === 10 ? 345 : 10;
-    this.lastBeekeeperX = startX; // Uppdatera lastBeekeeperX för nästa gång
+    this.lastBeekeeperX = startX; 
 
     var beekeeper = new rune.display.Sprite(startX, startY, 30, 35, "beekeeper");
     beekeeper.honeycombTaken = false;
@@ -355,6 +514,8 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
 
             
             if (honeycombs[i].health <= 0) {
+                this.honeycombSound.play(); 
+                this.honeycombSound.volume = 0.5; 
                 this.stage.removeChild(honeycombs[i]);
                 honeycombs.splice(i, 1); 
             }
@@ -373,8 +534,8 @@ beehive.scene.Game.prototype.initPowerups = function() {
         var width = 400; 
         var height = 225; 
 
-        var x = Math.random() * width; // Slumpmässig X-position inom scenens bredd
-        var y = Math.random() * height; // Slumpmässig Y-position inom scenens höjd
+        var x = Math.random() * width; // Slumpmässig X-position 
+        var y = Math.random() * height; // Slumpmässig Y-position 
 
         var powerupType = Math.random() < 0.5 ? "healthTimes2" : "shield"; 
         var texture = powerupType === "healthTimes2"
@@ -392,10 +553,9 @@ beehive.scene.Game.prototype.initPowerups = function() {
                 self.stage.removeChild(powerup);
                 self.powerups.splice(index, 1);
             }
-        }, 10000); // Ta bort power-up efter 10 sekunder om den inte plockats upp
+        }, 10000); 
     }
 
-    // Slumpmässigt spawnar en powerup varje 30 till 60 sekunder
     setInterval(spawnPowerup.bind(this), Math.random() * 15000 + 25000);
 };
 
@@ -471,40 +631,62 @@ this.shields.forEach(function(shield) {
     });
 });
 
- // Hit-test för spelarens skott mot beekeeper
-    // För spelare 1
-    for (var i = 0; i < this.player1.bullets.length; i++) {
-        var bullet = this.player1.bullets[i];
-        if (bullet.hitTestObject(this.birdPlayer1) || bullet.hitTestObject(this.birdPlayer2)) {
+//  // Hit-test för spelarens skott mot beekeeper
+//     // För spelare 1
+//     for (var i = 0; i < this.player1.bullets.length; i++) {
+//         var bullet = this.player1.bullets[i];
+//         if (bullet.hitTestObject(this.birdPlayer1) || bullet.hitTestObject(this.birdPlayer2)) {
+//             bullet.dispose();
+//         }
+//     }
+
+//     // För spelare 2
+//     for (var j = 0; j < this.player2.bullets.length; j++) {
+//         var bullet = this.player2.bullets[j];
+//         if (bullet.hitTestObject(this.birdPlayer1) || bullet.hitTestObject(this.birdPlayer2)) {
+//             bullet.dispose();
+//         }
+//     }
+
+for (var i = 0; i < this.player1.bullets.length; i++) {
+    var bullet = this.player1.bullets[i];
+    for (var k = 0; k < this.birds.length; k++) {
+        var bird = this.birds[k];
+        if (bullet.hitTestObject(bird)) {
             bullet.dispose();
         }
     }
+}
 
-    // För spelare 2
-    for (var j = 0; j < this.player2.bullets.length; j++) {
-        var bullet = this.player2.bullets[j];
-        if (bullet.hitTestObject(this.birdPlayer1) || bullet.hitTestObject(this.birdPlayer2)) {
+// För spelare 2
+for (var j = 0; j < this.player2.bullets.length; j++) {
+    var bullet = this.player2.bullets[j];
+    for (var l = 0; l < this.birds.length; l++) {
+        var bird = this.birds[l];
+        if (bullet.hitTestObject(bird)) {
             bullet.dispose();
         }
     }
-
-
+}
 
     var self = this;
     this.powerups.forEach(function(powerup, index) {
         if (self.player1.hitTestObject(powerup)) {
+            self.powerupSound.play(); 
+            self.powerupSound.volume = 0.5; 
             self.handlePowerup(self.player1, powerup);
             self.stage.removeChild(powerup);
             self.powerups.splice(index, 1);
         }
     });
 
-    // Hantera power-ups för player2
-    this.powerups.forEach((powerup, index) => {
-        if (this.player2.hitTestObject(powerup)) {
-            this.handlePowerup(this.player2, powerup);
-            this.stage.removeChild(powerup);
-            this.powerups.splice(index, 1);
+    this.powerups.forEach(function(powerup, index) {
+        if (self.player2.hitTestObject(powerup)) {
+            self.powerupSound.play(); 
+            self.powerupSound.volume = 0.5; 
+            self.handlePowerup(self.player2, powerup);
+            self.stage.removeChild(powerup);
+            self.powerups.splice(index, 1);
         }
     });
 
@@ -542,55 +724,11 @@ this.shields.forEach(function(shield) {
 
 
 
-    // for (var i = 0; i < this.honeycombs1.length; i++) {
-   
-    //     if (this.honeycombs1[i].health == 0) {
-    //         this.stage.removeChild(this.honeycombs1[i]);
-    //     }
-
-    // }
-
-    // for (var i = 0; i < this.honeycombs2.length; i++) {
-  
-    //     if (this.honeycombs2[i].health == 0) {
-    //         this.stage.removeChild(this.honeycombs2[i]);
-    //     }
-    // }
-
-
-    // let toRemove1 = [];
-    // for (let i = 0; i < this.honeycombs1.length; i++) {
-    //     if (this.honeycombs1[i].health <= 0) {
-    //         this.stage.removeChild(this.honeycombs1[i]);
-    //         toRemove1.push(i);
-    //     }
-    // }
-
-    // for (let i = toRemove1.length - 1; i >= 0; i--) {
-    //     this.honeycombs1.splice(toRemove1[i], 1);
-    // }
-
-    // let toRemove2 = [];
-    // for (let i = 0; i < this.honeycombs2.length; i++) {
-    //     if (this.honeycombs2[i].health <= 0) {
-    //         this.stage.removeChild(this.honeycombs2[i]);
-    //         toRemove2.push(i);
-    //     }
-    // }
-
-    // for (let i = toRemove2.length - 1; i >= 0; i--) {
-    //     this.honeycombs2.splice(toRemove2[i], 1);
-    // }
-
-    // if (this.honeycombs1.length === 0) {
-    //     this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
-    // } else if (this.honeycombs2.length === 0) {
-    //     this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
-    // }
-
     var toRemove1 = [];
     for (var i = 0; i < this.honeycombs1.length; i++) {
         if (this.honeycombs1[i].health <= 0) {
+            this.honeycombSound.play(); 
+            this.honeycombSound.volume = 0.5; 
             this.stage.removeChild(this.honeycombs1[i]);
             toRemove1.push(i);
         }
@@ -598,16 +736,18 @@ this.shields.forEach(function(shield) {
     for (var i = toRemove1.length - 1; i >= 0; i--) {
         this.honeycombs1.splice(toRemove1[i], 1);
     }
-    var toRemove2 = [];
+    var damageHoneycombs = [];
 for (var i = 0; i < this.honeycombs2.length; i++) {
     if (this.honeycombs2[i].health <= 0) {
+                        this.honeycombSound.play(); 
+                this.honeycombSound.volume = 0.5; 
         this.stage.removeChild(this.honeycombs2[i]);
-        toRemove2.push(i);
+        damageHoneycombs.push(i);
     }
 }
 
-for (var i = toRemove2.length - 1; i >= 0; i--) {
-    this.honeycombs2.splice(toRemove2[i], 1);
+for (var i = damageHoneycombs.length - 1; i >= 0; i--) {
+    this.honeycombs2.splice(damageHoneycombs[i], 1);
 }
 
 if (this.honeycombs1.length === 0) {
@@ -641,7 +781,6 @@ if (this.honeycombs1.length === 0) {
     //Lägg in flicker innan removeChild
 
     if (this.player1.health <= 0) {
-        // Ta bort spelaren från scenen endast om hälsan är noll eller mindre
         this.stage.removeChild(this.player1);
         this.timers.create({
             duration: 1000,
@@ -652,7 +791,6 @@ if (this.honeycombs1.length === 0) {
     }
     
     if (this.player2.health <= 0) {
-        // Ta bort spelaren från scenen endast om hälsan är noll eller mindre
         this.stage.removeChild(this.player2);
         this.timers.create({
             duration: 1000,
