@@ -37,6 +37,7 @@ beehive.scene.Game = function () {
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);
     this.shields = []; 
+    this.visualTimer = null;
 
 
     //Sound effects 
@@ -92,6 +93,7 @@ beehive.scene.Game.prototype.init = function () {
     this.initPlayers();
     this.initEnemyTimer(20000, 2);
     this.initEnemyRandom(20000, 40000);
+   // this.initTimerAnimation(); 
     var self = this;
     var initialDelay = Math.random() * (30000 - 10000) + 10000;
     setTimeout(function() {
@@ -534,11 +536,13 @@ beehive.scene.Game.prototype.initPowerups = function() {
     var self = this;
 
     function spawnPowerup() {
-        var width = 400; 
-        var height = 225; 
+        // var width = 400; 
+        // var height = 225; 
 
-        var x = Math.random() * width; // Slumpmässig X-position 
-        var y = Math.random() * height; // Slumpmässig Y-position 
+        // var x = Math.random() * width; // Slumpmässig X-position 
+        // var y = Math.random() * height; // Slumpmässig Y-position 
+        var x = 9; 
+        var y = 8; 
 
         var powerupType = Math.random() < 0.5 ? "healthTimes2" : "shield"; 
         var texture = powerupType === "healthTimes2"
@@ -587,10 +591,18 @@ setTimeout(function() {
 }, 10000);
 }; 
 
-
 beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
+     
 
+     var timerX = 100; 
+     var timerY = 20; 
+    
+    this.visualTimer = new rune.display.Sprite(timerX, timerY, 50, 10, "powerup");
+     this.stage.addChild(this.visualTimer);
+     this.initTimerAnimation(); 
 
+ 
+    
     if (powerup.type === "healthTimes2") {
         player.doubleDamage = true;
         // var self = this;
@@ -602,6 +614,12 @@ beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
     }
     
 }; 
+
+
+beehive.scene.Game.prototype.initTimerAnimation = function() {
+
+}; 
+
 
 
 
@@ -783,17 +801,14 @@ if (this.honeycombs1.length === 0) {
 
     //Lägg in flicker innan removeChild
 
-    // this.soundPlayed1 = false; 
-    // this.soundPlayed2 = false; 
 
-
-    // if (this.player1.health == 0 && !this.soundPlayed1) {
+    // if (this.player1.health == 0) {
     //     this.playerDeadSound.play(); 
     //     this.playerDeadSound.volume = 0.5; 
     //     this.soundPlayed1 = true; 
     // }
 
-    // if (this.player2.health == 0 && !this.soundPlayed2) {
+    // if (this.player2.health == 0) {
     //     this.playerDeadSound.play(); 
     //     this.playerDeadSound.volume = 0.5; 
     //     this.soundPlayed2 = true; 
