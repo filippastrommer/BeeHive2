@@ -41,7 +41,9 @@ beehive.scene.Game = function () {
 
     //Sound effects 
     this.powerupSound = null; 
-    this.honeycombSound = null; 
+    this.honeycombSound = null;
+    this.playerDeadSound = null; 
+    this.backgroundMusic = null; 
 
    // this.doubleDamage = false; 
 
@@ -96,13 +98,14 @@ beehive.scene.Game.prototype.init = function () {
         self.spawnBeekeeper();
     }, initialDelay);
 
-  
     this.initPowerups();
+    this.initBackgroundMusic(); 
+
 
     //Init sounds
     this.powerupSound = this.application.sounds.sound.get("pickupPowerup", true); 
-    this.honeycombSound = this.application.sounds.sound.get("honeycombSound", true); 
-
+    this.honeycombSound = this.application.sounds.sound.get("honeycombExplode", true); 
+    this.playerDeadSound = this.application.sounds.sound.get("playerDead", true); 
 
 
 
@@ -515,7 +518,7 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
             
             if (honeycombs[i].health <= 0) {
                 this.honeycombSound.play(); 
-                this.honeycombSound.volume = 0.5; 
+                this.honeycombSound.volume = 0.3; 
                 this.stage.removeChild(honeycombs[i]);
                 honeycombs.splice(i, 1); 
             }
@@ -780,10 +783,28 @@ if (this.honeycombs1.length === 0) {
 
     //Lägg in flicker innan removeChild
 
+    // this.soundPlayed1 = false; 
+    // this.soundPlayed2 = false; 
+
+
+    // if (this.player1.health == 0 && !this.soundPlayed1) {
+    //     this.playerDeadSound.play(); 
+    //     this.playerDeadSound.volume = 0.5; 
+    //     this.soundPlayed1 = true; 
+    // }
+
+    // if (this.player2.health == 0 && !this.soundPlayed2) {
+    //     this.playerDeadSound.play(); 
+    //     this.playerDeadSound.volume = 0.5; 
+    //     this.soundPlayed2 = true; 
+    // }
+
+
     if (this.player1.health <= 0) {
+        
         this.stage.removeChild(this.player1);
         this.timers.create({
-            duration: 1000,
+            duration: 3000,
             onTick: this.addPlayer1,
             scope: this
         });
@@ -793,7 +814,7 @@ if (this.honeycombs1.length === 0) {
     if (this.player2.health <= 0) {
         this.stage.removeChild(this.player2);
         this.timers.create({
-            duration: 1000,
+            duration: 3000,
             onTick: this.addPlayer2,
             scope: this
         });
@@ -853,6 +874,13 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
     this.player2.healthBar.x = 300;
     this.player2.healthBar.y = 10;
 };
+
+beehive.scene.Game.prototype.initBackgroundMusic = function() {
+    this.backgroundMusic = this.application.sounds.music.get("music", true); 
+    this.backgroundMusic.play(); 
+    this.backgroundMusic.volume = 0.2;
+    this.backgroundMusic.loop = true; 
+}
 
 
 beehive.scene.Game.prototype.gameEnd = function(winner) {
