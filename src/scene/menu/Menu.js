@@ -100,11 +100,11 @@ beehive.scene.Menu.prototype.selectionSwitch = function (element) {
 beehive.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step); 
 
-    if (this.controller1.justPressed(0)) {
+    if (this.controller1.justPressed(0) || this.keyboard.justPressed("ENTER")) {
         this.menu.select(); 
     }
 
-    if (this.controller1.stickLeftJustDown) {
+    if (this.controller1.stickLeftJustDown || this.keyboard.justPressed("DOWN")) {
         this.menu.down();
     }
 
