@@ -99,7 +99,6 @@ beehive.scene.Game.prototype.init = function () {
     this.initPowerups();
     this.initBackgroundMusic(); 
 
-
     //Init sounds
     this.powerupSound = this.application.sounds.sound.get("pickupPowerup", true); 
     this.honeycombSound = this.application.sounds.sound.get("honeycombExplode", true); 
@@ -449,6 +448,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
     beekeeper.animation.gotoAndPlay("move");
     beekeeper.honeycombTaken = false;
+    beekeeper.flippedY = true;
     this.stage.addChild(beekeeper);
 
     var endY = 250;
@@ -526,7 +526,7 @@ beehive.scene.Game.prototype.initPowerups = function() {
             texture = "shieldpower";
         } else {
             powerupType = "slowEnemyShots";
-            texture = "hppoweruptest";
+            texture = "slowdown";
         }
 
         var powerup = new rune.display.Sprite(x, y, 20, 20, texture);
@@ -573,26 +573,27 @@ setTimeout(function() {
 }; 
 
 beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
-    //  var self = this; 
+     var self = this;  
 
-    //  var timerX = 100; 
-    //  var timerY = 20; 
+     var timerX = 175; 
+     var timerY = 20; 
     
-    // this.visualTimer = new rune.display.Sprite(timerX, timerY, 49, 9, "powerup");
-    //  this.stage.addChild(this.visualTimer);
-    //  initTimerAnimation(); 
+    this.visualTimer = new rune.display.Sprite(timerX, timerY, 49, 9, "powerup");
+     this.stage.addChild(this.visualTimer);
+     this.initTimerAnimation(); 
 
-    //  var duration = 10;
-    //  var frameCount = 30; // Total number of frames
-    //  var interval = setInterval(function() {
-    //      self.updateTimer(duration, frameCount);
-    //      duration--;
-    //      if (duration < 0) {
-    //          clearInterval(interval);
-    //          self.stage.removeChild(self.visualTimer);
-    //      }
-    //  }, 1000);
- 
+     var duration = 9;
+     var frameCount = 30; // Total number of frames
+     var interval = setInterval(function() {
+         self.updateTimer(duration, frameCount);
+         duration--;
+         if (duration < 0) {
+             clearInterval(interval);
+             self.stage.removeChild(self.visualTimer);
+         }
+     }, 1000);
+
+    
     
     if (powerup.type === "healthTimes2") {
         player.doubleDamage = true;
@@ -621,6 +622,9 @@ beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
             opponent.velocity.max.y = originalMaxY;
         }, 10000);
     }
+
+
+
     
     //else if (powerup.type === "slowEnemyShots") {
     //     var opponent = (player === this.player1) ? this.player2 : this.player1;
@@ -637,21 +641,21 @@ beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
 }; 
 
 
-// beehive.scene.Game.prototype.initTimerAnimation = function() {
-//     for (var i = 0; i < 30; i++) {
-//         var frameStartIndex = i;
-//         var time = i.toString();
-//         this.visualTimer.animation.create(time, [frameStartIndex], 1, false); 
-//     }
-// }; 
+beehive.scene.Game.prototype.initTimerAnimation = function() {
+    for (var i = 0; i < 30; i++) {
+        var frameStartIndex = i;
+        var time = i.toString();
+        this.visualTimer.animation.create(time, [frameStartIndex], 1, false); 
+    }
+}; 
 
-// beehive.scene.Game.prototype.updateTimer = function (duration, frameCount) {
-//     var frameIndex = (frameCount - duration * 3).toString(); 
-//     if (frameIndex >= frameCount) {
-//         frameIndex = frameCount - 1; 
-//     }
-//     this.visualTimer.animation.gotoAndPlay(frameIndex);
-// }
+beehive.scene.Game.prototype.updateTimer = function (duration, frameCount) {
+    var frameIndex = (frameCount - duration * 3).toString(); 
+    if (frameIndex >= frameCount) {
+        frameIndex = frameCount - 1; 
+    }
+    this.visualTimer.animation.gotoAndPlay(frameIndex);
+}
 
 
 
@@ -914,11 +918,9 @@ beehive.scene.Game.prototype.initBackgroundMusic = function() {
 
 
 beehive.scene.Game.prototype.gameEnd = function(winner) {
-    console.log("Spelet är slut!");
-
     var self = this;
     this.timers.create({
-        duration: 3000,
+        duration: 2000,
         onComplete: function() {
             self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
         }
