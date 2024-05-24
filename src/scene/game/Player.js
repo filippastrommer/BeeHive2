@@ -15,9 +15,10 @@ beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownH
     this.honeycombs = honeycombs;
     this.ownHoneycombs = ownHoneycombs;
     this.healthBar = null;
-    this.rotationSpeed = 2.6;
+    this.rotationSpeed = 4;
     this.hitbox.set(2, 5, 18, 18);
     this.doubleDamage = false; 
+    this.slowShots = false;
    // this.healthBar = healthBar;
     //this.hitbox.debug = true;
     //this.bullet = null;
@@ -40,27 +41,12 @@ beehive.Player.prototype.constructor = beehive.Player;
  * 
  */
 beehive.Player.prototype.init = function () {
-   //this.initProgressbars();
     rune.display.Sprite.prototype.init.call(this);
-  //  this.initHealthbar();
     this.initPhysics();
     this.initAnimation();
 
     this.initHealthbar();
-    // this.initHealthbar2();
     this.initHealthBarAnimation();
-    // this.initHealthbarAnimation2();
-
-     // Uppdatera healthbaren baserat på spelarens hälsa
-   //  this.updateHealthbar();
-//    this.updateHealthbarPlayer1();
-//    this.updateHealthbarPlayer2();
-//this.initHealthbarAnimation();
-//this.updateHealthbarPlayer1();
-//this.updateHealthbarPlayer2();
-
-   // this.updateHealthBar();
-
 };
 
 
@@ -74,81 +60,12 @@ beehive.Player.prototype.init = function () {
  */
 
 
-
-
-
-// beehive.Player.prototype.initHealthbar = function () {
-//     this.healthbarplayer1 = new rune.display.Sprite(0, 0, 49, 49, "50hp2");
-//     this.healthbarplayer1.x = 100;
-//     this.healthbarplayer1.y = 10;
-//    // this.healthbarplayer1.animation.create("31", [0], 1, true); // Skapa animationer för healthbarplayer1
-//     this.stage.addChild(this.healthbarplayer1);
-
-//     this.healthbarplayer2 = new rune.display.Sprite(0, 0, 49, 49, "50hp");
-//     this.healthbarplayer2.x = 250;
-//     this.healthbarplayer2.y = 10;
-//    // this.healthbarplayer2.animation.create("31", [0], 1, true); // Skapa animationer för healthbarplayer2
-//     this.stage.addChild(this.healthbarplayer2);
-//     // Skapa animationer för healthbarplayer1 och healthbarplayer2 genom att anropa initHealthbarAnimation-metoden
-//     this.initHealthbarAnimation();
-
-// }
-
-
-// beehive.Player.prototype.initHealthbarAnimation = function () {
-
-//     for (var i = 0; i <= 10; i++) {
-//         var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
-//         var health = i * 5; // Hälsogränsen för varje frame
-//         var animationName = health.toString(); // Namnet på animationen baseras på hälsan
-//         this.healthbarplayer1.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer1
-//         this.healthbarplayer2.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer2
-//     }
-
-// }
-
-
-
-
-
-// beehive.Player.prototype.updateHealthbarPlayer1 = function () {
-//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
-//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
-
-//     // Spela upp rätt animation för healthbarplayer1
-//     this.healthbarplayer1.animation.gotoAndPlay(animationName);
-// }
-
-// beehive.Player.prototype.updateHealthbarPlayer2 = function () {
-//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
-//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
-
-//     // Spela upp rätt animation för healthbarplayer2
-//     this.healthbarplayer2.animation.gotoAndPlay(animationName);
-// }
-
 beehive.Player.prototype.initHealthbar = function () {
     this.healthBar = new rune.display.Sprite(0, 0, 49, 11, "50hp");
     this.stage.addChild(this.healthBar);
 }
 
-// beehive.Player.prototype.initHealthbar1 = function () {
-//     this.healthbarplayer1 = new rune.display.Sprite(0, 0, 49, 49, "50hp2");
-//     this.healthbarplayer1.x = 100;
-//     this.healthbarplayer1.y = 10;
-//     this.stage.addChild(this.healthbarplayer1);
 
-//     this.initHealthbarAnimation1();
-// }
-
-// beehive.Player.prototype.initHealthbar2 = function () {
-//     this.healthbarplayer2 = new rune.display.Sprite(0, 0, 49, 49, "50hp");
-//     this.healthbarplayer2.x = 250;
-//     this.healthbarplayer2.y = 10;
-//     this.stage.addChild(this.healthbarplayer2);
-
-//     this.initHealthbarAnimation2();
-// }
 beehive.Player.prototype.initHealthBarAnimation = function () {
     for (var i = 10; i >= 0; i--) {
         var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
@@ -158,14 +75,6 @@ beehive.Player.prototype.initHealthBarAnimation = function () {
     }
 }
 
-// beehive.Player.prototype.initHealthbarAnimation2 = function () {
-//     for (var i = 10; i >= 0; i--) {
-//         var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
-//         var health = i * 5; // Hälsogränsen för varje frame
-//         var animationName = health.toString(); // Namnet på animationen baseras på hälsan
-//         this.healthbarplayer2.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för healthbarplayer2
-//     }
-// }
 
 
 beehive.Player.prototype.updateHealthBar = function () {
@@ -175,25 +84,6 @@ beehive.Player.prototype.updateHealthBar = function () {
     // Starta och spela upp rätt animation för healthbarplayer1
     this.healthBar.animation.gotoAndPlay(animationName);
 }
-
-// beehive.Player.prototype.updateHealthbarPlayer2 = function () {
-//     var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
-//     var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
-
-//     // Starta och spela upp rätt animation för healthbarplayer2
-//     this.healthbarplayer2.animation.gotoAndPlay(animationName);
-// }
-
-
-// beehive.Player.prototype.resetHealthBar = function () {
-//     this.health = 50; // Återställ hälsan till full
-//     this.updateHealthBar(); // Uppdatera hälsobaren med den nya hälsan
-// };
-
-
-
-
-
 
 
 beehive.Player.prototype.update = function (step) {
@@ -326,9 +216,8 @@ beehive.Player.prototype.dispose = function () {
 beehive.Player.prototype.initPhysics = function () {
     this.velocity.drag.x = 0.04;
     this.velocity.drag.y = 0.04;
-    this.velocity.max.x = 0.5;
-    this.velocity.max.y = 0.5;
-
+    this.velocity.max.x = 0.7;
+    this.velocity.max.y = 0.7;
 };
 
 /**
@@ -387,6 +276,7 @@ beehive.Player.prototype.updateInput = function () {
 
 beehive.Player.prototype.shootNectar = function () {
 
+   
     var beeOffsetX = 5;
     var beeOffsetY = 8;
 
@@ -394,7 +284,8 @@ beehive.Player.prototype.shootNectar = function () {
     var bulletY = this.y + beeOffsetY;
 
     var radians = this.rotation * (Math.PI / 180);
-    var bulletSpeed = 3;
+    // var bulletSpeed = 3;
+    var bulletSpeed = this.slowShots ? 1.5 : 3;
     var bulletDirectionX = bulletSpeed * Math.cos(radians);
     var bulletDirectionY = bulletSpeed * Math.sin(radians);
 
