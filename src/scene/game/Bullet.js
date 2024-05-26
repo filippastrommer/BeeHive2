@@ -1,20 +1,8 @@
-beehive.Bullet = function (x, y, radians, Honeycomb) {
-    rune.display.Sprite.call(this, x, y, 7, 7, "nectar", radians);
-    //this.bulletSpeed = 5;
-
-      // Sätt startposition för skottet
-     
+beehive.Bullet = function (x, y, radians) {
+    rune.display.Sprite.call(this, x, y, 7, 7, "nectar", radians);     
     this.radians = radians;
     this.bulletSpeed = 5;
-  //  this.Honeycomb = Honeycomb;
-  this.hitbox.set(4, 4, 2, 2);
-  //this.hitbox.debug = true;
- // this.Honeycomb = Honeycomb;
- // this.bullets = [];
- // this.Honeycombs = [];
- 
-
- //console.log("Honeycomb reference in Bullet:", this.Honeycomb);
+    this.hitbox.set(4, 4, 2, 2);
 }
 
 beehive.Bullet.prototype = Object.create(rune.display.Sprite.prototype);

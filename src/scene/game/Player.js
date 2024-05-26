@@ -19,16 +19,6 @@ beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownH
     this.hitbox.set(2, 5, 18, 18);
     this.doubleDamage = false; 
     this.slowShots = false;
-   // this.healthBar = healthBar;
-    //this.hitbox.debug = true;
-    //this.bullet = null;
-    //this.bullet = bullet;
-    //this.bullets = [];
-
-    // this.game = game;
-    // this.bulletTimer = 0;
-    // this.bulletCooldown = 300;
-    // this.walking = false;
 };
 
 beehive.Player.prototype = Object.create(rune.display.Sprite.prototype);
@@ -68,21 +58,19 @@ beehive.Player.prototype.initHealthbar = function () {
 
 beehive.Player.prototype.initHealthBarAnimation = function () {
     for (var i = 10; i >= 0; i--) {
-        var frameIndex = 10 - i; // Ramar räknas baklänges från 10 till 0
-        var health = i * 5; // Hälsogränsen för varje frame
-        var animationName = health.toString(); // Namnet på animationen baseras på hälsan
-        this.healthBar.animation.create(animationName, [frameIndex], 1, true); // Skapa animation för hp-bar
+        var frameIndex = 10 - i; 
+        var health = i * 5; 
+        var animation = health.toString(); 
+        this.healthBar.animation.create(animation, [frameIndex], 1, true); 
     }
 }
 
 
 
 beehive.Player.prototype.updateHealthBar = function () {
-    var currentFrame = Math.floor(this.health / 5); // Beräkna vilken frame som ska visas baserat på hälsan
-    var animationName = (currentFrame * 5).toString(); // Namnet på animationen baseras på hälsan
-
-    // Starta och spela upp rätt animation för healthbarplayer1
-    this.healthBar.animation.gotoAndPlay(animationName);
+    var currentFrame = Math.floor(this.health / 5); 
+    var animation = (currentFrame * 5).toString(); 
+    this.healthBar.animation.gotoAndPlay(animation);
 }
 
 
@@ -91,24 +79,7 @@ beehive.Player.prototype.update = function (step) {
     this.updateInput();
 
 
-    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
-    //     this.ownHoneycombs[i].hitTestObject(this, function (honeycomb) {
-    //         if (this.controller.pressed(1)) {
-    //             if (!this.addTimer) {
-    //                 this.addTimer = setTimeout(() => {
-    //                     this.addHoneycomb(honeycomb);
-    //                     this.addTimer = null; 
-    //                 }, 3000);
-    //             }
-    //         } else {
-    //             if (this.addTimer) {
-    //                 clearTimeout(this.addTimer); 
-    //                 this.addTimer = null;
-    //             }
-    //         }
-    //     }.bind(this, this.ownHoneycombs[i]), this); 
-    // }
-
+//"laga" honeycombs
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
         this.ownHoneycombs[i].hitTestObject(this, (function(honeycomb) {
             if (this.controller.pressed(1)) {
@@ -128,61 +99,16 @@ beehive.Player.prototype.update = function (step) {
         }).bind(this, this.ownHoneycombs[i]), this);
     }
 
-
-
-
-
-    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
-    //     var honeycomb = this.ownHoneycombs[i];
-    //     honeycomb.hitTestObject(this, function () {
-    //         if (this.controller.pressed(1)) {
-    //             this.timers.create({
-    //                 duration: 10000, // Tid för fördröjning i millisekunder
-    //                 onTick: function() {
-    //                     this.addHoneycomb(honeycomb); // Anropa funktionen för att lägga till honungskakan
-    //                 },
-    //                 scope: this // Ange kontexten för funktionen
-    //             });
-    //         }
-    //     }, this);
-    // }
-
-
-
-
-    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
-    //     this.ownHoneycombs[i].hitTestObject(this, function () {
-    //         if (this.controller.pressed(1)) {
-    //             setTimeout(this.addHoneycomb(this.ownHoneycombs[i]), 10000);
-    //             // this.timers.create({
-    //             //     duration: 5000,
-    //             //     onTick: this.addHoneycomb,
-    //             //     scope: this
-    //             // });
-    //         }
-    //     }, this);
-    // }
-    //duration: 5000,
-    //         onTick: addHoneycomb,
-    //         scope: this
-    //     }, this);
-    // for (let i = 0; i < this.bullets.length; i++) {
-    //     this.bullets
-    // }
-
-
+//hit test honeycombs
     for (var i = 0; i < this.bullets.length; i++) {
         for (var j = 0; j < this.honeycombs.length; j++) {
             if (this.bullets[i].hitTestObject(this.honeycombs[j])) {
                 this.bullets[i].dispose(); 
-                console.log("träff");
-                // this.honeycombs[j].health--;
                 if (this.doubleDamage) {
                     this.honeycombs[j].health -= 2; // Dubbel skada
                 } else {
                     this.honeycombs[j].health -= 1; // Normal skada
                 }
-                console.log("Träff på honeycomb! Nuvarande hälsa: ", this.honeycombs[j].health);
             }
         }
     }
@@ -235,8 +161,6 @@ beehive.Player.prototype.initAnimation = function () {
 *
 */
 
-
-
 beehive.Player.prototype.updateInput = function () {
     var threshold = 0.1;
     var x = this.controller.m_axesOne.x;
@@ -276,7 +200,6 @@ beehive.Player.prototype.updateInput = function () {
 
 beehive.Player.prototype.shootNectar = function () {
 
-   
     var beeOffsetX = 5;
     var beeOffsetY = 8;
 
@@ -284,190 +207,14 @@ beehive.Player.prototype.shootNectar = function () {
     var bulletY = this.y + beeOffsetY;
 
     var radians = this.rotation * (Math.PI / 180);
-    // var bulletSpeed = 3;
     var bulletSpeed = this.slowShots ? 1.5 : 3;
     var bulletDirectionX = bulletSpeed * Math.cos(radians);
     var bulletDirectionY = bulletSpeed * Math.sin(radians);
 
-    // Skapa skottet som en ny instans
     var nectar = new beehive.Bullet(bulletX, bulletY, radians, this.bullets, this.honeycombs);
     nectar.velocity.x = bulletDirectionX;
     nectar.velocity.y = bulletDirectionY;
     this.bullets.push(nectar);
-    this.stage.addChild(nectar); // Lägg till skottet på scenen
-
-    // for (var i = 0; i < this.bullets.length; i++) {
-    //     var bullet = this.bullets[i];
-    //     for (var j = 0; j < this.honeycombs.length; j++) {
-    //         var honeycomb = this.honeycombs[j];
-    //         console.log("Testing collision for bullet", i, "and honeycomb", j);
-    //         if (bullet.hitTestObject(honeycomb)) {
-    //             console.log("Collision detected for bullet", i, "and honeycomb", j);
-    //             honeycomb.health--;
-    //             break;
-    //         }
-    //     }
-    // }
-    
-  
-    // for (var i = 0; i < this.bullets.length; i++) {
-    //     for (var j = 0; j < this.honeycombs.length; j++) {
-    //         this.bullets[i].hitTestObject(this.honeycombs[j], function () {
-    //             // this.stage.removeChild(this.bullets[i]);
-    //             console.log("träff");
-    //             this.honeycombs[j].health--;
-    //         }, this);
-    //     }
-    // }
-
-
-
-    // for (var i = 0; i < this.bullets.length; i++) {
-    //     var bullet = this.bullets[i];
-    //     for (var j = 0; j < this.honeycombs.length; j++) {
-    //         var honeycomb = this.honeycombs[j];
-    //         console.log("Testing collision for bullet", i, "and honeycomb", j);
-    //         var hitTestResult = bullet.hitTestObject(honeycomb);
-    //         console.log("Hit test result:", hitTestResult);
-    //         if (hitTestResult) {
-    //             console.log("Collision detected for bullet", i, "and honeycomb", j);
-    //             honeycomb.health--;
-    //             break;
-    //         }
-    //     }
-    // }
-    
+    this.stage.addChild(nectar); 
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// beehive.Player.prototype.shootNectar = function () {
-//     var beeOffsetX = 5;
-//     var beeOffsetY = 8;
-
-
-//     var bulletX = this.x + beeOffsetX;
-//     var bulletY = this.y + beeOffsetY;
-
-//     var radians = this.rotation * (Math.PI / 180); // Omvandla rotationen till radianer
-//     var bulletSpeed = 5;
-//     var bulletDirectionX = bulletSpeed * Math.cos(radians);
-//     var bulletDirectionY = bulletSpeed * Math.sin(radians);
-
-//     // Skapa skottet som en ny instans
-//     var nectar = new beehive.Bullet(bulletX, bulletY, radians, this.bullets, this.honeycombs);
-//     nectar.velocity.x = bulletDirectionX;
-//     nectar.velocity.y = bulletDirectionY;
-//     this.bullets.push(nectar);
-//     //console.log(this.bullets);
-//     this.stage.addChild(nectar); // Lägg till skottet på scenen
-
-  
-//     for (var i = 0; i < this.bullets.length; i++) {
-//         var bullet = this.bullets[i];
-//         for (var j = 0; j < this.honeycombs.length; j++) {
-//             var honeycomb = this.honeycombs[j];
-//             if (bullet.hitTestObject(honeycomb)) {
-//                 console.log("träff");
-//                 honeycomb.health--;
-//                 break; // Bryt loopen när en träff har upptäckts
-//             }
-//         }
-//     }
-    
-
-   
-
-
-//     // for (var i = 0; i < this.bullets.length; i++) {
-//     //     for (var j = 0; j < this.honeycombs.length; j++) {
-//     //         this.bullets[i].hitTestObject(this.honeycombs[j], function () {
-//     //             // this.stage.removeChild(this.bullets[i]);
-//     //             console.log("träff");
-//     //             this.honeycombs[j].health--;
-//     //         } );
-//     //     }
-//     // }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// //GAMMAL STYRNING
-// if (this.pressed.stickRightUp) {
-//     this.velocity.y -= 0.25;
-//     this.animation.gotoAndPlay("fly");
-// } else if (this.pressed.stickRightLeft) {
-//     this.velocity.x -= 0.25;
-//     console.log("hej");
-//     if(this.flippedX) {
-//        this.flippedX = false;
-//     }
-//     this.animation.gotoAndPlay("fly");
-// } else if (this.pressed.stickRightDown) {
-//     this.velocity.y += 0.25;
-//     this.animation.gotoAndPlay("fly");
-// } else if (this.pressed.stickRightRight) {
-//     this.velocity.x += 0.25;
-//     this.flippedX = true;
-//     this.animation.gotoAndPlay("fly");
-// } else {
-//     this.animation.gotoAndPlay("idle")
-// };
-
-
-// var threshold = 0.1;
-// var x = 0;
-// var y = 0;
-
-// // Kontrollera tangentbordsinput för att ändra x- och y-värdena
-// if (this.keyboard.pressed("LEFT")) {
-//     x -= 1;
-// }
-// if (this.keyboard.pressed("RIGHT")) {
-//     x += 1;
-// }
-// if (this.keyboard.pressed("UP")) {
-//     y -= 1;
-// }
-// if (this.keyboard.pressed("DOWN")) {
-//     y += 1;
-// }
-
-// if (Math.abs(x) > threshold || Math.abs(y) > threshold) {
-//     this.rotation = Math.atan2(y, x) * (180 / Math.PI);
-//     if (this.rotation < 0) {
-//         this.rotation += 360;
-//     }
-//     this.velocity.x += x * this.rotationSpeed;
-//     this.velocity.y += y * this.rotationSpeed;
-// }
-
-// if (this.velocity.x != 0 || this.velocity.y != 0) {
-//     this.animation.gotoAndPlay("fly");
-// } else {
-//     this.animation.gotoAndPlay("idle");
-// }

@@ -16,7 +16,6 @@ npx google-closure-compiler \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
 --js "./../../src/scene/game/Honeycomb.js" \
---js "./../../src/scene/game/Beekeeper.js" \
 --js "./../../src/scene/menu/GameOverMenu.js" \
 --js "./../../src/scene/howToPlay/HowToPlay.js" \
 --js_output_file "./../../dist/beehive.js";
