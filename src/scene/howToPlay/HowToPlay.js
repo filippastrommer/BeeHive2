@@ -15,6 +15,19 @@
  */
 
 beehive.scene.HowToPlay = function () {
+    // this.menu = null; 
+    // this.controller1 = this.gamepads.get(0); 
+    // this.controller2 = this.gamepads.get(1);
+    // this.background = null; 
+    // this.controllerImg = null; 
+    // this.beekeeper = null; 
+    // this.birds = null; 
+    // this.powerups = null; 
+    // this.beekeeper = null; 
+    // this.x2Bullets = null; 
+    // this.shield = null; 
+
+
     this.menu = null; 
     this.controller1 = this.gamepads.get(0); 
     this.controller2 = this.gamepads.get(1);
@@ -64,80 +77,58 @@ beehive.scene.HowToPlay.prototype.init = function () {
     this.menu.onSelect(this.selectionSwitch, this); 
     this.menu.add("Start Game"); 
     this.menu.add("Back to Main Menu"); 
-    this.menu.x = 235; 
-    this.menu.centerY = 190; 
+    this.menu.x = 25; 
+    this.menu.centerY = 185; 
     this.stage.addChild(this.menu); 
 
+    var goal = new rune.text.BitmapField("- Destroy the opponents honeycombs \nto win."); 
+    goal.autoSize = true; 
+    goal.x = 190; 
+    goal.y = 52; 
+
+    var health = new rune.text.BitmapField("- You lose 1hp when hit by the \nopponent's bullet and 5hp when \nyou collide with a bird."); 
+    health.autoSize = true; 
+    health.x = 190; 
+    health.y = 80; 
+
+    honeycombs = new rune.text.BitmapField("- Destroy all your opponent's \nhoneycombs to win the game!"); 
+    honeycombs.autoSize = true; 
+    honeycombs.x = 190; 
+    honeycombs.y = 55; 
 
 
-    var shoot = new rune.text.BitmapField("- Shoot opponents and honeycombs"); 
-    shoot.autoSize = true; 
-    shoot.x = 190; 
-    shoot.y = 35; 
-
-    var shootLine = new rune.display.Graphics();
-    this.stage.addChild(shootLine);
-
-    shootLine.drawLine(
-        150, 
-        60,  
-        shoot.x,
-        shoot.y, 
-        "#FFFFFF", 
-        2 
-    );
-
-
-//     var move = new rune.text.BitmapField("- Move with the left joystick");
-//     move.autoSize = true; 
-//     move.x = 190; 
-//     move.y = 65; 
-
-//     var health = new rune.text.BitmapField("- Collision with birds give -5 hp, \ncollision with bullet gives -1 hp"); 
-//     health.autoSize = true; 
-//     health.x = 190; 
-//     health.y = 80; 
-
-//     honeycombs = new rune.text.BitmapField("- Shoot apart the opponents \nhoneycombs to win. Honeycombs have \n20 health and bullets give -1hp"); 
-//     honeycombs.autoSize = true; 
-//     honeycombs.x = 190; 
-//     honeycombs.y = 110; 
-
-//     repair = new rune.text.BitmapField("- Repair and place new honeycombs \nby pressing B for 3s"); 
-//     repair.autoSize = true; 
-//     repair.x = 190; 
-//     repair.y = 150; 
-
-//     var beekeeperText = new rune.text.BitmapField("-5hp on one Honeycomb"); 
-//     beekeeperText.autoSize = true; 
-//     beekeeperText.x = 45; 
-//     beekeeperText.y = 123; 
+    var beekeeperText = new rune.text.BitmapField("-5 hp on one Honeycomb"); 
+    beekeeperText.autoSize = true; 
+    beekeeperText.x = 225; 
+    beekeeperText.y = 125; 
 
   
-//    var x2Text = new rune.text.BitmapField("Bullets damage doubles"); 
-//    x2Text.autoSize = true; 
-//    x2Text.x = 35; 
-//    x2Text.y = 160; 
+   var x2Text = new rune.text.BitmapField("Double damage"); 
+   x2Text.autoSize = true; 
+   x2Text.x = 225; 
+   x2Text.y = 159; 
 
    
 
-//    shieldText = new rune.text.BitmapField("Gives shield for Honeycombs"); 
-//    shieldText.autoSize = true; 
-//    shieldText.x = 35; 
-//    shieldText.y = 190; 
+   shieldText = new rune.text.BitmapField("Shields honeycombs"); 
+   shieldText.autoSize = true; 
+   shieldText.x = 225; 
+   shieldText.y = 181; 
+
+   slowText = new rune.text.BitmapField("Opponent moves slower"); 
+   slowText.autoSize = true; 
+   slowText.x = 225; 
+   slowText.y = 205; 
 
 
-//     this.stage.addChild(title); 
-//     this.stage.addChild(shoot); 
-//     this.stage.addChild(move); 
-//     this.stage.addChild(health); 
-//     this.stage.addChild(honeycombs);
-//     this.stage.addChild(repair);
+   this.stage.addChild(beekeeperText); 
+   this.stage.addChild(x2Text);
+   this.stage.addChild(shieldText);
+   this.stage.addChild(slowText); 
+   this.stage.addChild(health); 
+   this.stage.addChild(goal); 
 
 
-//     this.stage.addChild(beekeeperText); 
-//     this.stage.addChild(x2Text);
-//     this.stage.addChild(shieldText); 
  
 }; 
 
@@ -147,46 +138,49 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
         0,
         400, 
         225, 
-        "howtoplay"
+        "htp6"
         ); 
 
         this.stage.addChild(this.background); 
 
-        this.controllerImg = new rune.display.Graphic(
-            115, 
+    
+
+        this.beekeeper = new rune.display.Graphic(
+            190, 
+            110, 
+            30, 
             35, 
-            160, 
-            80, 
-            "controller"
+            "beekeeper"
         ); 
-        this.stage.addChild(this.controllerImg); 
+        this.stage.addChild(this.beekeeper); 
 
-        // this.beekeeper = new rune.display.Graphic(
-        //     10, 
-        //     110, 
-        //     30, 
-        //     35, 
-        //     "beekeeper"
-        // ); 
-        // this.stage.addChild(this.beekeeper); 
+        this.x2Bullets = new rune.display.Graphic(
+            197, 
+            155, 
+            20, 
+            20, 
+            "x2"
+        ); 
+        this.stage.addChild(this.x2Bullets); 
 
-        // this.x2Bullets = new rune.display.Graphic(
-        //     15, 
-        //     155, 
-        //     20, 
-        //     20, 
-        //     "x2"
-        // ); 
-        // this.stage.addChild(this.x2Bullets); 
+        this.shield = new rune.display.Graphic(
+            194, 
+            175, 
+            20, 
+            20, 
+            "shield_PU"
+        ); 
+        this.stage.addChild(this.shield); 
 
-        // this.shield = new rune.display.Graphic(
-        //     10, 
-        //     185, 
-        //     20, 
-        //     20, 
-        //     "shieldpower"
-        // ); 
-        // this.stage.addChild(this.shield); 
+        this.slow = new rune.display.Graphic(
+            194, 
+            200, 
+            22, 
+            26, 
+            "slow"
+        ); 
+        this.stage.addChild(this.slow); 
+
 }
 
 beehive.scene.HowToPlay.prototype.selectionSwitch = function (element) {

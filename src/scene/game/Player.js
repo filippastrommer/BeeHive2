@@ -105,7 +105,7 @@ beehive.Player.prototype.update = function (step) {
             if (this.bullets[i].hitTestObject(this.honeycombs[j])) {
                 this.bullets[i].dispose(); 
                 if (this.doubleDamage) {
-                    this.honeycombs[j].health -= 2; // Dubbel skada
+                    this.honeycombs[j].health -= 2; // Dubbel skada för powerup
                 } else {
                     this.honeycombs[j].health -= 1; // Normal skada
                 }
