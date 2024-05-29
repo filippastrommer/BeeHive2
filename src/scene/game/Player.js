@@ -34,7 +34,6 @@ beehive.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
     this.initPhysics();
     this.initAnimation();
-
     this.initHealthbar();
     this.initHealthBarAnimation();
 };
@@ -48,7 +47,6 @@ beehive.Player.prototype.init = function () {
  * @param {number} step Fixed time step.
  *
  */
-
 
 beehive.Player.prototype.initHealthbar = function () {
     this.healthBar = new rune.display.Sprite(0, 0, 49, 11, "50hp");
@@ -78,7 +76,6 @@ beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
 
-
 //"laga" honeycombs
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
         this.ownHoneycombs[i].hitTestObject(this, (function(honeycomb) {
@@ -99,6 +96,7 @@ beehive.Player.prototype.update = function (step) {
         }).bind(this, this.ownHoneycombs[i]), this);
     }
 
+
 //hit test honeycombs
     for (var i = 0; i < this.bullets.length; i++) {
         for (var j = 0; j < this.honeycombs.length; j++) {
@@ -116,11 +114,9 @@ beehive.Player.prototype.update = function (step) {
 };
 
 
-
-
 beehive.Player.prototype.addHoneycomb = function (honeycomb) {
     honeycomb.health = 20;
-    this.stage.addChild(honeycomb);
+    this.stage.addChildAt(honeycomb, 1);
 }
 
 /**

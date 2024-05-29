@@ -613,29 +613,24 @@ beehive.scene.Game.prototype.update = function (step) {
     //Honeycombs hit test and sounds for breaking
     var remove = [];
     for (var i = 0; i < this.honeycombs1.length; i++) {
-        if (this.honeycombs1[i].health <= 0) {
+        if (this.honeycombs1[i].health == 0) {
             this.honeycombSound.play();
             this.honeycombSound.volume = 0.5;
+            remove.push(this.honeycombs1[i]);
             this.stage.removeChild(this.honeycombs1[i]);
-            remove.push(i);
+            //remove.push(i);
         }
-    }
-    for (var i = remove.length - 1; i >= 0; i--) {
-        this.honeycombs1.splice(remove[i], 1);
     }
 
     var damageHoneycombs = [];
     for (var i = 0; i < this.honeycombs2.length; i++) {
-        if (this.honeycombs2[i].health <= 0) {
+        if (this.honeycombs2[i].health == 0) {
             this.honeycombSound.play();
             this.honeycombSound.volume = 0.5;
+            damageHoneycombs.push(this.honeycombs2[i]);
             this.stage.removeChild(this.honeycombs2[i]);
-            damageHoneycombs.push(i);
+            //damageHoneycombs.push(i);
         }
-    }
-
-    for (var i = damageHoneycombs.length - 1; i >= 0; i--) {
-        this.honeycombs2.splice(damageHoneycombs[i], 1);
     }
 
     //Game over when honeycombs is gone
