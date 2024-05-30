@@ -78,47 +78,47 @@ beehive.scene.HowToPlay.prototype.init = function () {
     this.menu.add("Start Game"); 
     this.menu.add("Back to Main Menu"); 
     this.menu.x = 25; 
-    this.menu.centerY = 185; 
+    this.menu.centerY = 190; 
     this.stage.addChild(this.menu); 
 
-    var goal = new rune.text.BitmapField("- Destroy the opponents honeycombs \nto win."); 
+    var goal = new rune.text.BitmapField("- Destroy the opponents \nhoneycombs to win."); 
     goal.autoSize = true; 
-    goal.x = 190; 
+    goal.x = 220; 
     goal.y = 52; 
 
-    var health = new rune.text.BitmapField("- You lose 1hp when hit by the \nopponent's bullet and 5hp when \nyou collide with a bird."); 
+    var health = new rune.text.BitmapField("- You lose 1hp when \nhit by the opponent's \nbullet and 5hp when \nyou collide with a bird."); 
     health.autoSize = true; 
-    health.x = 190; 
+    health.x = 220; 
     health.y = 80; 
 
-    honeycombs = new rune.text.BitmapField("- Destroy all your opponent's \nhoneycombs to win the game!"); 
-    honeycombs.autoSize = true; 
-    honeycombs.x = 190; 
-    honeycombs.y = 55; 
+    // honeycombs = new rune.text.BitmapField("- Destroy all your opponent's \nhoneycombs to win the game!"); 
+    // honeycombs.autoSize = true; 
+    // honeycombs.x = 220; 
+    // honeycombs.y = 55; 
 
 
     var beekeeperText = new rune.text.BitmapField("-5 hp on one Honeycomb"); 
     beekeeperText.autoSize = true; 
-    beekeeperText.x = 225; 
-    beekeeperText.y = 125; 
+    beekeeperText.x = 255; 
+    beekeeperText.y = 133; 
 
   
    var x2Text = new rune.text.BitmapField("Double damage"); 
    x2Text.autoSize = true; 
-   x2Text.x = 225; 
-   x2Text.y = 159; 
+   x2Text.x = 255; 
+   x2Text.y = 161; 
 
    
 
    shieldText = new rune.text.BitmapField("Shields honeycombs"); 
    shieldText.autoSize = true; 
-   shieldText.x = 225; 
-   shieldText.y = 181; 
+   shieldText.x = 255; 
+   shieldText.y = 183; 
 
    slowText = new rune.text.BitmapField("Opponent moves slower"); 
    slowText.autoSize = true; 
-   slowText.x = 225; 
-   slowText.y = 205; 
+   slowText.x = 255; 
+   slowText.y = 207; 
 
 
    this.stage.addChild(beekeeperText); 
@@ -138,7 +138,7 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
         0,
         400, 
         225, 
-        "htp6"
+        "htp"
         ); 
 
         this.stage.addChild(this.background); 
@@ -146,8 +146,8 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
     
 
         this.beekeeper = new rune.display.Graphic(
-            190, 
-            110, 
+            220, 
+            118, 
             30, 
             35, 
             "beekeeper"
@@ -155,8 +155,8 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
         this.stage.addChild(this.beekeeper); 
 
         this.x2Bullets = new rune.display.Graphic(
-            197, 
-            155, 
+            227, 
+            157, 
             20, 
             20, 
             "x2"
@@ -164,8 +164,8 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
         this.stage.addChild(this.x2Bullets); 
 
         this.shield = new rune.display.Graphic(
-            194, 
-            175, 
+            224, 
+            177, 
             20, 
             20, 
             "shield_PU"
@@ -173,8 +173,8 @@ beehive.scene.HowToPlay.prototype.initGraphics = function () {
         this.stage.addChild(this.shield); 
 
         this.slow = new rune.display.Graphic(
-            194, 
-            200, 
+            223, 
+            201, 
             22, 
             26, 
             "slow"
