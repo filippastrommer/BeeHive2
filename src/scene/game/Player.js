@@ -36,6 +36,7 @@ beehive.Player.prototype.init = function () {
     this.initAnimation();
     this.initHealthbar();
     this.initHealthBarAnimation();
+  //  this.initAddHoneycombTimer(); 
 };
 
 
@@ -72,6 +73,30 @@ beehive.Player.prototype.updateHealthBar = function () {
 }
 
 
+
+// beehive.Player.prototype.initAddHoneycombTimer = function(honeycomb) {
+//     if (!this.addTimer) {
+//         var self = this;
+//         this.addTimer = this.timers.create({
+//             duration: 3000,
+//             onTick: function() {
+//                 self.addHoneycomb(honeycomb);
+//                 self.addTimer = null;
+//             },
+//             scope: self,
+//             repeat: false
+//         });
+//     }
+// };
+
+// beehive.Player.prototype.stopAddHoneycombTimer = function() {
+//     if (this.addTimer) {
+//         this.timers.remove(this.addTimer);
+//         this.addTimer = null;
+//     }
+// };
+
+
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
     this.updateInput();
@@ -97,6 +122,24 @@ beehive.Player.prototype.update = function (step) {
     }
 
 
+
+    //Testa skapa timer utanför 
+
+
+    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
+    //     this.ownHoneycombs[i].hitTestObject(this, (function(honeycomb) {
+    //         if (this.controller.pressed(1)) {
+    //             this.initAddHoneycombTimer(honeycomb);
+    //         } else {
+    //             this.stopAddHoneycombTimer();
+    //         }
+    //     }).bind(this, this.ownHoneycombs[i]), this);
+    // }
+
+
+
+
+    
 //hit test honeycombs
     for (var i = 0; i < this.bullets.length; i++) {
         for (var j = 0; j < this.honeycombs.length; j++) {
@@ -112,6 +155,8 @@ beehive.Player.prototype.update = function (step) {
     }
     
 };
+
+
 
 
 beehive.Player.prototype.addHoneycomb = function (honeycomb) {
