@@ -37,6 +37,8 @@ beehive.Player.prototype.init = function () {
     this.initHealthbar();
     this.initHealthBarAnimation();
   //  this.initAddHoneycombTimer(); 
+  this.honeycombTimer = 0;
+
 };
 
 
@@ -102,21 +104,35 @@ beehive.Player.prototype.update = function (step) {
     this.updateInput();
 
 //"laga" honeycombs
+    // for (var i = 0; i < this.ownHoneycombs.length; i++) {
+    //     this.ownHoneycombs[i].hitTestObject(this, (function(honeycomb) {
+    //         if (this.controller.pressed(1)) {
+    //             if (!this.addTimer) {
+    //                 var self = this; 
+    //                 this.addTimer = setTimeout(function() {
+    //                     self.addHoneycomb(honeycomb);
+    //                     self.addTimer = null;
+    //                 }, 3000);
+    //             }
+    //         } else {
+    //             if (this.addTimer) {
+    //                 clearTimeout(this.addTimer);
+    //                 this.addTimer = null;
+    //             }
+    //         }
+    //     }).bind(this, this.ownHoneycombs[i]), this);
+    // }
+
     for (var i = 0; i < this.ownHoneycombs.length; i++) {
         this.ownHoneycombs[i].hitTestObject(this, (function(honeycomb) {
             if (this.controller.pressed(1)) {
-                if (!this.addTimer) {
-                    var self = this; 
-                    this.addTimer = setTimeout(function() {
-                        self.addHoneycomb(honeycomb);
-                        self.addTimer = null;
-                    }, 3000);
+                this.honeycombTimer += step;
+                if (this.honeycombTimer >= 3000) { // 3000 millisekunder = 3 sekunder
+                    this.addHoneycomb(honeycomb);
+                    this.honeycombTimer = 0; // Återställ timern
                 }
             } else {
-                if (this.addTimer) {
-                    clearTimeout(this.addTimer);
-                    this.addTimer = null;
-                }
+                this.honeycombTimer = 0; // Återställ timern om knappen släpps
             }
         }).bind(this, this.ownHoneycombs[i]), this);
     }
@@ -139,7 +155,7 @@ beehive.Player.prototype.update = function (step) {
 
 
 
-    
+
 //hit test honeycombs
     for (var i = 0; i < this.bullets.length; i++) {
         for (var j = 0; j < this.honeycombs.length; j++) {

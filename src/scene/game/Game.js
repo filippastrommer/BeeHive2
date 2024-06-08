@@ -396,7 +396,7 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
                 this.honeycombSound.play();
                 this.honeycombSound.volume = 0.3;
                 this.stage.removeChild(honeycombs[i]);
-                honeycombs.splice(i, 1);
+             //   honeycombs.splice(i, 1);
             }
             beekeeper.honeycombTaken = true;
             break;
