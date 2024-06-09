@@ -209,6 +209,7 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
     for (var i = 0; i < 6; i++) {
         this.honeycomb = new beehive.Honeycomb(10, y1, "honeycomb_full");
         this.honeycomb.animation.gotoAndPlay("100");
+        this.honeycomb.full = true;
         this.honeycombs1.push(this.honeycomb);
         y1 += 30;
         this.stage.addChild(this.honeycomb);
@@ -218,6 +219,7 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
         this.honeycomb = new beehive.Honeycomb(365, y2, "honeycomb_full");
         this.honeycomb.flippedX = true;
         this.honeycomb.animation.gotoAndPlay("100");
+        this.honeycomb.full = true;
         this.honeycombs2.push(this.honeycomb);
         y2 += 30;
         this.stage.addChild(this.honeycomb);
@@ -937,6 +939,7 @@ beehive.scene.Game.prototype.update = function (step) {
         if (this.honeycombs1[i].health == 0) {
             this.honeycombSound.play();
             this.honeycombSound.volume = 0.5;
+            this.honeycombs1[i].full = false;
             remove.push(this.honeycombs1[i]);
             this.stage.removeChild(this.honeycombs1[i]);
             //remove.push(i);
@@ -948,18 +951,41 @@ beehive.scene.Game.prototype.update = function (step) {
         if (this.honeycombs2[i].health == 0) {
             this.honeycombSound.play();
             this.honeycombSound.volume = 0.5;
+            this.honeycombs2[i].full = false;
             damageHoneycombs.push(this.honeycombs2[i]);
             this.stage.removeChild(this.honeycombs2[i]);
             //damageHoneycombs.push(i);
         }
     }
 
+    var honeycombs1Empty = true; 
+    for (var i = 0; i < this.honeycombs1.length; i++) {
+        if (this.honeycombs1[i].full) {
+            honeycombs1Empty = false;
+            break;
+        }
+    }
+
+   var honeycombs2Empty = true; 
+   for (var i = 0; i < this.honeycombs2.length; i++) {
+    if (this.honeycombs2[i].full) {
+        honeycombs2Empty = false;
+        break;
+    }
+}
+
     //Game over when honeycombs is gone
-    if (this.honeycombs1.length === 0) {
+    // if (this.honeycombs1.length === 0) {
+    //     this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
+    // } else if (this.honeycombs2.length === 0) {
+    //     this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
+    // }
+    if (honeycombs1Empty) {
         this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
-    } else if (this.honeycombs2.length === 0) {
+    } else if (honeycombs2Empty) {
         this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
     }
+
 
     //Limitations
     if (this.player1.bottom > 225) {
@@ -1043,28 +1069,15 @@ beehive.scene.Game.prototype.initBackgroundMusic = function () {
 
 //Gameover
 beehive.scene.Game.prototype.gameEnd = function (winner) {
-   // var self = this;
-    // this.timers.create({
-    //     duration: 2000,
-    //     onComplete: function () {
-    //         self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
-    //     }
-
-        this.timers.create({
-            duration: 4000,
-            onComplete: this.application.scenes.load([new beehive.scene.GameOverMenu(winner)])
-        }, true)
-    
-
-    // var self = this;
-    // this.timers.create({
-    //     duration: 2000,
-    //     onTick: function () {
-    //         self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
-    //     },
-    //     scope: self,
-    //     repeat: true
-    // });
+    var self = this;
+    this.timers.create({
+        duration: 2000,
+        onTick: function () {
+            self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
+        },
+        scope: self,
+        repeat: false
+    });
 
 };
 
