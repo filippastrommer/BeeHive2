@@ -615,9 +615,9 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player2.bullets[j].dispose(this.player2.bullets[j]);
             //this.player1.health--;
             if (this.player2.doubleDamage) {
-                this.player1.health -= 2;
+                this.player1.health -= 4;
             } else {
-                this.player1.health -= 1;
+                this.player1.health -= 2;
             }
             this.player1.flicker.start();
             this.player1.updateHealthBar();
@@ -630,9 +630,9 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player1.bullets[i].dispose(this.player1.bullets[i]);
             // this.player2.health--;
             if (this.player1.doubleDamage) {
-                this.player2.health -= 2;
+                this.player2.health -= 4;
             } else {
-                this.player2.health -= 1;
+                this.player2.health -= 2;
             }
             this.player2.flicker.start();
             this.player2.updateHealthBar();

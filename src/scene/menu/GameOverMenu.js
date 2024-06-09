@@ -56,6 +56,7 @@ beehive.scene.GameOverMenu.prototype.init = function () {
 
     this.initBackground();
     this.initBackgroundMusic();
+
     this.menu = new rune.ui.VTMenu (); 
     this.menu.onSelect(this.selectionSwitch, this); 
     this.menu.add("Play Again");
@@ -86,10 +87,9 @@ beehive.scene.GameOverMenu.prototype.initBackground = function() {
 }; 
 
 beehive.scene.GameOverMenu.prototype.initBackgroundMusic = function () {
-    this.backgroundMusic = this.application.sounds.music.get("menu", true);
+    this.backgroundMusic = this.application.sounds.music.get("over", true);
     this.backgroundMusic.play();
     this.backgroundMusic.volume = 0.2;
-    this.backgroundMusic.loop = true;
 }
 
 beehive.scene.GameOverMenu.prototype.selectionSwitch = function (element) {

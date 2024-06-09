@@ -86,7 +86,7 @@ beehive.scene.HowToPlay.prototype.init = function () {
     goal.x = 220; 
     goal.y = 52; 
 
-    var health = new rune.text.BitmapField("- You lose 1hp when \nhit by the opponent's \nbullet and 5hp when \nyou collide with a bird."); 
+    var health = new rune.text.BitmapField("- You lose 2hp when \nhit by the opponent's \nbullet and 5hp when \nyou collide with a bird."); 
     health.autoSize = true; 
     health.x = 220; 
     health.y = 80; 
