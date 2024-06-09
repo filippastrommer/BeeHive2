@@ -22,6 +22,7 @@ beehive.scene.GameOverMenu = function (winner) {
     this.controller2 = this.gamepads.get(1);
     this.background = null;
     this.winner = winner; 
+    this.backgroundMusic = null;
 
     //--------------------------------------------------------------------------
     // Super call
@@ -54,6 +55,7 @@ beehive.scene.GameOverMenu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
     this.initBackground();
+    this.initBackgroundMusic();
     this.menu = new rune.ui.VTMenu (); 
     this.menu.onSelect(this.selectionSwitch, this); 
     this.menu.add("Play Again");
@@ -82,6 +84,13 @@ beehive.scene.GameOverMenu.prototype.initBackground = function() {
     ); 
     this.stage.addChild(this.background); 
 }; 
+
+beehive.scene.GameOverMenu.prototype.initBackgroundMusic = function () {
+    this.backgroundMusic = this.application.sounds.music.get("gameover", true);
+    this.backgroundMusic.play();
+    this.backgroundMusic.volume = 0.2;
+    this.backgroundMusic.loop = true;
+}
 
 beehive.scene.GameOverMenu.prototype.selectionSwitch = function (element) {
 switch (element.text) {

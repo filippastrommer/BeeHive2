@@ -572,7 +572,7 @@ beehive.scene.Game.prototype.spawnPowerup = function () {
 
 //Powerup for bush/shield
 beehive.scene.Game.prototype.shieldPowerup = function (player) {
-    var shield = new rune.display.Sprite(0, 0, 13, 172, "bushPowerup");
+    var shield = new rune.display.Sprite(0, 0, 13, 172, "bush");
     this.stage.addChild(shield);
 
 
@@ -858,7 +858,6 @@ beehive.scene.Game.prototype.update = function (step) {
             } else {
                 this.player1.health -= 1;
             }
-            console.log("Spelare 1 health:", this.player1.health);
             this.player1.flicker.start();
             this.player1.updateHealthBar();
 
@@ -874,7 +873,6 @@ beehive.scene.Game.prototype.update = function (step) {
             } else {
                 this.player2.health -= 1;
             }
-            console.log("Spelare 2 health:", this.player2.health);
             this.player2.flicker.start();
             this.player2.updateHealthBar();
         }, this);

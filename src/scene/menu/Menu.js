@@ -19,6 +19,7 @@ beehive.scene.Menu = function() {
     this.controller1 = this.gamepads.get(0);
     this.controller2 = this.gamepads.get(1);    
     this.background = null; 
+    this.backgroundMusic = null;
 
 
     //--------------------------------------------------------------------------
@@ -54,6 +55,7 @@ beehive.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this); 
 
     this.initBackground(); 
+    this.initBackgroundMusic();
     this.menu = new rune.ui.VTMenu(); 
     this.menu.onSelect(this.selectionSwitch, this); 
     this.menu.add("Start Game"); 
@@ -62,6 +64,7 @@ beehive.scene.Menu.prototype.init = function () {
     this.menu.centerY = 135; 
 
     this.stage.addChild(this.menu); 
+
 }; 
 
 beehive.scene.Menu.prototype.initBackground = function () {
@@ -74,6 +77,13 @@ this.background = new rune.display.Graphic (
 ); 
 this.stage.addChild(this.background); 
 };
+
+beehive.scene.Menu.prototype.initBackgroundMusic = function () {
+    this.backgroundMusic = this.application.sounds.music.get("menu", true);
+    this.backgroundMusic.play();
+    this.backgroundMusic.volume = 0.2;
+    this.backgroundMusic.loop = true;
+}
 
 beehive.scene.Menu.prototype.selectionSwitch = function (element) {
     switch (element.text) {

@@ -38,7 +38,7 @@ beehive.scene.HowToPlay = function () {
     this.powerups = null; 
     this.beekeeper = null; 
     this.x2Bullets = null; 
-    this.shield = null; 
+    this.shield = null;
 
     //--------------------------------------------------------------------------
     // Super call
@@ -72,7 +72,7 @@ beehive.scene.HowToPlay.prototype.constructor = beehive.scene.HowToPlay;
 beehive.scene.HowToPlay.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this); 
 
-    this.initGraphics(); 
+    this.initGraphics();
     this.menu = new rune.ui.VTMenu(); 
     this.menu.onSelect(this.selectionSwitch, this); 
     this.menu.add("Start Game"); 
