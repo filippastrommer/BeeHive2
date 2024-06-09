@@ -129,10 +129,10 @@ beehive.Player.prototype.update = function (step) {
                 this.honeycombTimer += step;
                 if (this.honeycombTimer >= 3000) { // 3000 millisekunder = 3 sekunder
                     this.addHoneycomb(honeycomb);
-                    this.honeycombTimer = 0; // Återställ timern
+                    this.honeycombTimer = 0; 
                 }
             } else {
-                this.honeycombTimer = 0; // Återställ timern om knappen släpps
+                this.honeycombTimer = 0; 
             }
         }).bind(this, this.ownHoneycombs[i]), this);
     }

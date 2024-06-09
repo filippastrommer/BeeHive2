@@ -417,9 +417,9 @@ beehive.scene.Game.prototype.powerupsTimer = function () {
 };
 
 beehive.scene.Game.prototype.spawnPowerup = function () {
-    var player1Width = 175 - 10;
-    var player2Width = 390 - 225;
-    var height = 200;
+    var player1Width = 175 - 25;
+    var player2Width = 375 - 225;
+    var height = 190;
 
     var x, y;
     var position = Math.random() < 0.5 ? 0 : 1;
