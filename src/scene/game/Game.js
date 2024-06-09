@@ -411,44 +411,44 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     if (this.currentBeekeeper !== null) {
         return;
     }
-
     var self = this;
     var startY = -40;
 
     var startX = this.lastBeekeeperX === 10 ? 355 : 10;
     this.lastBeekeeperX = startX;
 
-    var beekeeper = new rune.display.Sprite(startX, startY, 29, 35, "beekeeper");
-    beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
-    beekeeper.animation.gotoAndPlay("move");
-    beekeeper.honeycombTaken = false;
-    beekeeper.flippedY = true;
+    var beekeeper = new rune.display.Sprite(startX, this.startY, 29, 35, "beekeeper");
+        beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
+        beekeeper.animation.gotoAndPlay("move");
+        beekeeper.honeycombTaken = false;
+        beekeeper.flippedY = true;
     this.stage.addChild(beekeeper);
-
-    this.currentBeekeeper = beekeeper; 
 
     var endY = 250;
     var distanceY = endY - startY;
     var verticalSpeed = distanceY / 400;
 
-    var interval = setInterval(function () {
+    function animateBeekeeper() {
         beekeeper.y += verticalSpeed;
+
         if (!beekeeper.honeycombTaken) {
             self.takeHoneycomb(beekeeper);
         }
-        if (beekeeper.y >= endY) {
-            clearInterval(interval);
+        if (beekeeper.y < endY) {
+            requestAnimationFrame(animateBeekeeper);
+        } else {
             self.timers.create({
                 duration: 1000,
                 onTick: function () {
                     self.stage.removeChild(beekeeper);
-                    self.currentBeekeeper = null; 
                 },
                 scope: self,
-                repeat: false
+                repeat: Infinity
             });
         }
-    }, 16);
+    }
+
+    requestAnimationFrame(animateBeekeeper);
 }
 
 //Collision with honeycomb, takes health from them
