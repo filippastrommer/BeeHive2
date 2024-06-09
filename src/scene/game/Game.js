@@ -181,7 +181,7 @@ beehive.scene.Game.prototype.birdTimer = function (duration, maxBirds) {
     if (birdNumber < maxBirds) {
         self.spawnBird(self.player1, self.player2);
         self.spawnBird(self.player1, self.player2);
-        birdNumber += 2;
+        birdNumber += 1;
     }
 
     this.timers.create({
@@ -384,38 +384,6 @@ beehive.scene.Game.prototype.randomBeekeeper = function (minDuration, maxDuratio
 
 //Beekeepers position and collision with honeycombs
 beehive.scene.Game.prototype.spawnBeekeeper = function () {
-    // var self = this;
-    // var startY = -40;
-
-    // var startX = this.lastBeekeeperX === 10 ? 355 : 10;
-    // this.lastBeekeeperX = startX;
-
-    // var beekeeper = new rune.display.Sprite(startX, startY, 29, 35, "beekeeper");
-    // beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
-    // beekeeper.animation.gotoAndPlay("move");
-    // beekeeper.honeycombTaken = false;
-    // beekeeper.flippedY = true;
-    // this.stage.addChild(beekeeper);
-
-    // var endY = 250;
-    // var distanceY = endY - startY;
-    // var verticalSpeed = distanceY / 400;
-
-    //     var interval = setInterval(function () {
-    //         beekeeper.y += verticalSpeed;
-    //         if (!beekeeper.honeycombTaken) {
-    //             self.takeHoneycomb(beekeeper);
-    //         }
-    //         if (beekeeper.y >= endY) {
-    //             clearInterval(interval);
-    //             setTimeout(function () {
-    //                 self.stage.removeChild(beekeeper);
-    //             }, 1000);
-    //         }
-    //     }, 16);
-
-
-    
 
     var self = this;
     var startY = -40;
@@ -423,24 +391,26 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     var startX = this.lastBeekeeperX === 10 ? 355 : 10;
     this.lastBeekeeperX = startX;
 
-    var beekeeper = new rune.display.Sprite(startX, startY, 29, 35, "beekeeper");
-    beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
-    beekeeper.animation.gotoAndPlay("move");
-    beekeeper.honeycombTaken = false;
-    beekeeper.flippedY = true;
+    var beekeeper = new rune.display.Sprite(startX, this.startY, 29, 35, "beekeeper");
+        beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
+        beekeeper.animation.gotoAndPlay("move");
+        beekeeper.honeycombTaken = false;
+        beekeeper.flippedY = true;
     this.stage.addChild(beekeeper);
 
     var endY = 250;
     var distanceY = endY - startY;
     var verticalSpeed = distanceY / 400;
 
-    var interval = setInterval(function () {
+    function animateBeekeeper() {
         beekeeper.y += verticalSpeed;
+
         if (!beekeeper.honeycombTaken) {
             self.takeHoneycomb(beekeeper);
         }
-        if (beekeeper.y >= endY) {
-            clearInterval(interval);
+        if (beekeeper.y < endY) {
+            requestAnimationFrame(animateBeekeeper);
+        } else {
             self.timers.create({
                 duration: 1000,
                 onTick: function () {
@@ -450,7 +420,9 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
                 repeat: Infinity
             });
         }
-    }, 16);
+    }
+
+    requestAnimationFrame(animateBeekeeper);
 }
 
 //Collision with honeycomb, takes health from them
@@ -846,8 +818,6 @@ beehive.scene.Game.prototype.update = function (step) {
             }
         });
     });
-
-
 
 
     //Hit test players bullets and bird 
