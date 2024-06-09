@@ -37,10 +37,9 @@ beehive.Player.prototype.init = function () {
     this.initHealthbar();
     this.initHealthBarAnimation();
   //  this.initAddHoneycombTimer(); 
-  this.honeycombTimer = 0;
+   this.honeycombTimer = 0;
 
 };
-
 
 
 
@@ -129,10 +128,10 @@ beehive.Player.prototype.update = function (step) {
                 this.honeycombTimer += step;
                 if (this.honeycombTimer >= 3000) { // 3000 millisekunder = 3 sekunder
                     this.addHoneycomb(honeycomb);
-                    this.honeycombTimer = 0; 
+                    this.honeycombTimer = 0; // Återställ timern
                 }
             } else {
-                this.honeycombTimer = 0; 
+                this.honeycombTimer = 0; // Återställ timern om knappen släpps
             }
         }).bind(this, this.ownHoneycombs[i]), this);
     }

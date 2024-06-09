@@ -78,18 +78,18 @@ beehive.scene.Game.prototype.init = function () {
     this.initPlayers();
     this.birdTimer(20000, 2);
     this.initBeekeeper(20000, 40000);
-    var self = this;
-    // var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
-    // setTimeout(function () {
-    //     self.spawnBeekeeper();
-    // }, firstBeekeeper);
+//    var self = this;
+//     var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
+//     setTimeout(function () {
+//         self.spawnBeekeeper();
+//     }, firstBeekeeper);
 
     var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
     this.timers.create({
         duration: firstBeekeeper,
         onTick: this.spawnBeekeeper,
         scope: this,
-        repeat: false
+        repeat: Infinity
     });
 
     this.powerupsTimer();
@@ -287,7 +287,7 @@ beehive.scene.Game.prototype.initBeekeeper = function (minDuration, maxDuration)
         onTick: this.randomBeekeeper,
         scope: this,
         args: [minDuration, maxDuration],
-        repeat: false
+        repeat: Infinity
     });
 }
 
@@ -305,6 +305,8 @@ beehive.scene.Game.prototype.randomBeekeeper = function (minDuration, maxDuratio
     // this.beekeeperRandom = setTimeout(function() {
     //     self.randomBeekeeper(minDuration, maxDuration);
     // }, duration);
+
+
     this.spawnBeekeeper();
     var duration = this.randomDuration(minDuration, maxDuration);
 
@@ -313,7 +315,7 @@ beehive.scene.Game.prototype.randomBeekeeper = function (minDuration, maxDuratio
         onTick: this.randomBeekeeper,
         scope: this,
         args: [minDuration, maxDuration],
-        repeat: false
+        repeat: Infinity
     });
 };
 
@@ -349,6 +351,9 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
     //         }
     //     }, 16);
 
+
+    
+
     var self = this;
     var startY = -40;
 
@@ -379,7 +384,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
                     self.stage.removeChild(beekeeper);
                 },
                 scope: self,
-                repeat: false
+                repeat: Infinity
             });
         }
     }, 16);
@@ -396,7 +401,7 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
                 this.honeycombSound.play();
                 this.honeycombSound.volume = 0.3;
                 this.stage.removeChild(honeycombs[i]);
-             //   honeycombs.splice(i, 1);
+               // honeycombs.splice(i, 1);
             }
             beekeeper.honeycombTaken = true;
             break;
@@ -417,9 +422,9 @@ beehive.scene.Game.prototype.powerupsTimer = function () {
 };
 
 beehive.scene.Game.prototype.spawnPowerup = function () {
-    var player1Width = 175 - 25;
-    var player2Width = 375 - 225;
-    var height = 190;
+    var player1Width = 175 - 10;
+    var player2Width = 390 - 225;
+    var height = 200;
 
     var x, y;
     var position = Math.random() < 0.5 ? 0 : 1;
@@ -583,7 +588,7 @@ beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
     //         opponent.velocity.max.y = originalMaxY;
     //     }, 10000);
     // }
-    var self = this;
+var self = this;
 
     var timerX = 185;
     var timerY = 20;
