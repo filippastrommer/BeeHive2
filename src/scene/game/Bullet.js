@@ -1,5 +1,5 @@
 beehive.Bullet = function (x, y, radians) {
-    rune.display.Sprite.call(this, x, y, 7, 7, "nectar", radians);     
+    rune.display.Sprite.call(this, x, y, 6, 6, "nectar1", radians);     
     this.radians = radians;
     this.bulletSpeed = 5;
     this.hitbox.set(4, 4, 2, 2);

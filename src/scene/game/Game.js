@@ -18,7 +18,7 @@ beehive.scene.Game = function () {
     this.player1 = null;
     this.player2 = null;
     this.honeycomb = null;
-
+    this.nectar =  null;
     this.honeycombs1 = [];
     this.honeycombs2 = [];
     this.bullets = [];
@@ -129,10 +129,9 @@ beehive.scene.Game.prototype.initBackground = function () {
         0,
         26, 
         225, 
-        "cobble"
+        "cobble"    
     ); 
     this.stage.addChild(cobblestone); 
-    
 
 };
 

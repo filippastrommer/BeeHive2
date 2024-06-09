@@ -256,8 +256,8 @@ beehive.Player.prototype.updateInput = function () {
 
 beehive.Player.prototype.shootNectar = function () {
 
-    var beeOffsetX = 5;
-    var beeOffsetY = 8;
+    var beeOffsetX = 20;
+    var beeOffsetY = 10;
 
     var bulletX = this.x + beeOffsetX;
     var bulletY = this.y + beeOffsetY;
