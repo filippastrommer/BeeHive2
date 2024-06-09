@@ -125,11 +125,11 @@ beehive.scene.Game.prototype.initBackground = function () {
     this.stage.addChild(this.rightBeehive);
 
     var cobblestone = new rune.display.Graphic(
-        198,
+        187,
         0,
-        25, 
+        26, 
         225, 
-        "cobblestone"
+        "cobble"
     ); 
     this.stage.addChild(cobblestone); 
     
