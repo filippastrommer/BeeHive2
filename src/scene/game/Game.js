@@ -78,11 +78,6 @@ beehive.scene.Game.prototype.init = function () {
     this.initPlayers();
     this.birdTimer(20000, 2);
     this.initBeekeeper(20000, 40000);
-//    var self = this;
-//     var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
-//     setTimeout(function () {
-//         self.spawnBeekeeper();
-//     }, firstBeekeeper);
 
     var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
     this.timers.create({
@@ -158,22 +153,6 @@ beehive.scene.Game.prototype.initPlayers = function () {
 };
 
 beehive.scene.Game.prototype.birdTimer = function (duration, maxBirds) {
-    // var self = this;
-    // var birdNumber = this.birds.length;
-
-    // if (birdNumber < maxBirds) {
-    //     self.spawnBird(self.player1, self.player2);
-    //     self.spawnBird(self.player1, self.player2);
-    //     birdNumber += 2;
-    // }
-
-    // setInterval(function () {
-    //     birdNumber = self.birds.length; 
-    //     if (birdNumber < maxBirds) {
-    //         self.spawnBird(self.player1, self.player2);
-    //         self.spawnBird(self.player1, self.player2);
-    //     }
-    // }, duration);
 
     var self = this;
     var birdNumber = this.birds.length;
@@ -226,54 +205,7 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
 
 //Spawn birds and movement 
 beehive.scene.Game.prototype.spawnBird = function (player1, player2) {
-    // var self = this;
-    // var bird = new rune.display.Sprite(0, 0, 38, 24, "birdFlying");
-    // bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-    // bird.animation.gotoAndPlay("move");
 
-    // bird.hitbox.set(10, 7, 30, 25);
-    // bird.x = Math.random() * (400 - bird.width);
-    // bird.y = -bird.height;
-    // this.stage.addChild(bird);
-    // this.birds.push(bird);
-
-    // var collision = false;
-    // var direction = { x: Math.random() < 0.5 ? -1 : 1, y: 1 }; 
-
-    //     var angle = Math.atan2(direction.y, direction.x) * (180 / Math.PI);
-    //     bird.rotation = angle; 
-    //     if (direction.x < 0) {
-    //         bird.flippedX = true; 
-    //     } else {
-    //         bird.flippedX = false; 
-    //     }
-    //     if (direction.x > 0) {
-    //         bird.flippedY = true; 
-    //     } else {
-    //         bird.flippedY = false; 
-    //     }
-
-
-    //     var interval = setInterval(function () {
-    //         bird.x += direction.x;
-    //         bird.y += direction.y;
-
-    //         if (bird.x <= -bird.width || bird.x >= 400 || bird.y >= 225) {
-    //             clearInterval(interval);
-    //             self.stage.removeChild(bird);
-    //             self.birds.splice(self.birds.indexOf(bird), 1);
-    //             return;
-    //         }
-
-    //         if (!collision && (bird.hitTestObject(player1) || bird.hitTestObject(player2))) {
-    //             self.birdCollision(bird.hitTestObject(player1) ? player1 : player2);
-    //             collision = true;
-    //         }
-
-
-    //     }, 16);
-
-    // return bird;
     var bird = new rune.display.Sprite(0, 0, 38, 24, "birdFlying");
     bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 12, true);
     bird.animation.gotoAndPlay("move");
@@ -330,16 +262,6 @@ beehive.scene.Game.prototype.birdCollision = function (player) {
 //Beekeeper
 beehive.scene.Game.prototype.initBeekeeper = function (minDuration, maxDuration) {
 
-    // var startX = [10, 355];
-    // this.lastBeekeeperX = startX[Math.floor(Math.random() * startX.length)];
-
-    // var self = this;
-    // var firstBeekeeper = this.randomDuration(minDuration, maxDuration);
-
-    // this.beekeeperRandom = setTimeout(function() {
-    //     self.randomBeekeeper(minDuration, maxDuration);
-    // }, firstBeekeeper);
-
     var startX = [10, 355];
     this.lastBeekeeperX = startX[Math.floor(Math.random() * startX.length)];
 
@@ -362,13 +284,6 @@ beehive.scene.Game.prototype.randomDuration = function (minDuration, maxDuration
 
 
 beehive.scene.Game.prototype.randomBeekeeper = function (minDuration, maxDuration) {
-    // var self = this;
-    // this.spawnBeekeeper();
-    // var duration = this.randomDuration(minDuration, maxDuration);
-    // this.beekeeperRandom = setTimeout(function() {
-    //     self.randomBeekeeper(minDuration, maxDuration);
-    // }, duration);
-
 
     this.spawnBeekeeper();
     var duration = this.randomDuration(minDuration, maxDuration);
@@ -448,13 +363,7 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
 //Powerups 
 beehive.scene.Game.prototype.powerupsTimer = function () {
 
-    // var self = this;
-
-    // setInterval(function () {
-    //     self.spawnPowerup();
-    // }, Math.random() * 10000 + 25000);
     var self = this;
-
     var duration = Math.random() * 10000 + 25000;
 
     this.timers.create({
@@ -472,66 +381,6 @@ beehive.scene.Game.prototype.powerupsTimer = function () {
 };
 
 beehive.scene.Game.prototype.spawnPowerup = function () {
-    // var player1Width = 175 - 25;
-    // var player2Width = 375 - 225;
-    // var height = 190;
-
-    // var x, y;
-    // var position = Math.random() < 0.5 ? 0 : 1;
-
-    // if (position === 0) {
-    //     x = Math.random() * player1Width;
-    //     y = Math.random() * height;
-    // } else {
-    //     x = 225 + Math.random() * player2Width;
-    //     y = Math.random() * height;
-    // }
-
-    // var powerupType;
-    // var texture;
-
-    // var randomValue = Math.random();
-    // if (randomValue < 0.33) {
-    //     powerupType = "healthTimes2";
-    //     texture = "doubleAnimation";
-    // } else if (randomValue < 0.66) {
-    //     powerupType = "shield";
-    //     texture = "shieldAnimation";
-    // } else {
-    //     powerupType = "slowEnemyShots";
-    //     texture = "slowAnimation";
-    // }
-
-    // var powerup = new rune.display.Sprite(x, y, 22, 26, texture);
-    // powerup.type = powerupType;
-
-    // powerup.animation.create("timer", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1, true);
-    // powerup.animation.gotoAndPlay("timer");
-
-    // this.stage.addChild(powerup);
-    // this.powerups.push(powerup);
-
-    // var self = this;
-    // // setTimeout(function () {
-    // //     var index = self.powerups.indexOf(powerup);
-    // //     if (index > -1) {
-    // //         self.stage.removeChild(powerup);
-    // //         self.powerups.splice(index, 1);
-    // //     }
-    // // }, 10000);
-
-    // this.timers.create({
-    //     duration: 10000,
-    //     onTick: function () {
-    //         var index = self.powerups.indexOf(powerup);
-    //         if (index > -1) {
-    //             self.stage.removeChild(powerup);
-    //             self.powerups.splice(index, 1);
-    //         }
-    //     },
-    //     scope: self,
-    //     repeat: false
-    // });
 
     var player1Width = 175 - 25;
     var player2Width = 375 - 225;
@@ -607,13 +456,7 @@ beehive.scene.Game.prototype.shieldPowerup = function (player) {
     this.shields.push(shield);
 
     var self = this;
-    // setTimeout(function () {
-    //     self.stage.removeChild(shield);
-    //     var index = self.shields.indexOf(shield);
-    //     if (index !== -1) {
-    //         self.shields.splice(index, 1);
-    //     }
-    // }, 10000);
+
     this.timers.create({
         duration: 10000,
         onTick: function () {
@@ -630,71 +473,8 @@ beehive.scene.Game.prototype.shieldPowerup = function (player) {
 
 //Powerups functions
 beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
-    // var self = this;
 
-    // var timerX = 185;
-    // var timerY = 20;
-
-    // this.visualTimer = new rune.display.Sprite(timerX, timerY, 49, 9, "powerup");
-    // this.stage.addChild(this.visualTimer);
-    // this.visualTimer.animation.create("timer", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 3, false); 
-    // this.visualTimer.animation.gotoAndPlay("timer"); 
-
-    // setTimeout(function () {
-    //     self.stage.removeChild(self.visualTimer);
-    // }, 10000);
- 
-
-    // var textX = 160;
-    // var textY = 30;
-
-    
-
-    // if (powerup.type === "healthTimes2") {
-    //     player.doubleDamage = true;
-    //     var doubleDamageText = new rune.display.Sprite(textX, textY, 162, 150, "doubleDamage");
-    //     this.stage.addChild(doubleDamageText);
-    //     setTimeout(function () {
-    //         this.stage.removeChild(doubleDamageText);
-    //     }.bind(this), 2000);
-
-    //     setTimeout(function () {
-    //         player.doubleDamage = false;
-    //     }, 10000);
-    // } else if (powerup.type === "shield") {
-    //     var shieldText = new rune.display.Sprite(textX, textY, 162, 150, "shieldText");
-    //     this.stage.addChild(shieldText);
-
-    //     setTimeout(function () {
-    //         this.stage.removeChild(shieldText);
-    //     }.bind(this), 2000);
-    //     this.shieldPowerup(player);
-
-    // } else if (powerup.type === "slowEnemyShots") {
-        
-    // var slowText = new rune.display.Sprite(textX, textY, 162, 150, "slowDownText");
-  
-    //  this.stage.addChild(slowText);
-    //     setTimeout(function () {
-    //         this.stage.removeChild(slowText);
-    //     }.bind(this), 2000);
-
-    //     var opponent = (player === this.player1) ? this.player2 : this.player1;
-    //     opponent.slowShots = true;
-
-    //     var originalMaxX = opponent.velocity.max.x;
-    //     var originalMaxY = opponent.velocity.max.y;
-
-    //     opponent.velocity.max.x *= 0.3;
-    //     opponent.velocity.max.y *= 0.3;
-
-    //     setTimeout(function () {
-    //         opponent.slowShots = false;
-    //         opponent.velocity.max.x = originalMaxX;
-    //         opponent.velocity.max.y = originalMaxY;
-    //     }, 10000);
-    // }
-var self = this;
+    var self = this;
 
     var timerX = 185;
     var timerY = 20;
