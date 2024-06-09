@@ -643,8 +643,8 @@ beehive.scene.Game.prototype.update = function (step) {
     var remove = [];
     for (var i = 0; i < this.honeycombs1.length; i++) {
         if (this.honeycombs1[i].health == 0) {
-            this.honeycombSound.play();
-            this.honeycombSound.volume = 0.5;
+         //   this.honeycombSound.play();
+          //  this.honeycombSound.volume = 0.5;
             this.honeycombs1[i].full = false;
             remove.push(this.honeycombs1[i]);
             this.stage.removeChild(this.honeycombs1[i]);
@@ -655,8 +655,8 @@ beehive.scene.Game.prototype.update = function (step) {
     var damageHoneycombs = [];
     for (var i = 0; i < this.honeycombs2.length; i++) {
         if (this.honeycombs2[i].health == 0) {
-            this.honeycombSound.play();
-            this.honeycombSound.volume = 0.5;
+         //   this.honeycombSound.play();
+          //  this.honeycombSound.volume = 0.5;
             this.honeycombs2[i].full = false;
             damageHoneycombs.push(this.honeycombs2[i]);
             this.stage.removeChild(this.honeycombs2[i]);
