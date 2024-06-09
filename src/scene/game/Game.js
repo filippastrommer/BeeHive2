@@ -646,24 +646,18 @@ beehive.scene.Game.prototype.update = function (step) {
     var remove = [];
     for (var i = 0; i < this.honeycombs1.length; i++) {
         if (this.honeycombs1[i].health == 0) {
-         //   this.honeycombSound.play();
-          //  this.honeycombSound.volume = 0.5;
             this.honeycombs1[i].full = false;
             remove.push(this.honeycombs1[i]);
             this.stage.removeChild(this.honeycombs1[i]);
-            //remove.push(i);
         }
     }
 
     var damageHoneycombs = [];
     for (var i = 0; i < this.honeycombs2.length; i++) {
         if (this.honeycombs2[i].health == 0) {
-         //   this.honeycombSound.play();
-          //  this.honeycombSound.volume = 0.5;
             this.honeycombs2[i].full = false;
             damageHoneycombs.push(this.honeycombs2[i]);
             this.stage.removeChild(this.honeycombs2[i]);
-            //damageHoneycombs.push(i);
         }
     }
 
@@ -682,12 +676,7 @@ beehive.scene.Game.prototype.update = function (step) {
             break;
         }
     }
-    //Game over when honeycombs is gone
-    // if (this.honeycombs1.length === 0) {
-    //     this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
-    // } else if (this.honeycombs2.length === 0) {
-    //     this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
-    // }
+ 
 
     if (honeycombs1Empty) {
         this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
