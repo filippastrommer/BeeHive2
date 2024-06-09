@@ -9,7 +9,6 @@ if (typeof window !== "undefined") {
     if (typeof window.beehive === "undefined") {
         window.beehive = beehive;
     }
-    console.log("test")
 }
 
 /**

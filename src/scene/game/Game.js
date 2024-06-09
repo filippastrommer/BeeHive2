@@ -1,7 +1,6 @@
 //------------------------------------------------------------------------------
 // Constructor scope
 //------------------------------------------------------------------------------
-
 /**
  * Creates a new object.
  *
@@ -18,7 +17,6 @@ beehive.scene.Game = function () {
     this.player1 = null;
     this.player2 = null;
     this.honeycomb = null;
-
     this.honeycombs1 = [];
     this.honeycombs2 = [];
     this.bullets = [];
@@ -35,56 +33,43 @@ beehive.scene.Game = function () {
     this.shields = [];
     this.visualTimer = null;
 
-
     //Sound effects 
     this.powerupSound = null;
     this.honeycombSound = null;
     this.backgroundMusic = null;
     this.birdHitSound = null;
-
-
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-
     /**
      * Calls the constructor method of the super class.
      */
     rune.scene.Scene.call(this);
 };
-
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
-
 beehive.scene.Game.prototype = Object.create(rune.scene.Scene.prototype);
 beehive.scene.Game.prototype.constructor = beehive.scene.Game;
-
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
-
 /**
  * This method is automatically executed once after the scene is instantiated. 
  * The method is used to create objects to be used within the scene.
  *
  * @returns {undefined}
  */
+
 beehive.scene.Game.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
-
     this.initBackground();
     this.initHoneycombs();
     this.initPlayers();
     this.birdTimer(20000, 2);
     this.initBeekeeper(20000, 40000);
-//    var self = this;
-//     var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
-//     setTimeout(function () {
-//         self.spawnBeekeeper();
-//     }, firstBeekeeper);
 
-this.currentBeekeeper = null;
+    this.currentBeekeeper = null;
     var firstBeekeeper = Math.random() * (30000 - 10000) + 10000;
     this.timers.create({
         duration: firstBeekeeper,
@@ -101,9 +86,7 @@ this.currentBeekeeper = null;
     this.powerupSound = this.application.sounds.sound.get("pickupPowerup", true);
     this.honeycombSound = this.application.sounds.sound.get("honeycombExplode", true);
     this.birdHitSound = this.application.sounds.sound.get("birdHit", true);
-
     
-
 };
 
 beehive.scene.Game.prototype.initBackground = function () {
@@ -115,78 +98,47 @@ beehive.scene.Game.prototype.initBackground = function () {
         "background"
     );
     this.stage.addChild(this.background);
-
     this.leftBeehive = new rune.display.Graphic(
         9, 8, 24, 24, "beehive"
     );
     this.stage.addChild(this.leftBeehive);
-
     this.rightBeehive = new rune.display.Graphic(
         364, 190, 24, 24, "beehive"
     );
     this.stage.addChild(this.rightBeehive);
-
     var cobblestone = new rune.display.Graphic(
-        198,
+        187,
         0,
-        25, 
+        26, 
         225, 
-        "cobblestone"
+        "cobble"    
     ); 
     this.stage.addChild(cobblestone); 
-    
-
 };
 
 beehive.scene.Game.prototype.initPlayers = function () {
+
     //Player 1 (black bee)
     this.player1 = new beehive.Player(9, 8, "bee", this.controller1, this.bullets1, this.honeycombs2, this.honeycombs1);
-
     this.stage.addChild(this.player1);
-
     this.player1.healthBar.x = 75;
-    this.player1.healthBar.y = 10;
-
-
+    this.player1.healthBar.y = 5;
 
     //Player 2 (brown bee)
     this.player2 = new beehive.Player(364, 190, "bee2", this.controller2, this.bullets2, this.honeycombs1, this.honeycombs2);
-
     this.stage.addChild(this.player2);
-
     this.player2.healthBar.x = 300;
-    this.player2.healthBar.y = 10;
-
-
+    this.player2.healthBar.y = 5;
 };
 
 beehive.scene.Game.prototype.birdTimer = function (duration, maxBirds) {
-    // var self = this;
-    // var birdNumber = this.birds.length;
-
-    // if (birdNumber < maxBirds) {
-    //     self.spawnBird(self.player1, self.player2);
-    //     self.spawnBird(self.player1, self.player2);
-    //     birdNumber += 2;
-    // }
-
-    // setInterval(function () {
-    //     birdNumber = self.birds.length; 
-    //     if (birdNumber < maxBirds) {
-    //         self.spawnBird(self.player1, self.player2);
-    //         self.spawnBird(self.player1, self.player2);
-    //     }
-    // }, duration);
-
     var self = this;
     var birdNumber = this.birds.length;
-
     if (birdNumber < maxBirds) {
         self.spawnBird(self.player1, self.player2);
         self.spawnBird(self.player1, self.player2);
         birdNumber += 2;
     }
-
     this.timers.create({
         duration: duration,
         onTick: function () {
@@ -201,10 +153,8 @@ beehive.scene.Game.prototype.birdTimer = function (duration, maxBirds) {
     });
 };
 
-
 //Honeycombs
 beehive.scene.Game.prototype.initHoneycombs = function () {
-
     var y1 = 40;
     var y2 = 10;
 
@@ -226,77 +176,26 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
         y2 += 30;
         this.stage.addChild(this.honeycomb);
     }
-
 };
 
 //Spawn birds and movement 
 beehive.scene.Game.prototype.spawnBird = function (player1, player2) {
-    // var self = this;
-    // var bird = new rune.display.Sprite(0, 0, 38, 24, "birdFlying");
-    // bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
-    // bird.animation.gotoAndPlay("move");
-
-    // bird.hitbox.set(10, 7, 30, 25);
-    // bird.x = Math.random() * (400 - bird.width);
-    // bird.y = -bird.height;
-    // this.stage.addChild(bird);
-    // this.birds.push(bird);
-
-    // var collision = false;
-    // var direction = { x: Math.random() < 0.5 ? -1 : 1, y: 1 }; 
-
-    //     var angle = Math.atan2(direction.y, direction.x) * (180 / Math.PI);
-    //     bird.rotation = angle; 
-    //     if (direction.x < 0) {
-    //         bird.flippedX = true; 
-    //     } else {
-    //         bird.flippedX = false; 
-    //     }
-    //     if (direction.x > 0) {
-    //         bird.flippedY = true; 
-    //     } else {
-    //         bird.flippedY = false; 
-    //     }
-
-
-    //     var interval = setInterval(function () {
-    //         bird.x += direction.x;
-    //         bird.y += direction.y;
-
-    //         if (bird.x <= -bird.width || bird.x >= 400 || bird.y >= 225) {
-    //             clearInterval(interval);
-    //             self.stage.removeChild(bird);
-    //             self.birds.splice(self.birds.indexOf(bird), 1);
-    //             return;
-    //         }
-
-    //         if (!collision && (bird.hitTestObject(player1) || bird.hitTestObject(player2))) {
-    //             self.birdCollision(bird.hitTestObject(player1) ? player1 : player2);
-    //             collision = true;
-    //         }
-
-
-    //     }, 16);
-
-    // return bird;
     var bird = new rune.display.Sprite(0, 0, 38, 24, "birdFlying");
     bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 12, true);
     bird.animation.gotoAndPlay("move");
-
     bird.hitbox.set(10, 7, 30, 25);
     bird.x = Math.random() * (400 - bird.width);
     bird.y = -bird.height;
+
     this.stage.addChild(bird);
     this.birds.push(bird);
 
     bird.collision = false;
     bird.direction = { x: Math.random() < 0.5 ? -1 : 1, y: 1 }; 
-
     var angle = Math.atan2(bird.direction.y, bird.direction.x) * (180 / Math.PI);
     bird.rotation = angle; 
     bird.flippedX = bird.direction.x < 0;
     bird.flippedY = bird.direction.x > 0;
-
     return bird;
 };
 
@@ -304,17 +203,14 @@ beehive.scene.Game.prototype.updateBirds = function() {
     var self = this;
     var player1 = this.player1;
     var player2 = this.player2;
-
     this.birds.forEach(function(bird, index) {
         bird.x += bird.direction.x;
         bird.y += bird.direction.y;
-
         if (bird.x <= -bird.width || bird.x >= 400 || bird.y >= 225) {
             self.stage.removeChild(bird);
             self.birds.splice(index, 1);
             return;
         }
-
         if (!bird.collision && (bird.hitTestObject(player1) || bird.hitTestObject(player2))) {
             self.birdCollision(bird.hitTestObject(player1) ? player1 : player2);
             bird.collision = true;
@@ -334,11 +230,8 @@ beehive.scene.Game.prototype.birdCollision = function (player) {
 
 //Beekeeper
 beehive.scene.Game.prototype.initBeekeeper = function (minDuration, maxDuration) {
-
-
     var startX = [10, 355];
     this.lastBeekeeperX = startX[Math.floor(Math.random() * startX.length)];
-
     var firstBeekeeper = this.randomDuration(minDuration, maxDuration);
 
     this.timers.create({
@@ -350,16 +243,13 @@ beehive.scene.Game.prototype.initBeekeeper = function (minDuration, maxDuration)
     });
 }
 
-
 //Beekeeper spawn at a random time
 beehive.scene.Game.prototype.randomDuration = function (minDuration, maxDuration) {
     return Math.random() * (maxDuration - minDuration) + minDuration;
 };
 
-
 beehive.scene.Game.prototype.randomBeekeeper = function (minDuration, maxDuration) {
 
-    // this.spawnBeekeeper();
     if (this.currentBeekeeper === null) {
         this.spawnBeekeeper();
     }
@@ -376,38 +266,7 @@ beehive.scene.Game.prototype.randomBeekeeper = function (minDuration, maxDuratio
 
 //Beekeepers position and collision with honeycombs
 beehive.scene.Game.prototype.spawnBeekeeper = function () {
-    // var self = this;
-    // var startY = -40;
 
-    // var startX = this.lastBeekeeperX === 10 ? 355 : 10;
-    // this.lastBeekeeperX = startX;
-
-    // var beekeeper = new rune.display.Sprite(startX, startY, 29, 35, "beekeeper");
-    // beekeeper.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7, 8], 12, true);
-    // beekeeper.animation.gotoAndPlay("move");
-    // beekeeper.honeycombTaken = false;
-    // beekeeper.flippedY = true;
-    // this.stage.addChild(beekeeper);
-
-    // var endY = 250;
-    // var distanceY = endY - startY;
-    // var verticalSpeed = distanceY / 400;
-
-    //     var interval = setInterval(function () {
-    //         beekeeper.y += verticalSpeed;
-    //         if (!beekeeper.honeycombTaken) {
-    //             self.takeHoneycomb(beekeeper);
-    //         }
-    //         if (beekeeper.y >= endY) {
-    //             clearInterval(interval);
-    //             setTimeout(function () {
-    //                 self.stage.removeChild(beekeeper);
-    //             }, 1000);
-    //         }
-    //     }, 16);
-
-
-    
     if (this.currentBeekeeper !== null) {
         return;
     }
@@ -423,6 +282,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
         beekeeper.honeycombTaken = false;
         beekeeper.flippedY = true;
     this.stage.addChild(beekeeper);
+    //this.currentBeekeeper = beekeeper;
 
     var endY = 250;
     var distanceY = endY - startY;
@@ -441,6 +301,7 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
                 duration: 1000,
                 onTick: function () {
                     self.stage.removeChild(beekeeper);
+                    //self.currentBeekeeper = null;
                 },
                 scope: self,
                 repeat: Infinity
@@ -453,21 +314,6 @@ beehive.scene.Game.prototype.spawnBeekeeper = function () {
 
 //Collision with honeycomb, takes health from them
 beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
-    // var honeycombs = beekeeper.x === 10 ? this.honeycombs1 : this.honeycombs2;
-
-    // for (var i = 0; i < honeycombs.length; i++) {
-    //     if (beekeeper.hitTestObject(honeycombs[i])) {
-    //         honeycombs[i].health -= 5;
-    //         if (honeycombs[i].health <= 0) {
-    //             this.honeycombSound.play();
-    //             this.honeycombSound.volume = 0.3;
-    //             this.stage.removeChild(honeycombs[i]);
-    //            // honeycombs.splice(i, 1);
-    //         }
-    //         beekeeper.honeycombTaken = true;
-    //         break;
-    //     }
-    // }
 
     var honeycombs = beekeeper.x === 10 ? this.honeycombs1 : this.honeycombs2;
 
@@ -488,13 +334,10 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
     }
 }
 
-
 //Powerups 
 beehive.scene.Game.prototype.powerupsTimer = function () {
 
- 
     var self = this;
-
     var duration = Math.random() * 10000 + 25000;
 
     this.timers.create({
@@ -508,15 +351,13 @@ beehive.scene.Game.prototype.powerupsTimer = function () {
         scope: self,
         repeat: false
     });
-
 };
 
 beehive.scene.Game.prototype.spawnPowerup = function () {
-   
+
     var player1Width = 175 - 25;
     var player2Width = 375 - 225;
     var height = 190;
-
     var x, y;
     var position = Math.random() < 0.5 ? 0 : 1;
 
@@ -553,8 +394,8 @@ beehive.scene.Game.prototype.spawnPowerup = function () {
     this.powerups.push(powerup);
 
     this.currentPowerup = powerup; 
-
     var self = this;
+    
     this.timers.create({
         duration: 10000,
         onTick: function () {
@@ -572,9 +413,9 @@ beehive.scene.Game.prototype.spawnPowerup = function () {
 
 //Powerup for bush/shield
 beehive.scene.Game.prototype.shieldPowerup = function (player) {
+
     var shield = new rune.display.Sprite(0, 0, 13, 172, "bush");
     this.stage.addChild(shield);
-
 
     if (player === this.player1) {
         shield.x = 30;
@@ -585,15 +426,8 @@ beehive.scene.Game.prototype.shieldPowerup = function (player) {
     }
 
     this.shields.push(shield);
-
     var self = this;
-    // setTimeout(function () {
-    //     self.stage.removeChild(shield);
-    //     var index = self.shields.indexOf(shield);
-    //     if (index !== -1) {
-    //         self.shields.splice(index, 1);
-    //     }
-    // }, 10000);
+
     this.timers.create({
         duration: 10000,
         onTick: function () {
@@ -610,74 +444,9 @@ beehive.scene.Game.prototype.shieldPowerup = function (player) {
 
 //Powerups functions
 beehive.scene.Game.prototype.handlePowerup = function (player, powerup) {
-    // var self = this;
-
-    // var timerX = 185;
-    // var timerY = 20;
-
-    // this.visualTimer = new rune.display.Sprite(timerX, timerY, 49, 9, "powerup");
-    // this.stage.addChild(this.visualTimer);
-    // this.visualTimer.animation.create("timer", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 3, false); 
-    // this.visualTimer.animation.gotoAndPlay("timer"); 
-
-    // setTimeout(function () {
-    //     self.stage.removeChild(self.visualTimer);
-    // }, 10000);
- 
-
-    // var textX = 160;
-    // var textY = 30;
-
-    
-
-    // if (powerup.type === "healthTimes2") {
-    //     player.doubleDamage = true;
-    //     var doubleDamageText = new rune.display.Sprite(textX, textY, 162, 150, "doubleDamage");
-    //     this.stage.addChild(doubleDamageText);
-    //     setTimeout(function () {
-    //         this.stage.removeChild(doubleDamageText);
-    //     }.bind(this), 2000);
-
-    //     setTimeout(function () {
-    //         player.doubleDamage = false;
-    //     }, 10000);
-    // } else if (powerup.type === "shield") {
-    //     var shieldText = new rune.display.Sprite(textX, textY, 162, 150, "shieldText");
-    //     this.stage.addChild(shieldText);
-
-    //     setTimeout(function () {
-    //         this.stage.removeChild(shieldText);
-    //     }.bind(this), 2000);
-    //     this.shieldPowerup(player);
-
-    // } else if (powerup.type === "slowEnemyShots") {
-        
-    // var slowText = new rune.display.Sprite(textX, textY, 162, 150, "slowDownText");
-  
-    //  this.stage.addChild(slowText);
-    //     setTimeout(function () {
-    //         this.stage.removeChild(slowText);
-    //     }.bind(this), 2000);
-
-    //     var opponent = (player === this.player1) ? this.player2 : this.player1;
-    //     opponent.slowShots = true;
-
-    //     var originalMaxX = opponent.velocity.max.x;
-    //     var originalMaxY = opponent.velocity.max.y;
-
-    //     opponent.velocity.max.x *= 0.3;
-    //     opponent.velocity.max.y *= 0.3;
-
-    //     setTimeout(function () {
-    //         opponent.slowShots = false;
-    //         opponent.velocity.max.x = originalMaxX;
-    //         opponent.velocity.max.y = originalMaxY;
-    //     }, 10000);
-    // }
-var self = this;
-
+    var self = this;
     var timerX = 185;
-    var timerY = 20;
+    var timerY = 5;
 
     this.visualTimer = new rune.display.Sprite(timerX, timerY, 49, 9, "powerup");
     this.stage.addChild(this.visualTimer);
@@ -718,10 +487,10 @@ var self = this;
             scope: self,
             repeat: false
         });
+
     } else if (powerup.type === "shield") {
         var shieldText = new rune.display.Sprite(textX, textY, 162, 150, "shieldText");
         this.stage.addChild(shieldText);
-
         this.timers.create({
             duration: 2000,
             onTick: function () {
@@ -736,7 +505,6 @@ var self = this;
     } else if (powerup.type === "slowEnemyShots") {
         var slowText = new rune.display.Sprite(textX, textY, 162, 150, "slowDownText");
         this.stage.addChild(slowText);
-
         this.timers.create({
             duration: 2000,
             onTick: function () {
@@ -748,10 +516,8 @@ var self = this;
 
         var opponent = (player === this.player1) ? this.player2 : this.player1;
         opponent.slowShots = true;
-
         var originalMaxX = opponent.velocity.max.x;
         var originalMaxY = opponent.velocity.max.y;
-
         opponent.velocity.max.x *= 0.3;
         opponent.velocity.max.y *= 0.3;
 
@@ -768,8 +534,6 @@ var self = this;
     }
 };
 
-
-
 /**
  * This method is automatically executed once per "tick". The method is used for 
  * calculations such as application logic.
@@ -778,9 +542,11 @@ var self = this;
  *
  * @returns {undefined}
  */
+
 beehive.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     this.updateBirds();
+
 //Dispose bullets for shield powerup
     var self = this;
     this.shields.forEach(function (shield) {
@@ -798,9 +564,6 @@ beehive.scene.Game.prototype.update = function (step) {
             }
         });
     });
-
-
-
 
     //Hit test players bullets and bird 
     for (var i = 0; i < this.player1.bullets.length; i++) {
@@ -846,8 +609,6 @@ beehive.scene.Game.prototype.update = function (step) {
         }
     });
 
-
-
     //Hit test player and bullet
     for (var j = 0; j < this.player2.bullets.length; j++) {
         this.player2.bullets[j].hitTestObject(this.player1, function () {
@@ -877,8 +638,6 @@ beehive.scene.Game.prototype.update = function (step) {
             this.player2.updateHealthBar();
         }, this);
     }
-
-
 
     //Honeycombs hit test and sounds for breaking
     var remove = [];
@@ -913,26 +672,25 @@ beehive.scene.Game.prototype.update = function (step) {
         }
     }
 
-   var honeycombs2Empty = true; 
-   for (var i = 0; i < this.honeycombs2.length; i++) {
-    if (this.honeycombs2[i].full) {
-        honeycombs2Empty = false;
-        break;
+    var honeycombs2Empty = true; 
+    for (var i = 0; i < this.honeycombs2.length; i++) {
+        if (this.honeycombs2[i].full) {
+            honeycombs2Empty = false;
+            break;
+        }
     }
-}
-
     //Game over when honeycombs is gone
     // if (this.honeycombs1.length === 0) {
     //     this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
     // } else if (this.honeycombs2.length === 0) {
     //     this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
     // }
+
     if (honeycombs1Empty) {
         this.gameEnd("Player 2");  // Player 2 vinner om alla honeycombs1 är borta
     } else if (honeycombs2Empty) {
         this.gameEnd("Player 1");  // Player 1 vinner om alla honeycombs2 är borta
     }
-
 
     //Limitations
     if (this.player1.bottom > 225) {
@@ -955,12 +713,9 @@ beehive.scene.Game.prototype.update = function (step) {
     } else if (this.player2.right > 399) {
         this.player2.right = 399;
     };
-
  
-
-//Remove player if 0 hp
+    //Remove player if 0 hp
     if (this.player1.health <= 0) {
-
         this.stage.removeChild(this.player1);
         this.timers.create({
             duration: 3000,
@@ -979,11 +734,7 @@ beehive.scene.Game.prototype.update = function (step) {
         });
         this.player2.health = 0;
     }
-
-
 };
-
-
 
 //Respawn player
 beehive.scene.Game.prototype.addPlayer1 = function () {
@@ -1025,12 +776,9 @@ beehive.scene.Game.prototype.gameEnd = function (winner) {
         scope: self,
         repeat: false
     });
-
 };
 
-
 // 
-
 /**
  * This method is automatically called once just before the scene ends. Use 
  * the method to reset references and remove objects that no longer need to 

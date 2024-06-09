@@ -86,7 +86,7 @@ beehive.scene.GameOverMenu.prototype.initBackground = function() {
 }; 
 
 beehive.scene.GameOverMenu.prototype.initBackgroundMusic = function () {
-    this.backgroundMusic = this.application.sounds.music.get("gameover", true);
+    this.backgroundMusic = this.application.sounds.music.get("menu", true);
     this.backgroundMusic.play();
     this.backgroundMusic.volume = 0.2;
     this.backgroundMusic.loop = true;
