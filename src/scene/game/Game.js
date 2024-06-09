@@ -97,14 +97,17 @@ beehive.scene.Game.prototype.initBackground = function () {
         225,
         "background"
     );
+
     this.stage.addChild(this.background);
     this.leftBeehive = new rune.display.Graphic(
         9, 8, 24, 24, "beehive"
     );
+
     this.stage.addChild(this.leftBeehive);
     this.rightBeehive = new rune.display.Graphic(
         364, 190, 24, 24, "beehive"
     );
+
     this.stage.addChild(this.rightBeehive);
     var cobblestone = new rune.display.Graphic(
         187,
@@ -744,7 +747,7 @@ beehive.scene.Game.prototype.addPlayer1 = function () {
     this.stage.addChild(this.player1);
     this.player1.flicker.start();
     this.player1.healthBar.x = 75;
-    this.player1.healthBar.y = 10;
+    this.player1.healthBar.y = 5;
 };
 
 beehive.scene.Game.prototype.addPlayer2 = function () {
@@ -754,7 +757,7 @@ beehive.scene.Game.prototype.addPlayer2 = function () {
     this.stage.addChild(this.player2);
     this.player2.flicker.start();
     this.player2.healthBar.x = 300;
-    this.player2.healthBar.y = 10;
+    this.player2.healthBar.y = 5;
 };
 
 //background music
