@@ -91,7 +91,7 @@ beehive.scene.Game.prototype.init = function () {
         scope: this,
         repeat: Infinity
     });
-
+    this.currentPowerup = null;
     this.powerupsTimer();
     this.initBackgroundMusic();
 
@@ -159,6 +159,23 @@ beehive.scene.Game.prototype.initPlayers = function () {
 };
 
 beehive.scene.Game.prototype.birdTimer = function (duration, maxBirds) {
+    // var self = this;
+    // var birdNumber = this.birds.length;
+
+    // if (birdNumber < maxBirds) {
+    //     self.spawnBird(self.player1, self.player2);
+    //     self.spawnBird(self.player1, self.player2);
+    //     birdNumber += 2;
+    // }
+
+    // setInterval(function () {
+    //     birdNumber = self.birds.length; 
+    //     if (birdNumber < maxBirds) {
+    //         self.spawnBird(self.player1, self.player2);
+    //         self.spawnBird(self.player1, self.player2);
+    //     }
+    // }, duration);
+
     var self = this;
     var birdNumber = this.birds.length;
 
@@ -168,13 +185,18 @@ beehive.scene.Game.prototype.birdTimer = function (duration, maxBirds) {
         birdNumber += 2;
     }
 
-    setInterval(function () {
-        birdNumber = self.birds.length; 
-        if (birdNumber < maxBirds) {
-            self.spawnBird(self.player1, self.player2);
-            self.spawnBird(self.player1, self.player2);
-        }
-    }, duration);
+    this.timers.create({
+        duration: duration,
+        onTick: function () {
+            birdNumber = self.birds.length; 
+            if (birdNumber < maxBirds) {
+                self.spawnBird(self.player1, self.player2);
+                self.spawnBird(self.player1, self.player2);
+            }
+        },
+        scope: self,
+        repeat: true
+    });
 };
 
 
@@ -205,9 +227,56 @@ beehive.scene.Game.prototype.initHoneycombs = function () {
 
 //Spawn birds and movement 
 beehive.scene.Game.prototype.spawnBird = function (player1, player2) {
-    var self = this;
+    // var self = this;
+    // var bird = new rune.display.Sprite(0, 0, 38, 24, "birdFlying");
+    // bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
+    // bird.animation.gotoAndPlay("move");
+
+    // bird.hitbox.set(10, 7, 30, 25);
+    // bird.x = Math.random() * (400 - bird.width);
+    // bird.y = -bird.height;
+    // this.stage.addChild(bird);
+    // this.birds.push(bird);
+
+    // var collision = false;
+    // var direction = { x: Math.random() < 0.5 ? -1 : 1, y: 1 }; 
+
+    //     var angle = Math.atan2(direction.y, direction.x) * (180 / Math.PI);
+    //     bird.rotation = angle; 
+    //     if (direction.x < 0) {
+    //         bird.flippedX = true; 
+    //     } else {
+    //         bird.flippedX = false; 
+    //     }
+    //     if (direction.x > 0) {
+    //         bird.flippedY = true; 
+    //     } else {
+    //         bird.flippedY = false; 
+    //     }
+
+
+    //     var interval = setInterval(function () {
+    //         bird.x += direction.x;
+    //         bird.y += direction.y;
+
+    //         if (bird.x <= -bird.width || bird.x >= 400 || bird.y >= 225) {
+    //             clearInterval(interval);
+    //             self.stage.removeChild(bird);
+    //             self.birds.splice(self.birds.indexOf(bird), 1);
+    //             return;
+    //         }
+
+    //         if (!collision && (bird.hitTestObject(player1) || bird.hitTestObject(player2))) {
+    //             self.birdCollision(bird.hitTestObject(player1) ? player1 : player2);
+    //             collision = true;
+    //         }
+
+
+    //     }, 16);
+
+    // return bird;
     var bird = new rune.display.Sprite(0, 0, 38, 24, "birdFlying");
-    bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
+    bird.animation.create("move", [0, 1, 2, 3, 4, 5, 6, 7], 12, true);
     bird.animation.gotoAndPlay("move");
 
     bird.hitbox.set(10, 7, 30, 25);
@@ -216,43 +285,38 @@ beehive.scene.Game.prototype.spawnBird = function (player1, player2) {
     this.stage.addChild(bird);
     this.birds.push(bird);
 
-    var collision = false;
-    var direction = { x: Math.random() < 0.5 ? -1 : 1, y: 1 }; 
+    bird.collision = false;
+    bird.direction = { x: Math.random() < 0.5 ? -1 : 1, y: 1 }; 
 
-        var angle = Math.atan2(direction.y, direction.x) * (180 / Math.PI);
-        bird.rotation = angle; 
-        if (direction.x < 0) {
-            bird.flippedX = true; 
-        } else {
-            bird.flippedX = false; 
-        }
-        if (direction.x > 0) {
-            bird.flippedY = true; 
-        } else {
-            bird.flippedY = false; 
-        }
-
-
-        var interval = setInterval(function () {
-            bird.x += direction.x;
-            bird.y += direction.y;
-
-            if (bird.x <= -bird.width || bird.x >= 400 || bird.y >= 225) {
-                clearInterval(interval);
-                self.stage.removeChild(bird);
-                self.birds.splice(self.birds.indexOf(bird), 1);
-                return;
-            }
-
-            if (!collision && (bird.hitTestObject(player1) || bird.hitTestObject(player2))) {
-                self.birdCollision(bird.hitTestObject(player1) ? player1 : player2);
-                collision = true;
-            }
-
-
-        }, 16);
+    var angle = Math.atan2(bird.direction.y, bird.direction.x) * (180 / Math.PI);
+    bird.rotation = angle; 
+    bird.flippedX = bird.direction.x < 0;
+    bird.flippedY = bird.direction.x > 0;
 
     return bird;
+};
+
+beehive.scene.Game.prototype.updateBirds = function() {
+    var self = this;
+    var player1 = this.player1;
+    var player2 = this.player2;
+
+    this.birds.forEach(function(bird, index) {
+        bird.x += bird.direction.x;
+        bird.y += bird.direction.y;
+
+        if (bird.x <= -bird.width || bird.x >= 400 || bird.y >= 225) {
+            self.stage.removeChild(bird);
+            self.birds.splice(index, 1);
+            return;
+        }
+
+        if (!bird.collision && (bird.hitTestObject(player1) || bird.hitTestObject(player2))) {
+            self.birdCollision(bird.hitTestObject(player1) ? player1 : player2);
+            bird.collision = true;
+        }
+    });
+    
 };
 
 //Collision between bird and player
@@ -413,15 +477,91 @@ beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
 //Powerups 
 beehive.scene.Game.prototype.powerupsTimer = function () {
 
+    // var self = this;
+
+    // setInterval(function () {
+    //     self.spawnPowerup();
+    // }, Math.random() * 10000 + 25000);
     var self = this;
 
-    setInterval(function () {
-        self.spawnPowerup();
-    }, Math.random() * 10000 + 25000);
+    var duration = Math.random() * 10000 + 25000;
+
+    this.timers.create({
+        duration: duration,
+        onTick: function () {
+            if (self.currentPowerup === null) {
+                self.spawnPowerup();
+            }
+            self.powerupsTimer();
+        },
+        scope: self,
+        repeat: false
+    });
 
 };
 
 beehive.scene.Game.prototype.spawnPowerup = function () {
+    // var player1Width = 175 - 25;
+    // var player2Width = 375 - 225;
+    // var height = 190;
+
+    // var x, y;
+    // var position = Math.random() < 0.5 ? 0 : 1;
+
+    // if (position === 0) {
+    //     x = Math.random() * player1Width;
+    //     y = Math.random() * height;
+    // } else {
+    //     x = 225 + Math.random() * player2Width;
+    //     y = Math.random() * height;
+    // }
+
+    // var powerupType;
+    // var texture;
+
+    // var randomValue = Math.random();
+    // if (randomValue < 0.33) {
+    //     powerupType = "healthTimes2";
+    //     texture = "doubleAnimation";
+    // } else if (randomValue < 0.66) {
+    //     powerupType = "shield";
+    //     texture = "shieldAnimation";
+    // } else {
+    //     powerupType = "slowEnemyShots";
+    //     texture = "slowAnimation";
+    // }
+
+    // var powerup = new rune.display.Sprite(x, y, 22, 26, texture);
+    // powerup.type = powerupType;
+
+    // powerup.animation.create("timer", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1, true);
+    // powerup.animation.gotoAndPlay("timer");
+
+    // this.stage.addChild(powerup);
+    // this.powerups.push(powerup);
+
+    // var self = this;
+    // // setTimeout(function () {
+    // //     var index = self.powerups.indexOf(powerup);
+    // //     if (index > -1) {
+    // //         self.stage.removeChild(powerup);
+    // //         self.powerups.splice(index, 1);
+    // //     }
+    // // }, 10000);
+
+    // this.timers.create({
+    //     duration: 10000,
+    //     onTick: function () {
+    //         var index = self.powerups.indexOf(powerup);
+    //         if (index > -1) {
+    //             self.stage.removeChild(powerup);
+    //             self.powerups.splice(index, 1);
+    //         }
+    //     },
+    //     scope: self,
+    //     repeat: false
+    // });
+
     var player1Width = 175 - 25;
     var player2Width = 375 - 225;
     var height = 190;
@@ -461,15 +601,9 @@ beehive.scene.Game.prototype.spawnPowerup = function () {
     this.stage.addChild(powerup);
     this.powerups.push(powerup);
 
-    var self = this;
-    // setTimeout(function () {
-    //     var index = self.powerups.indexOf(powerup);
-    //     if (index > -1) {
-    //         self.stage.removeChild(powerup);
-    //         self.powerups.splice(index, 1);
-    //     }
-    // }, 10000);
+    this.currentPowerup = powerup; 
 
+    var self = this;
     this.timers.create({
         duration: 10000,
         onTick: function () {
@@ -477,6 +611,7 @@ beehive.scene.Game.prototype.spawnPowerup = function () {
             if (index > -1) {
                 self.stage.removeChild(powerup);
                 self.powerups.splice(index, 1);
+                self.currentPowerup = null; 
             }
         },
         scope: self,
@@ -694,7 +829,7 @@ var self = this;
  */
 beehive.scene.Game.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
-
+    this.updateBirds();
 //Dispose bullets for shield powerup
     var self = this;
     this.shields.forEach(function (shield) {
@@ -908,13 +1043,28 @@ beehive.scene.Game.prototype.initBackgroundMusic = function () {
 
 //Gameover
 beehive.scene.Game.prototype.gameEnd = function (winner) {
-    var self = this;
-    this.timers.create({
-        duration: 2000,
-        onComplete: function () {
-            self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
-        }
-    });
+   // var self = this;
+    // this.timers.create({
+    //     duration: 2000,
+    //     onComplete: function () {
+    //         self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
+    //     }
+
+        this.timers.create({
+            duration: 4000,
+            onComplete: this.application.scenes.load([new beehive.scene.GameOverMenu(winner)])
+        }, true)
+    
+
+    // var self = this;
+    // this.timers.create({
+    //     duration: 2000,
+    //     onTick: function () {
+    //         self.application.scenes.load([new beehive.scene.GameOverMenu(winner)]);
+    //     },
+    //     scope: self,
+    //     repeat: true
+    // });
 
 };
 
