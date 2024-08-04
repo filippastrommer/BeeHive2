@@ -13,6 +13,9 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/Player.js" \
 --js "./../../src/scene/game/Bullet.js" \
 --js "./../../src/scene/game/Game.js" \
+--js "./../../src/scene/game/Bird.js" \
+--js "./../../src/scene/game/Beekeeper.js" \
+--js "./../../src/scene/game/Powerup.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
 --js "./../../src/scene/game/Honeycomb.js" \

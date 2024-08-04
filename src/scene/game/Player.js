@@ -17,8 +17,10 @@ beehive.Player = function (x, y, resource, controller, bullets, honeycombs, ownH
     this.healthBar = null;
     this.rotationSpeed = 4;
     this.hitbox.set(2, 5, 18, 18);
-    this.doubleDamage = false; 
+   // this.doubleDamage = false; 
     this.slowShots = false;
+    this.isDoubleDamage = false; 
+    this.shieldActive = false; 
 };
 
 beehive.Player.prototype = Object.create(rune.display.Sprite.prototype);
@@ -70,6 +72,40 @@ beehive.Player.prototype.updateHealthBar = function () {
     var animation = (currentFrame * 5).toString(); 
     this.healthBar.animation.gotoAndPlay(animation);
 }
+
+beehive.Player.prototype.doubleDamage = function() {
+    console.log("Double Damage activated!");
+    this.isDoubleDamage = true;  
+    setTimeout(() => {
+        this.isDoubleDamage = false;  
+        console.log("Double Damage ended.");
+    }, 10000); 
+};
+
+beehive.Player.prototype.slowEnemyShots = function() {
+    console.log("Slowing down enemy shots!");
+    this.slowShots = true;
+
+    setTimeout(() => {
+        this.slowShots = false;  
+    }, 10000); 
+};
+
+beehive.Player.prototype.activateShield = function() {
+    console.log("Shield activated for player");
+    this.shieldActive = true;
+
+    // Inaktivera skölden efter 10 sekunder
+    setTimeout(() => {
+        this.deactivateShield();
+    }, 10000); // Skölden varar i 10 sekunder
+};
+
+beehive.Player.prototype.deactivateShield = function() {
+    console.log("Shield deactivated for player.");
+    this.shieldActive = false;
+};
+
 
 beehive.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
