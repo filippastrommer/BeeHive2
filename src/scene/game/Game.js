@@ -1043,6 +1043,30 @@ beehive.scene.Game.prototype.birdCollision = function(player) {
 //     });
 // };
 
+// beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
+
+//     var honeycombs = beekeeper.x === 10 ? this.honeycombs1 : this.honeycombs2;
+
+//     if (honeycombs.length > 0) {
+//         var randomIndex = Math.floor(Math.random() * honeycombs.length);
+//         var targetHoneycomb = honeycombs[randomIndex];
+
+//        if (targetHoneycomb.full && beekeeper.hitTestObject(targetHoneycomb)) {
+//         console.log("Collision detected");
+//             targetHoneycomb.health -= 5;
+//             console.log("Honeycomb health: ", targetHoneycomb.health); 
+//             if (targetHoneycomb.health <= 0) {
+//                 this.honeycombSound.play();
+//                 this.honeycombSound.volume = 0.3;
+//                 targetHoneycomb.full = false; 
+//                 this.stage.removeChild(targetHoneycomb);
+//             }
+//             beekeeper.honeycombTaken = true;
+//         }
+//     }
+// }
+
+
 beehive.scene.Game.prototype.shieldPowerup = function (player) {
     var shieldSprite = new rune.display.Sprite(0, 0, 13, 172, "shieldTexture");  // Se till att "shieldTexture" är rätt
     this.stage.addChild(shieldSprite);
@@ -1435,4 +1459,35 @@ beehive.scene.Game.prototype.gameEnd = function (winner) {
 beehive.scene.Game.prototype.dispose = function() {
     rune.scene.Scene.prototype.dispose.call(this);
     // Dispose additional components if necessary
+
+    this.cleanupAllObjects();
+    
+    this.bullets = [];
+    this.honeycombs1 = [];
+    this.honeycombs2 = [];
+    this.powerups = [];
+    this.birds = [];
+    this.beekeepers = [];
 };
+
+beehive.scene.Game.prototype.cleanupAllObjects = function() {
+    for (var i = 0; i < this.bullets.length; i++) {
+        this.stage.removeChild(this.bullets[i]);
+    }
+    for (var i = 0; i < this.honeycombs1.length; i++) {
+        this.stage.removeChild(this.honeycombs1[i]);
+    }
+    for (var i = 0; i < this.honeycombs2.length; i++) {
+        this.stage.removeChild(this.honeycombs2[i]);
+    }
+    for (var i = 0; i < this.powerups.length; i++) {
+        this.stage.removeChild(this.powerups[i]);
+    }
+    for (var i = 0; i < this.birds.length; i++) {
+        this.stage.removeChild(this.birds[i]);
+    }
+    for (var i = 0; i < this.beekeepers.length; i++) {
+        this.stage.removeChild(this.beekeepers[i]);
+    }
+};
+

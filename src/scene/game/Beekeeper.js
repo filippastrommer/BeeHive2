@@ -1,5 +1,6 @@
-beehive.Beekeeper = function(x, y) {
-    rune.display.Sprite.call(this, x, y, 29, 35, "beekeeper");
+beehive.Beekeeper = function(x, y, honeycombs) {
+    rune.display.Sprite.call(this, x, y, 29, 35, "beekeeper"); this.honeycombs = honeycombs;
+
     this.init();
 };
 
@@ -33,20 +34,46 @@ beehive.Beekeeper.prototype.update = function() {
 //     }
 // };
 
-beehive.Beekeeper.prototype.takeHoneycomb = function(honeycombs) {
-    if (!this.honeycombTaken && honeycombs.length > 0) {
+beehive.scene.Game.prototype.takeHoneycomb = function (beekeeper) {
+
+    var honeycombs = beekeeper.x === 10 ? this.honeycombs1 : this.honeycombs2;
+
+    if (honeycombs.length > 0) {
         var randomIndex = Math.floor(Math.random() * honeycombs.length);
         var targetHoneycomb = honeycombs[randomIndex];
-        if (targetHoneycomb.full && this.hitTestObject(targetHoneycomb)) {
+
+       if (targetHoneycomb.full && beekeeper.hitTestObject(targetHoneycomb)) {
+        console.log("Collision detected");
             targetHoneycomb.health -= 5;
-            console.log("Honeycomb health after beekeeper interaction:", targetHoneycomb.health); // Loggar den aktuella hälsan
+            console.log("Honeycomb health: ", targetHoneycomb.health); 
             if (targetHoneycomb.health <= 0) {
+                this.honeycombSound.play();
+                this.honeycombSound.volume = 0.3;
                 targetHoneycomb.full = false; 
-                targetHoneycomb.dispose();
+                this.stage.removeChild(targetHoneycomb);
             }
-            this.honeycombTaken = true;
+            beekeeper.honeycombTaken = true;
         }
     }
-};
+}
+
+
+
+// beehive.Beekeeper.prototype.takeHoneycomb = function(honeycombs) {
+//     if (!this.honeycombTaken && honeycombs.length > 0) {
+//         var randomIndex = Math.floor(Math.random() * honeycombs.length);
+//         var targetHoneycomb = honeycombs[randomIndex];
+//         if (targetHoneycomb.full && this.hitTestObject(targetHoneycomb)) {
+//             console.log("Collision detected");
+//             targetHoneycomb.health -= 5;
+//             console.log("Honeycomb health after beekeeper interaction:", targetHoneycomb.health); // Loggar den aktuella hälsan
+//             if (targetHoneycomb.health <= 0) {
+//                 targetHoneycomb.full = false; 
+//                 targetHoneycomb.dispose();
+//             }
+//             this.honeycombTaken = true;
+//         }
+//     }
+// };
 
 
